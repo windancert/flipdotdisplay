@@ -6,8 +6,7 @@
 #define PANEL_COLS 28
 #define PANEL_ROWS 16
 
-// Panels in the array. The controller has 8 COL-SEL lines, so at most 8 in total,
-// and the total width must be a multiple of 8.
+// Panels in the array. The controller has 8 COL-SEL lines, so at most 8 in total.
 #define DISPLAY_PANELS_X 4
 #define DISPLAY_PANELS_Y 2
 

@@ -16,6 +16,7 @@ Host test of the addressing logic, no toolchain needed:
 
 ```sh
 cc -std=c11 -Wall -Wextra -Itest -Imain test/test_map.c main/flipdot_map.c -o test/test_map && test/test_map
+cc -std=c11 -Wall -Wextra -Itest/one_panel -Imain test/test_one_panel.c main/flipdot_map.c -o test/test_one_panel && test/test_one_panel
 ```
 
 ## Wiring
@@ -78,8 +79,8 @@ are also clamped to 400 us, at least 335 us apart, and a new frame is adopted at
 ## Sending frames
 
 One UDP datagram per frame, port 7777 by default: 1 bit per dot, row by row from the
-top, MSB leftmost, 1 = yellow. For the 112 x 32 display that is 14 bytes per row, 448
-bytes in total. The port is unauthenticated, so anything on
+top, MSB leftmost, 1 = yellow, with each row padded to whole bytes. The 112 x 32 display
+takes 14 bytes per row, 448 in total; a single 28 x 16 panel takes 4 per row, 64 in total. The port is unauthenticated, so anything on
 the LAN can write to the display.
 
 ```python
@@ -134,6 +135,6 @@ including the code that limits coil pulses.
 ## Bring-up
 
 1. Check the strobe with a scope or LED on U3 QA **before connecting a panel**.
-2. Connect one panel on COL-SEL4 (bottom-left position) and enable the boot test.
+2. Connect one panel on the COL-SEL line set in `local_config.h` and enable the boot test.
 3. Do the COL-SEL buzz test from `CLAUDE.md`, then fix the `DISPLAY_LAYOUT` table in
    `local_config.h` if the headers shift the select lines.

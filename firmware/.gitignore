@@ -5,4 +5,6 @@ sdkconfig.old
 # Display geometry and WiFi credentials. Never commit this.
 local_config.h
 !test/local_config.h
+!test/one_panel/local_config.h
 test/test_map
+test/test_one_panel

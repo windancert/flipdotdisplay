@@ -115,6 +115,7 @@ void flipdot_show(const uint8_t *frame)
 {
     xSemaphoreTake(s_lock, portMAX_DELAY);
     memcpy(s_pending, frame, FRAME_BYTES);
+    flipdot_clear_padding(s_pending);
     s_pending_dirty = true;
     xSemaphoreGive(s_lock);
     xTaskNotifyGive(s_task);

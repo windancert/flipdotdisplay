@@ -34,6 +34,17 @@ dot_location_t flipdot_locate(uint16_t x, uint16_t y)
     return (dot_location_t){.sel = panel->sel, .col = col, .row = row};
 }
 
+void flipdot_clear_padding(uint8_t *frame)
+{
+    if (DISPLAY_W % 8 == 0) {
+        return;
+    }
+    const uint8_t mask = (uint8_t)(0xFF << (8 - DISPLAY_W % 8));
+    for (int y = 0; y < DISPLAY_H; y++) {
+        frame[y * DISPLAY_STRIDE + DISPLAY_STRIDE - 1] &= mask;
+    }
+}
+
 shift_frame_t flipdot_dot_frame(dot_location_t loc, dot_colour_t colour)
 {
     shift_frame_t f = flipdot_idle_frame();
