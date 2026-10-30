@@ -4,6 +4,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "net.h"
+#include "ota.h"
 #include "sdkconfig.h"
 #include "status_led.h"
 
@@ -35,6 +36,7 @@ static void boot_test(void)
 
 void app_main(void)
 {
+    ota_start();
     status_led_start();
     flipdot_start();
 #if CONFIG_FLIPDOT_BOOT_TEST

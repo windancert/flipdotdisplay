@@ -100,10 +100,36 @@ The onboard RGB LED (GPIO8, as on the ESP32-C6-DevKitC-1) shows:
 | Solid green | Has an IP address, listening for frames |
 | Solid purple | No SSID configured |
 | Short white flash | Valid frame received |
+| Blinking blue | Receiving a firmware update |
 
 Blue should last about 1.5 s and only appear once. Blue repeating every couple of
 seconds, with a brief flicker in between, means a reset loop, usually a brownout while
 WiFi starts: check the serial log and the power supply.
+
+## Updating over WiFi
+
+The first flash after adding OTA must go over USB and erase the flash, because the
+partition table changed (`idf.py erase-flash flash`). After that:
+
+```sh
+idf.py fullclean build     # always a clean build, see below
+curl --data-binary @build/flipdot.bin http://<display-ip>/update
+curl http://<display-ip>/version
+```
+
+The image goes into the slot that isn't running, and the board reboots into it. The
+display blacks out and redraws on restart.
+
+A new image must get an IP address within 2 minutes. If it doesn't, or if it crashes or
+hangs first, the board returns to the previous firmware. Rollback can't catch a build
+that gets online but misbehaves, so test changes to `panel_hw.c` over USB first. The
+same goes for bootloader and partition table changes, which OTA doesn't update.
+
+Clean builds matter because incremental PlatformIO builds have produced images that
+flash fine but can't use WiFi, for reasons not yet understood.
+
+The endpoint has no authentication: anything on the LAN can replace the firmware,
+including the code that limits coil pulses.
 
 ## Bring-up
 

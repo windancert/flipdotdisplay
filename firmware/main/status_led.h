@@ -6,6 +6,7 @@ typedef enum {
     STATUS_CONNECTING,  // blinking yellow: looking for WiFi
     STATUS_ONLINE,      // solid green: has an IP address, listening for frames
     STATUS_NO_NETWORK,  // solid purple: no SSID configured
+    STATUS_UPDATING,    // blinking blue: receiving a firmware update
 } status_t;
 
 void status_led_start(void);

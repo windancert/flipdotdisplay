@@ -21,6 +21,8 @@
 #define MIN_FRAME_INTERVAL_US (250 * 1000)
 
 static SemaphoreHandle_t s_lock;
+static SemaphoreHandle_t s_flip_lock;  // held while the driver task flips a dot
+static volatile bool s_paused;
 static TaskHandle_t s_task;
 static uint8_t s_pending[FRAME_BYTES];
 static bool s_pending_dirty;
@@ -75,9 +77,15 @@ static bool flip_next_dot(void)
 static void driver_task(void *arg)
 {
     for (;;) {
-        // Checked before every dot, so a new message interrupts a slow redraw.
-        adopt_pending_frame();
-        if (!flip_next_dot()) {
+        xSemaphoreTake(s_flip_lock, portMAX_DELAY);
+        bool flipped = false;
+        if (!s_paused) {
+            // Checked before every dot, so a new message interrupts a slow redraw.
+            adopt_pending_frame();
+            flipped = flip_next_dot();
+        }
+        xSemaphoreGive(s_flip_lock);
+        if (!flipped) {
             ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(50));
         }
     }
@@ -87,6 +95,8 @@ void flipdot_start(void)
 {
     s_lock = xSemaphoreCreateMutex();
     configASSERT(s_lock);
+    s_flip_lock = xSemaphoreCreateMutex();
+    configASSERT(s_flip_lock);
 
     panel_hw_init();
 
@@ -107,5 +117,18 @@ void flipdot_show(const uint8_t *frame)
     memcpy(s_pending, frame, FRAME_BYTES);
     s_pending_dirty = true;
     xSemaphoreGive(s_lock);
+    xTaskNotifyGive(s_task);
+}
+
+void flipdot_pause(void)
+{
+    s_paused = true;
+    xSemaphoreTake(s_flip_lock, portMAX_DELAY);
+    xSemaphoreGive(s_flip_lock);
+}
+
+void flipdot_resume(void)
+{
+    s_paused = false;
     xTaskNotifyGive(s_task);
 }

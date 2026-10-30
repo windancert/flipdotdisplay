@@ -13,6 +13,7 @@
 #include "local_config.h"
 #include "lwip/sockets.h"
 #include "nvs_flash.h"
+#include "ota.h"
 #include "status_led.h"
 
 static const char *TAG = "net";
@@ -28,6 +29,7 @@ static void on_wifi_event(void *arg, esp_event_base_t base, int32_t id, void *da
         esp_wifi_connect();
     } else if (base == IP_EVENT && id == IP_EVENT_STA_GOT_IP) {
         status_led_set(STATUS_ONLINE);
+        ota_mark_good();
         const ip_event_got_ip_t *event = data;
         ESP_LOGI(TAG, "listening on " IPSTR ":%d", IP2STR(&event->ip_info.ip),
                  CONFIG_FLIPDOT_UDP_PORT);
@@ -97,6 +99,7 @@ void net_start(void)
         return;
     }
     wifi_start();
+    ota_server_start();
     BaseType_t ok = xTaskCreate(udp_task, "udp", 4096, NULL, 4, NULL);
     configASSERT(ok == pdPASS);
 }

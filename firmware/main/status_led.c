@@ -58,6 +58,8 @@ static colour_t colour_for(status_t status, uint32_t tick)
         return GREEN;
     case STATUS_NO_NETWORK:
         return PURPLE;
+    case STATUS_UPDATING:
+        return (tick / BLINK_TICKS) % 2 ? OFF : BLUE;
     }
     return OFF;
 }
