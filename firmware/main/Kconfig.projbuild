@@ -1,15 +1,5 @@
 menu "Flip-dot display"
 
-    config FLIPDOT_WIFI_SSID
-        string "WiFi SSID"
-        default ""
-        help
-            Leave empty to run without networking (useful during bring-up).
-
-    config FLIPDOT_WIFI_PASSWORD
-        string "WiFi password"
-        default ""
-
     config FLIPDOT_UDP_PORT
         int "UDP port for incoming frames"
         range 1 65535
@@ -20,6 +10,6 @@ menu "Flip-dot display"
         default n
         help
             Lights a corner marker on each panel in turn, so the layout table in
-            flipdot_map.c can be checked against the physical wiring.
+            local_config.h can be checked against the physical wiring.
 
 endmenu

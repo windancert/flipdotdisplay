@@ -5,10 +5,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define PANEL_COLS 28
-#define PANEL_ROWS 16
-#define DISPLAY_PANELS_X 4
-#define DISPLAY_PANELS_Y 2
+#include "local_config.h"
+
+_Static_assert(PANEL_COLS <= 28 && PANEL_ROWS <= 28, "the 5-bit address reaches 28 dots");
+_Static_assert(DISPLAY_PANELS_X * DISPLAY_PANELS_Y <= 8, "the controller has 8 COL-SEL lines");
+_Static_assert(PANEL_COLS * DISPLAY_PANELS_X % 8 == 0, "frames store whole bytes per row");
+
 #define DISPLAY_W (PANEL_COLS * DISPLAY_PANELS_X)
 #define DISPLAY_H (PANEL_ROWS * DISPLAY_PANELS_Y)
 

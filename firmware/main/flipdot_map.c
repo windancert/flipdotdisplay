@@ -14,13 +14,8 @@ typedef struct {
     bool rotated;  // mounted 180 degrees, so both axes are mirrored
 } panel_t;
 
-// Seen from the front, [0] is the top row. Top row is chain A, bottom is chain B.
-// If the ribbon headers turn out to shift the COL-SEL lines as they chain, the
-// fix is to reorder the sel values here.
-static const panel_t LAYOUT[DISPLAY_PANELS_Y][DISPLAY_PANELS_X] = {
-    {{0, true}, {1, true}, {2, true}, {3, true}},
-    {{4, false}, {5, false}, {6, false}, {7, false}},
-};
+// Seen from the front, [0] is the top row.
+static const panel_t LAYOUT[DISPLAY_PANELS_Y][DISPLAY_PANELS_X] = DISPLAY_LAYOUT;
 
 uint8_t flipdot_addr(uint8_t n)
 {

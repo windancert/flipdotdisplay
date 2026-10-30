@@ -1,5 +1,5 @@
 // Host test for the addressing logic:
-//   cc -std=c11 -Wall -Wextra -Imain test/test_map.c main/flipdot_map.c -o test/test_map && test/test_map
+//   cc -std=c11 -Wall -Wextra -Itest -Imain test/test_map.c main/flipdot_map.c -o test/test_map && test/test_map
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>

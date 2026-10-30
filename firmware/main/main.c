@@ -10,7 +10,7 @@
 #if CONFIG_FLIPDOT_BOOT_TEST
 // Lights a 7x7 block in the top-left corner of each panel position in turn, left
 // to right, top row first. Each block should appear at the top-left of the panel
-// you expect; if not, the layout table in flipdot_map.c is wrong.
+// you expect; if not, the layout table in local_config.h is wrong.
 static void boot_test(void)
 {
     static uint8_t frame[FRAME_BYTES];

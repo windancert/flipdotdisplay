@@ -1,17 +1,21 @@
 # Flip-dot firmware (ESP32-C6, ESP-IDF)
 
-Built against ESP-IDF 6.1. Not tried on older versions, and not yet run on hardware.
+Built against ESP-IDF 6.1. Not tried on older versions. Runs on a bare DevKitC-1, but
+has not yet driven a panel.
 
 ```sh
+cp local_config.example.h local_config.h   # display geometry and WiFi credentials
 idf.py set-target esp32c6
-idf.py menuconfig          # "Flip-dot display": WiFi, UDP port, boot test
+idf.py menuconfig          # optional, "Flip-dot display": UDP port, boot test
 idf.py build flash monitor
 ```
+
+`local_config.h` is gitignored, so it needs creating on each new checkout.
 
 Host test of the addressing logic, no toolchain needed:
 
 ```sh
-cc -std=c11 -Wall -Wextra -Imain test/test_map.c main/flipdot_map.c -o test/test_map && test/test_map
+cc -std=c11 -Wall -Wextra -Itest -Imain test/test_map.c main/flipdot_map.c -o test/test_map && test/test_map
 ```
 
 ## Wiring
@@ -73,8 +77,9 @@ are also clamped to 400 us, at least 335 us apart, and a new frame is adopted at
 
 ## Sending frames
 
-One UDP datagram per frame, port 7777 by default: 448 bytes, 14 bytes per row, 32 rows
-top to bottom, MSB leftmost, 1 = yellow. The port is unauthenticated, so anything on
+One UDP datagram per frame, port 7777 by default: 1 bit per dot, row by row from the
+top, MSB leftmost, 1 = yellow. For the 112 x 32 display that is 14 bytes per row, 448
+bytes in total. The port is unauthenticated, so anything on
 the LAN can write to the display.
 
 ```python
@@ -104,5 +109,5 @@ WiFi starts: check the serial log and the power supply.
 
 1. Check the strobe with a scope or LED on U3 QA **before connecting a panel**.
 2. Connect one panel on COL-SEL4 (bottom-left position) and enable the boot test.
-3. Do the COL-SEL buzz test from `CLAUDE.md`, then fix the `LAYOUT` table in
-   `main/flipdot_map.c` if the headers shift the select lines.
+3. Do the COL-SEL buzz test from `CLAUDE.md`, then fix the `DISPLAY_LAYOUT` table in
+   `local_config.h` if the headers shift the select lines.

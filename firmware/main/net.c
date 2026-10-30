@@ -10,6 +10,7 @@
 #include "flipdot.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "local_config.h"
 #include "lwip/sockets.h"
 #include "nvs_flash.h"
 #include "status_led.h"
@@ -52,11 +53,13 @@ static void wifi_start(void)
     ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, on_wifi_event, NULL));
 
     wifi_config_t wifi_cfg = {};
-    strlcpy((char *)wifi_cfg.sta.ssid, CONFIG_FLIPDOT_WIFI_SSID, sizeof(wifi_cfg.sta.ssid));
-    strlcpy((char *)wifi_cfg.sta.password, CONFIG_FLIPDOT_WIFI_PASSWORD, sizeof(wifi_cfg.sta.password));
+    strlcpy((char *)wifi_cfg.sta.ssid, WIFI_SSID, sizeof(wifi_cfg.sta.ssid));
+    strlcpy((char *)wifi_cfg.sta.password, WIFI_PASSWORD, sizeof(wifi_cfg.sta.password));
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_cfg));
     ESP_ERROR_CHECK(esp_wifi_start());
+    // Mains powered, and power saving delays incoming frames by up to seconds.
+    ESP_ERROR_CHECK(esp_wifi_set_ps(WIFI_PS_NONE));
 }
 
 static void udp_task(void *arg)
@@ -88,7 +91,7 @@ static void udp_task(void *arg)
 
 void net_start(void)
 {
-    if (strlen(CONFIG_FLIPDOT_WIFI_SSID) == 0) {
+    if (strlen(WIFI_SSID) == 0) {
         ESP_LOGW(TAG, "no WiFi SSID configured, running without network");
         status_led_set(STATUS_NO_NETWORK);
         return;
