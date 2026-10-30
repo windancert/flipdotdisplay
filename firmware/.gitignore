@@ -1,0 +1,5 @@
+build/
+# Holds the WiFi password once menuconfig has been run.
+sdkconfig
+sdkconfig.old
+test/test_map
