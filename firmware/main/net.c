@@ -12,14 +12,21 @@
 #include "freertos/task.h"
 #include "lwip/sockets.h"
 #include "nvs_flash.h"
+#include "status_led.h"
 
 static const char *TAG = "net";
 
 static void on_wifi_event(void *arg, esp_event_base_t base, int32_t id, void *data)
 {
     if (base == WIFI_EVENT && (id == WIFI_EVENT_STA_START || id == WIFI_EVENT_STA_DISCONNECTED)) {
+        if (id == WIFI_EVENT_STA_DISCONNECTED) {
+            const wifi_event_sta_disconnected_t *event = data;
+            ESP_LOGW(TAG, "WiFi connect failed or lost, reason %d", event->reason);
+        }
+        status_led_set(STATUS_CONNECTING);
         esp_wifi_connect();
     } else if (base == IP_EVENT && id == IP_EVENT_STA_GOT_IP) {
+        status_led_set(STATUS_ONLINE);
         const ip_event_got_ip_t *event = data;
         ESP_LOGI(TAG, "listening on " IPSTR ":%d", IP2STR(&event->ip_info.ip),
                  CONFIG_FLIPDOT_UDP_PORT);
@@ -72,6 +79,7 @@ static void udp_task(void *arg)
         int len = recv(sock, buf, sizeof(buf), 0);
         if (len == FRAME_BYTES) {
             flipdot_show(buf);
+            status_led_flash();
         } else {
             ESP_LOGW(TAG, "dropped datagram of %d bytes, expected %d", len, FRAME_BYTES);
         }
@@ -82,6 +90,7 @@ void net_start(void)
 {
     if (strlen(CONFIG_FLIPDOT_WIFI_SSID) == 0) {
         ESP_LOGW(TAG, "no WiFi SSID configured, running without network");
+        status_led_set(STATUS_NO_NETWORK);
         return;
     }
     wifi_start();

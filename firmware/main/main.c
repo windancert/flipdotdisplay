@@ -5,6 +5,7 @@
 #include "freertos/task.h"
 #include "net.h"
 #include "sdkconfig.h"
+#include "status_led.h"
 
 #if CONFIG_FLIPDOT_BOOT_TEST
 // Lights a 7x7 block in the top-left corner of each panel position in turn, left
@@ -34,6 +35,7 @@ static void boot_test(void)
 
 void app_main(void)
 {
+    status_led_start();
     flipdot_start();
 #if CONFIG_FLIPDOT_BOOT_TEST
     boot_test();

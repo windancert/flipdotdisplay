@@ -84,6 +84,22 @@ frame[0] = 0x80  # top-left dot
 socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(frame, ("<display-ip>", 7777))
 ```
 
+## Status LED
+
+The onboard RGB LED (GPIO8, as on the ESP32-C6-DevKitC-1) shows:
+
+| LED | Meaning |
+|-----|---------|
+| Solid blue | Booting, blacking out the display |
+| Blinking yellow | Looking for WiFi |
+| Solid green | Has an IP address, listening for frames |
+| Solid purple | No SSID configured |
+| Short white flash | Valid frame received |
+
+Blue should last about 1.5 s and only appear once. Blue repeating every couple of
+seconds, with a brief flicker in between, means a reset loop, usually a brownout while
+WiFi starts: check the serial log and the power supply.
+
 ## Bring-up
 
 1. Check the strobe with a scope or LED on U3 QA **before connecting a panel**.
