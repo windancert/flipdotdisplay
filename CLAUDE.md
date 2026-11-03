@@ -119,6 +119,30 @@ Arduino Uno driving one panel directly - Uno GPIO is 5 V so no level shifting ne
 Plus 10k pull-downs to ground on ribbon 10, 11 and 19, because Uno pins are
 high-impedance through the bootloader delay and on every upload reset.
 
+## ESP32-C6 direct-drive bench setup (working, two panels)
+
+ESP32-C6 driving two daisy-chained panels side by side (56 x 16) straight from its
+GPIOs, no shift registers. Built with `CONFIG_FLIPDOT_DIRECT_DRIVE=y`; the pin map
+lives in `firmware/main/panel_hw_direct.c`.
+
+| C6 | Signal | Ribbon |
+|----|--------|--------|
+| GPIO18-22 | ROW0-4 | 5, 6, 7, 8, 9 (straight; firmware undoes the 6/7 crossing) |
+| GPIO4, 5, 6, 7, 0 | COL0-4 | 13-17 |
+| GPIO23 | COL-H/L | 18 |
+| GPIO1 | COL-SEL0 (left panel) | 19 |
+| GPIO2 | COL-SEL1 (right panel) | 20 |
+| GPIO10 | ROW-HIGH | 10 |
+| GPIO11 | ROW-LOW | 11 |
+| 3V3 | panel logic supply | 3 |
+| GND | GND | 1, 2 |
+
+Plus 10k pull-downs to ground on ribbon 10, 11, 19 and 20, and 24 V on pin 26.
+
+The C6 has only two RMT TX channels and the status LED owns one, so both polarity
+strobes share a single RMT channel that is re-pointed through the GPIO matrix per
+pulse. A second strobe channel does not exist and panics at boot.
+
 ## Status
 
 VERIFIED by experiment:
@@ -127,14 +151,17 @@ VERIFIED by experiment:
   the row/column address decoding is correct
 - The polarity model is correct (dots go both ways)
 - At least one stuck dot near the left edge, ~6 rows down (probably mechanical)
+- ROW-HIGH and ROW-LOW work as two separate polarity strobes (C6 direct drive pulses
+  only one per dot, and dots go both ways)
+- The panel logic runs at 3.3 V on pin 3, driven directly from 3.3 V GPIOs
+- Two daisy-chained panels are addressed independently: driving COL-SEL1 (pin 20)
+  at the controller selects the second panel only, orientation and addressing correct
 
 NOT YET VERIFIED - do not assume:
-- Whether ROW-HIGH and ROW-LOW are genuinely two separate polarity strobes, or are
-  gated together as the reference firmware's single SET_PX implies
-- Whether the two 26-way headers are straight-through pin-for-pin, or shift the
-  COL-SEL lines by one position as the ribbon chains. This decides how a panel claims
-  its select line, and therefore how chaining is wired. TEST: buzz COL-SEL0 (pin 19)
-  on one header against pins 19-23 on the other.
+- WHY the second panel answers on COL-SEL1: the 26-way headers may shift the COL-SEL
+  lines by one position as the ribbon chains, or the panel may be strapped to SEL1.
+  Chaining works either way, but it matters for panels 3-5. TEST: buzz COL-SEL0
+  (pin 19) on one header against pins 19-23 on the other.
 
 ## Target build
 

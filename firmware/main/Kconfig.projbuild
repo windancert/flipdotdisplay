@@ -12,4 +12,12 @@ menu "Flip-dot display"
             Lights a corner marker on each panel in turn, so the layout table in
             local_config.h can be checked against the physical wiring.
 
+    config FLIPDOT_DIRECT_DRIVE
+        bool "Direct drive (no 74HCT595 shift registers)"
+        default n
+        help
+            Temporary bench mode. Drives the panel logic lines straight from
+            the C6's GPIOs instead of through the three 74HCT595 shift registers.
+            The pin map is in panel_hw_direct.c. Up to two panels (COL-SEL0/1).
+
 endmenu
