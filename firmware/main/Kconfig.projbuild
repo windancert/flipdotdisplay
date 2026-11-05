@@ -1,0 +1,23 @@
+menu "Flip-dot display"
+
+    config FLIPDOT_UDP_PORT
+        int "UDP port for incoming frames"
+        range 1 65535
+        default 7777
+
+    config FLIPDOT_BOOT_TEST
+        bool "Show the panel orientation test at boot"
+        default n
+        help
+            Lights a corner marker on each panel in turn, so the layout table in
+            local_config.h can be checked against the physical wiring.
+
+    config FLIPDOT_DIRECT_DRIVE
+        bool "Direct drive (no 74HCT595 shift registers)"
+        default n
+        help
+            Temporary bench mode. Drives the panel logic lines straight from
+            the C6's GPIOs instead of through the three 74HCT595 shift registers.
+            The pin map is in panel_hw_direct.c. Up to two panels (COL-SEL0/1).
+
+endmenu
