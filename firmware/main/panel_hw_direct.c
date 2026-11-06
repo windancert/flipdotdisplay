@@ -19,8 +19,10 @@
 //   ROW-HIGH GPIO10     [ribbon 10]   + external 10k pull-down, RMT-timed strobe
 //   ROW-LOW  GPIO11     [ribbon 11]   + external 10k pull-down, RMT-timed strobe
 //
-// None of these are strapping pins (GPIO8/9/15), USB (12/13) or the UART console
-// (16/17). Change the map here if your wiring differs.
+// GPIO4 and GPIO5 (COL0, COL1) are strapping pins, but they only drive address
+// lines, and nothing flows while the strobes are held low by their pull-downs. None
+// of the pins are USB (12/13) or the UART console (16/17). Change the map here if
+// your wiring differs.
 //
 // The C6 has only two RMT TX channels and the status LED already owns one, so the
 // two polarity strobes share ONE RMT channel: its output is re-pointed to ROW-HIGH

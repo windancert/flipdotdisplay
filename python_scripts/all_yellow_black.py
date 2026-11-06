@@ -6,7 +6,7 @@ import time
 DISPLAY_IP = "192.168.42.172"
 UDP_PORT = 7777
 
-# One 28x16 panel: each row padded to whole bytes -> 4 bytes/row * 16 rows = 64.
+# Rows are padded to whole bytes: 7 bytes/row * 16 rows = 112.
 COLS, ROWS = 56, 16          # two 28x16 panels side by side
 STRIDE = (COLS + 7) // 8
 FRAME_BYTES = STRIDE * ROWS
