@@ -12,7 +12,8 @@ WA10067, uncertain; test stamp 981103, so late-1998 production).
 - Board 19 x 28 cm; the dot field is ~16 x 28 cm, leaving a ~30 mm bare PCB strip
   along ONE long edge carrying the driver ICs
 - Dots are magnetically latching: they hold state with zero power
-- Logic 5 V, coils 24 V, both arriving over the ribbon
+- Designed for logic 5 V, coils 24 V, both arriving over the ribbon. Verified to work
+  with logic at 3.3 V and coils at 20 V (see Status)
 
 ICs (all confirmed from photos):
 - 74HC4514 (Philips) - 4-to-16 decoder with input latches, 1-of-7 row/column select
@@ -35,8 +36,16 @@ address-driven H-bridge matrix.
   observed repeatedly). This is a hard ceiling; normal use is far lower.
 - Full-panel sweep: 448 dots in ~150 ms, i.e. ~335 us per dot
 - Only ONE coil is ever energised at a time, so current does NOT scale with panel count
+- The RL model (16 ohm, 290 us) predicts ~83 uC per 200 us pulse at 24 V, i.e. 0.25 A
+  at one dot per 335 us, matching the measured sweep current. It is trustworthy.
+- At **20 V** (the planned USB-C PD supply): peak 0.62 A at the end of a 200 us pulse,
+  ~70 uC per flip, ~0.21 A for continuous sweeping (model). Measured on the S3 bench
+  during a diagonal wipe: at most 0.04 A on the bench supply (its finest resolution),
+  consistent with the model's ~0.02 A per 250 ms frame. A stuck 400 us pulse (the
+  firmware ceiling) would peak at ~0.94 A.
 
-DANGER: 24 V across 16 ohm continuously is 36 W in a coil the size of a shirt button.
+DANGER: 24 V across 16 ohm continuously is 36 W (25 W at 20 V) in a coil the size of a
+shirt button.
 A hung controller holding a strobe destroys that dot within seconds. Firmware MUST
 enforce a hard pulse-width ceiling, and outputs must be inactive at reset/power-up.
 
@@ -143,6 +152,15 @@ The C6 has only two RMT TX channels and the status LED owns one, so both polarit
 strobes share a single RMT channel that is re-pointed through the GPIO matrix per
 pulse. A second strobe channel does not exist and panics at boot.
 
+## ESP32-S3 two-row direct drive (working, one panel per row)
+
+Waveshare ESP32-S3-Pico (ESP32-S3R2, 16 MB flash, 2 MB PSRAM) driving two rows of
+panels, each row on its own ribbon. Address, polarity and strobe lines are wired in
+parallel to both ribbons; only COL-SEL is per ribbon (0-3 on ribbon A / top row,
+4-7 on ribbon B / bottom row). The pin map reserves all 21 signals, enough for the
+full 4 x 2 target without rewiring. Full table in `firmware/README.md`, code in
+`firmware/main/panel_hw_direct.c`. Status LED is a WS2812 on GPIO21, RGB order.
+
 ## Status
 
 VERIFIED by experiment:
@@ -156,6 +174,17 @@ VERIFIED by experiment:
 - The panel logic runs at 3.3 V on pin 3, driven directly from 3.3 V GPIOs
 - Two daisy-chained panels are addressed independently: driving COL-SEL1 (pin 20)
   at the controller selects the second panel only, orientation and addressing correct
+- ESP32-S3-Pico drives two rows, one panel per ribbon, each answering on its own
+  ribbon's pin 19 (COL-SEL0 and COL-SEL4), with address and strobe lines shared by
+  both ribbons. Every row flips. Bring-up faults were wiring: ribbon pins 7 and 8
+  crossed (only rows 1 and 15 dead, other rows misplaced), and a bad connection on
+  the second ribbon. On this bench the arrangement is the reverse of the README:
+  ribbon B (COL-SEL4) panel on top and upright, ribbon A (COL-SEL0) panel at the
+  bottom and rotated, so local_config.h has `{{4, false}}, {{0, true}}`.
+- Coils at 20 V with 200 us pulses flip reliably in both directions (S3 two-row bench,
+  bench supply at 20 V). A few dots stay put in both colours (about 2 on one panel,
+  4 on the other, one cluster of 3), probably mechanical; untested whether 24 V or a
+  longer pulse frees them.
 
 NOT YET VERIFIED - do not assume:
 - WHY the second panel answers on COL-SEL1: the 26-way headers may shift the COL-SEL
@@ -172,18 +201,33 @@ NOT YET VERIFIED - do not assume:
   `col = 27 - col; row = 15 - row`
 - Two ribbon chains of 4 (the 5-panel bus limit). Address and polarity lines are
   common to both chains; only the 8 COL-SEL lines are unique.
-- Controller: ESP32 + 3x **74HCT595** shift registers. HCT (not HC) because its TTL
-  input thresholds accept the ESP32's 3.3 V while its outputs swing to 5 V for the
-  panel's HC inputs. 21 signals needed, 24 outputs available.
-  Tie the 595 OE pin high through a pull-up so outputs are disabled at reset.
+- Controller: Waveshare ESP32-S3-Pico in direct drive, no shift registers (current
+  plan). Its pin map already covers all 21 signals; see `firmware/README.md`.
+  The earlier plan, an ESP32 + 3x 74HCT595 with OE through a BSS138 inverter, is still
+  in the firmware for the C6 only. Its reason for HCT parts (level shifting to 5 V) no
+  longer applies, since the panel logic is verified at 3.3 V.
 - WiFi, not Ethernet (no drop at the location). The panels are ~3500 steel discs plus
   ground planes, so use a module with an external antenna mounted clear of the array,
-  or put the ESP32 in the frame's bottom rail.
-- Power: 24 V / 1 A external brick. 470 uF bulk at the controller. 24 V chains through
-  the ribbons (fine at 0.75 A peak on 28 AWG). Buck 24 V -> 5 V (not linear), feeding
-  the 595s and the ESP32's VIN pin. Put a series Schottky plus 220-470 uF between the
-  24 V rail and the buck input so coil pulses cannot brown out the ESP32.
-- Star ground: coil return and logic return join at one point near the 24 V input.
+  or put the ESP32 in the frame's bottom rail. Observed on the S3 bench: with the
+  ribbons wired up near the Pico's ceramic antenna, pings went from 0% loss / 35 ms
+  to 20% loss / 138 ms. Keep wiring away from the antenna end of the board.
+- Power: **USB-C PD at 20 V** (decided; not yet built). Needs a PD trigger chip
+  requesting 20 V; at most ~0.62 A peak and ~0.21 A continuous, so any 20 V profile
+  suffices. Design rules:
+  - NEVER put 20 V on the Pico's USB-C or VSYS, which take 3.7-6 V. The 20 V goes to
+    the coil rail (ribbon pin 26) and to a buck converter rated well above 20 V
+    (~28 V or more) that feeds the Pico's VSYS with 5 V.
+  - USB-PD limits sink capacitance before the 20 V contract is made, so put the bulk
+    capacitance (470 uF) behind a load switch, typically a P-MOSFET, enabled by the
+    trigger chip's power-good output.
+  - Chargers without a 20 V profile (many phone chargers stop at 9 or 12 V) leave the
+    rail too low to flip reliably. Planned, not implemented: a divider from the coil
+    rail to an ADC pin (GPIO40 is free on the S3), with firmware refusing to pulse
+    below ~18 V and showing it on the status LED.
+  - Keep the series Schottky plus 220-470 uF ahead of the buck input, so coil pulses
+    cannot brown out the ESP32.
+- Coil supply chains through the ribbons (fine at 0.62 A peak on 28 AWG).
+- Star ground: coil return and logic return join at one point near the power input.
 
 ## Message formatting
 

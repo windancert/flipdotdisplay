@@ -4,7 +4,7 @@ endif()
 
 set(srcs "main.c" "flipdot.c" "flipdot_map.c" "net.c" "status_led.c" "ota.c")
 if(CONFIG_FLIPDOT_DIRECT_DRIVE)
-    # Bench variant: drive up to two panels straight from the GPIOs, no shift registers.
+    # Drive the panels straight from the GPIOs, no shift registers.
     list(APPEND srcs "panel_hw_direct.c")
 else()
     list(APPEND srcs "panel_hw.c")

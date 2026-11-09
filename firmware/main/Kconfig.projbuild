@@ -14,10 +14,12 @@ menu "Flip-dot display"
 
     config FLIPDOT_DIRECT_DRIVE
         bool "Direct drive (no 74HCT595 shift registers)"
+        default y if IDF_TARGET_ESP32S3
         default n
         help
-            Temporary bench mode. Drives the panel logic lines straight from
-            the C6's GPIOs instead of through the three 74HCT595 shift registers.
-            The pin map is in panel_hw_direct.c. Up to two panels (COL-SEL0/1).
+            Drives the panel logic lines straight from the GPIOs instead of through
+            the three 74HCT595 shift registers. The pin maps are in
+            panel_hw_direct.c: two panels (COL-SEL0/1) on the C6, eight on the S3.
+            The shift-register driver only exists for the C6.
 
 endmenu
