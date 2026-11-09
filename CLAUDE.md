@@ -143,7 +143,7 @@ The C6 has only two RMT TX channels and the status LED owns one, so both polarit
 strobes share a single RMT channel that is re-pointed through the GPIO matrix per
 pulse. A second strobe channel does not exist and panics at boot.
 
-## ESP32-S3 two-row direct drive (in progress, NOT yet verified on hardware)
+## ESP32-S3 two-row direct drive (working, one panel per row)
 
 Waveshare ESP32-S3-Pico (ESP32-S3R2, 16 MB flash, 2 MB PSRAM) driving two rows of
 panels, each row on its own ribbon. Address, polarity and strobe lines are wired in
@@ -165,6 +165,13 @@ VERIFIED by experiment:
 - The panel logic runs at 3.3 V on pin 3, driven directly from 3.3 V GPIOs
 - Two daisy-chained panels are addressed independently: driving COL-SEL1 (pin 20)
   at the controller selects the second panel only, orientation and addressing correct
+- ESP32-S3-Pico drives two rows, one panel per ribbon, each answering on its own
+  ribbon's pin 19 (COL-SEL0 and COL-SEL4), with address and strobe lines shared by
+  both ribbons. Every row flips. Bring-up faults were wiring: ribbon pins 7 and 8
+  crossed (only rows 1 and 15 dead, other rows misplaced), and a bad connection on
+  the second ribbon. On this bench the arrangement is the reverse of the README:
+  ribbon B (COL-SEL4) panel on top and upright, ribbon A (COL-SEL0) panel at the
+  bottom and rotated, so local_config.h has `{{4, false}}, {{0, true}}`.
 
 NOT YET VERIFIED - do not assume:
 - WHY the second panel answers on COL-SEL1: the 26-way headers may shift the COL-SEL
