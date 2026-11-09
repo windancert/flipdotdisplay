@@ -143,6 +143,15 @@ The C6 has only two RMT TX channels and the status LED owns one, so both polarit
 strobes share a single RMT channel that is re-pointed through the GPIO matrix per
 pulse. A second strobe channel does not exist and panics at boot.
 
+## ESP32-S3 two-row direct drive (in progress, NOT yet verified on hardware)
+
+Waveshare ESP32-S3-Pico (ESP32-S3R2, 16 MB flash, 2 MB PSRAM) driving two rows of
+panels, each row on its own ribbon. Address, polarity and strobe lines are wired in
+parallel to both ribbons; only COL-SEL is per ribbon (0-3 on ribbon A / top row,
+4-7 on ribbon B / bottom row). The pin map reserves all 21 signals, enough for the
+full 4 x 2 target without rewiring. Full table in `firmware/README.md`, code in
+`firmware/main/panel_hw_direct.c`. Status LED is a WS2812 on GPIO21, RGB order.
+
 ## Status
 
 VERIFIED by experiment:

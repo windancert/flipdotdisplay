@@ -90,9 +90,54 @@ frame[0] = 0x80  # top-left dot
 socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(frame, ("<display-ip>", 7777))
 ```
 
+## Direct drive (no shift registers)
+
+With `CONFIG_FLIPDOT_DIRECT_DRIVE=y` (the default on the S3) the GPIOs drive the
+ribbon directly. The panel logic runs at 3.3 V from ribbon pin 3. Pin maps are in
+`main/panel_hw_direct.c`; the C6 bench map is in `CLAUDE.md`.
+
+### Waveshare ESP32-S3-Pico, two ribbons
+
+Every shared line goes to the same pin on **both** ribbons. Ribbon A feeds the top
+row (COL-SEL0-3), ribbon B the bottom row (COL-SEL4-7). The first panel on each
+ribbon answers on that ribbon's pin 19.
+
+Each group is an unbroken run down one header (apart from GND and RUN pins), and the
+left header follows the ribbon's own order.
+
+| S3 GPIO | Pico header pin | Signal | Ribbon pin | Ribbons |
+|---------|-----------------|--------|------------|---------|
+| 10, 9, 8, 7, 6 | left 35, 34, 32, 31, 29 | ROW0-4 | 5, 6, 7, 8, 9 (straight; firmware undoes the 6/7 crossing) | both |
+| 5, 4, 2, 1, 41 | left 27, 26, 25, 24, 22 | COL0-4 | 13-17 | both |
+| 42 | left 21 | COL-H/L | 18 | both |
+| 11, 12, 13, 14 | right 1, 2, 4, 5 | COL-SEL0-3 | 19-22 | A only |
+| 15, 16, 17, 18 | right 6, 7, 9, 10 | COL-SEL4-7 | 19-22 | B only |
+| 38 | right 17 | ROW-HIGH | 10 | both |
+| 39 | right 19 | ROW-LOW | 11 | both |
+| 3V3 | left 36 | logic supply | 3 | both |
+| GND | any GND | GND | 1, 2 | both |
+
+10k pull-downs to ground on ROW-HIGH, ROW-LOW and every COL-SEL line that is wired.
+24 V on pin 26 of each ribbon.
+
+GPIO33-37 are avoided because Waveshare lists them for PSRAM. The onboard WS2812 is
+on GPIO21 and takes its colours red first.
+
+For one panel per row, mounted as in the target build:
+
+```c
+#define DISPLAY_PANELS_X 1
+#define DISPLAY_PANELS_Y 2
+#define DISPLAY_LAYOUT \
+    {                  \
+        {{0, true}},   \
+        {{4, false}},  \
+    }
+```
+
 ## Status LED
 
-The onboard RGB LED (GPIO8, as on the ESP32-C6-DevKitC-1) shows:
+The onboard RGB LED (GPIO8 on the ESP32-C6-DevKitC-1, GPIO21 on the ESP32-S3-Pico) shows:
 
 | LED | Meaning |
 |-----|---------|

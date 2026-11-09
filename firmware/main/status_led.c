@@ -8,9 +8,18 @@
 #include "esp_check.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "sdkconfig.h"
 
+#if CONFIG_IDF_TARGET_ESP32C6
 // ESP32-C6-DevKitC-1. GPIO8 is a strapping pin, which only matters during reset.
 #define PIN_LED GPIO_NUM_8
+#elif CONFIG_IDF_TARGET_ESP32S3
+// Waveshare ESP32-S3-Pico. Its WS2812 takes red first, not green.
+#define PIN_LED GPIO_NUM_21
+#define LED_ORDER_RGB 1
+#else
+#error "No status LED pin for this target"
+#endif
 
 // 0.1 us per RMT tick, for the WS2812 bit timings below.
 #define RMT_RESOLUTION_HZ (10 * 1000 * 1000)
@@ -22,16 +31,20 @@
 // The LED is bright and shares the supply, so keep it dim.
 #define LEVEL 16
 
-typedef struct {
-    uint8_t g, r, b;  // the order the LED expects
+typedef struct {  // fields in the order the LED expects them
+#if LED_ORDER_RGB
+    uint8_t r, g, b;
+#else
+    uint8_t g, r, b;
+#endif
 } colour_t;
 
-static const colour_t OFF = {0, 0, 0};
-static const colour_t BLUE = {0, 0, LEVEL};
-static const colour_t YELLOW = {LEVEL, LEVEL, 0};
-static const colour_t GREEN = {LEVEL, 0, 0};
-static const colour_t PURPLE = {0, LEVEL, LEVEL};
-static const colour_t WHITE = {LEVEL, LEVEL, LEVEL};
+static const colour_t OFF = {.r = 0, .g = 0, .b = 0};
+static const colour_t BLUE = {.r = 0, .g = 0, .b = LEVEL};
+static const colour_t YELLOW = {.r = LEVEL, .g = LEVEL, .b = 0};
+static const colour_t GREEN = {.r = 0, .g = LEVEL, .b = 0};
+static const colour_t PURPLE = {.r = LEVEL, .g = 0, .b = LEVEL};
+static const colour_t WHITE = {.r = LEVEL, .g = LEVEL, .b = LEVEL};
 
 static rmt_channel_handle_t s_rmt;
 static rmt_encoder_handle_t s_encoder;

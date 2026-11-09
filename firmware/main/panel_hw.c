@@ -8,6 +8,12 @@
 #include "esp_rom_sys.h"
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
+#include "sdkconfig.h"
+
+#if !CONFIG_IDF_TARGET_ESP32C6
+// This pin map is for the C6; on the S3, GPIO19 and GPIO20 are USB.
+#error "The shift-register driver only has a C6 pin map; use CONFIG_FLIPDOT_DIRECT_DRIVE"
+#endif
 
 // None of these are strapping pins, and all are broken out on both the
 // ESP32-C6-DevKitC-1 and the XIAO ESP32-C6.
