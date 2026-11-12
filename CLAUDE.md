@@ -221,9 +221,11 @@ NOT YET VERIFIED - do not assume:
     capacitance (470 uF) behind a load switch, typically a P-MOSFET, enabled by the
     trigger chip's power-good output.
   - Chargers without a 20 V profile (many phone chargers stop at 9 or 12 V) leave the
-    rail too low to flip reliably. Planned, not implemented: a divider from the coil
-    rail to an ADC pin (GPIO40 is free on the S3), with firmware refusing to pulse
-    below ~18 V and showing it on the status LED.
+    rail too low to flip reliably. Plan: the PD trigger's power-good output switches
+    the coil rail in hardware AND goes to GPIO40, so firmware can refuse to pulse and
+    show it on the status LED (not implemented yet). An ADC divider is not an option:
+    the S3's ADC pins are GPIO1-20, all used by the pin map, and GPIO40 has no ADC.
+  - Draft schematic (rev 0): https://claude.ai/artifact/8Sb9KLrSTWjDoLQiBUVHx7
   - Keep the series Schottky plus 220-470 uF ahead of the buck input, so coil pulses
     cannot brown out the ESP32.
 - Coil supply chains through the ribbons (fine at 0.62 A peak on 28 AWG).

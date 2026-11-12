@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Wipe the display corner to corner along the diagonal, every 5 seconds.
+"""Wipe the display corner to corner along the diagonal, one diagonal per frame.
 
 Each wipe runs from the top-left to the bottom-right corner, alternating
-between yellow and black, so the display fills and then clears.
+between yellow and black, so the display fills and then clears. At the
+firmware's 4 frames a second a wipe takes about 15 seconds.
 """
 import socket
 import time
@@ -14,9 +15,8 @@ COLS, ROWS = 28, 32          # two 28x16 panels stacked, one per ribbon
 STRIDE = (COLS + 7) // 8
 FRAME_BYTES = STRIDE * ROWS
 
-PERIOD_S = 5                 # a new wipe starts this often
 FRAME_S = 0.25               # the firmware adopts at most 4 frames a second
-WIPE_S = 3                   # time for one wipe, within PERIOD_S
+PAUSE_S = 2                  # hold between wipes
 
 
 def diagonal_frame(reach, yellow):
@@ -31,21 +31,18 @@ def diagonal_frame(reach, yellow):
 
 def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    steps = round(WIPE_S / FRAME_S)
     last_diagonal = COLS + ROWS - 2
     yellow = True
 
     sock.sendto(bytes(FRAME_BYTES), (DISPLAY_IP, UDP_PORT))   # start from black
     try:
         while True:
-            start = time.monotonic()
-            for step in range(1, steps + 1):
-                reach = round(last_diagonal * step / steps)
+            for reach in range(last_diagonal + 1):
                 sock.sendto(diagonal_frame(reach, yellow), (DISPLAY_IP, UDP_PORT))
                 time.sleep(FRAME_S)
             print(f"{time.strftime('%H:%M:%S')}  wiped {'yellow' if yellow else 'black'}")
             yellow = not yellow
-            time.sleep(max(0, PERIOD_S - (time.monotonic() - start)))
+            time.sleep(PAUSE_S)
     except KeyboardInterrupt:
         pass
     finally:
