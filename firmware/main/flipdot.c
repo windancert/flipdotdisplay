@@ -24,12 +24,12 @@ static SemaphoreHandle_t s_lock;
 static SemaphoreHandle_t s_flip_lock;  // held while the driver task flips a dot
 static volatile bool s_paused;
 static TaskHandle_t s_task;
-static uint8_t s_pending[FRAME_BYTES];
+static uint8_t s_pending[GEOMETRY_MAX_FRAME_BYTES];
 static bool s_pending_dirty;
 
 // Only touched by the driver task, after flipdot_start has finished with them.
-static uint8_t s_target[FRAME_BYTES];
-static uint8_t s_shown[FRAME_BYTES];
+static uint8_t s_target[GEOMETRY_MAX_FRAME_BYTES];
+static uint8_t s_shown[GEOMETRY_MAX_FRAME_BYTES];
 static int64_t s_last_adopt_us = -MIN_FRAME_INTERVAL_US;
 
 static void flip_dot(uint16_t x, uint16_t y, dot_colour_t colour)
@@ -46,7 +46,7 @@ static void adopt_pending_frame(void)
     }
     xSemaphoreTake(s_lock, portMAX_DELAY);
     if (s_pending_dirty) {
-        memcpy(s_target, s_pending, FRAME_BYTES);
+        memcpy(s_target, s_pending, flipdot_geometry()->frame_bytes);
         s_pending_dirty = false;
         s_last_adopt_us = now;
     }
@@ -56,7 +56,8 @@ static void adopt_pending_frame(void)
 // Flips the first dot that differs from the target. Returns false if none does.
 static bool flip_next_dot(void)
 {
-    for (uint16_t i = 0; i < FRAME_BYTES; i++) {
+    const geometry_t *geo = flipdot_geometry();
+    for (uint16_t i = 0; i < geo->frame_bytes; i++) {
         uint8_t diff = s_target[i] ^ s_shown[i];
         if (diff == 0) {
             continue;
@@ -66,7 +67,7 @@ static bool flip_next_dot(void)
             bit++;
         }
         uint8_t mask = 0x80 >> bit;
-        flip_dot((i % DISPLAY_STRIDE) * 8 + bit, i / DISPLAY_STRIDE,
+        flip_dot((i % geo->stride) * 8 + bit, i / geo->stride,
                  (s_target[i] & mask) ? DOT_YELLOW : DOT_BLACK);
         s_shown[i] ^= mask;
         return true;
@@ -101,8 +102,9 @@ void flipdot_start(void)
     panel_hw_init();
 
     // Dots latch, so the state left over from before this boot is unknown.
-    for (uint16_t y = 0; y < DISPLAY_H; y++) {
-        for (uint16_t x = 0; x < DISPLAY_W; x++) {
+    const geometry_t *geo = flipdot_geometry();
+    for (uint16_t y = 0; y < geo->height; y++) {
+        for (uint16_t x = 0; x < geo->width; x++) {
             flip_dot(x, y, DOT_BLACK);
         }
     }
@@ -114,7 +116,7 @@ void flipdot_start(void)
 void flipdot_show(const uint8_t *frame)
 {
     xSemaphoreTake(s_lock, portMAX_DELAY);
-    memcpy(s_pending, frame, FRAME_BYTES);
+    memcpy(s_pending, frame, flipdot_geometry()->frame_bytes);
     flipdot_clear_padding(s_pending);
     s_pending_dirty = true;
     xSemaphoreGive(s_lock);

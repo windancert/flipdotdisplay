@@ -5,18 +5,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "local_config.h"
+#include "geometry.h"
 
-_Static_assert(PANEL_COLS <= 28 && PANEL_ROWS <= 28, "the 5-bit address reaches 28 dots");
-_Static_assert(DISPLAY_PANELS_X * DISPLAY_PANELS_Y <= 8, "the controller has 8 COL-SEL lines");
-
-#define DISPLAY_W (PANEL_COLS * DISPLAY_PANELS_X)
-#define DISPLAY_H (PANEL_ROWS * DISPLAY_PANELS_Y)
-
-// 1 bit per dot, row-major, MSB is the leftmost dot. 1 = yellow, 0 = black.
-// Rows are padded to whole bytes.
-#define DISPLAY_STRIDE ((DISPLAY_W + 7) / 8)
-#define FRAME_BYTES (DISPLAY_STRIDE * DISPLAY_H)
+// Frames are 1 bit per dot, row-major, MSB is the leftmost dot. 1 = yellow,
+// 0 = black. Rows are padded to whole bytes; the geometry gives the sizes.
 
 typedef enum { DOT_BLACK = 0, DOT_YELLOW = 1 } dot_colour_t;
 
@@ -34,6 +26,11 @@ typedef struct {
     uint8_t col;  // 0-27
     uint8_t row;  // 0-15
 } dot_location_t;
+
+// Sets the geometry every other call works with. Call before the driver starts;
+// g must have come from geometry_parse.
+void flipdot_set_geometry(const geometry_t *g);
+const geometry_t *flipdot_geometry(void);
 
 // One-of-7 address: the low 3 bits are never 0 here, because 0 selects nothing.
 uint8_t flipdot_addr(uint8_t n);

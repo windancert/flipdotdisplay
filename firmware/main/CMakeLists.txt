@@ -1,8 +1,8 @@
 if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/../local_config.h")
-    message(FATAL_ERROR "Copy firmware/local_config.example.h to firmware/local_config.h and fill it in")
+    message(FATAL_ERROR "Copy firmware/local_config.example.h to firmware/local_config.h and fill in the WiFi credentials")
 endif()
 
-set(srcs "main.c" "flipdot.c" "flipdot_map.c" "net.c" "status_led.c" "ota.c")
+set(srcs "main.c" "flipdot.c" "flipdot_map.c" "geometry.c" "geometry_store.c" "net.c" "status_led.c" "ota.c")
 if(CONFIG_FLIPDOT_DIRECT_DRIVE)
     # Drive the panels straight from the GPIOs, no shift registers.
     list(APPEND srcs "panel_hw_direct.c")

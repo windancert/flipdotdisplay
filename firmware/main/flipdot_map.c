@@ -9,13 +9,17 @@
 #define U3_ROW_LOW (1u << 1)
 #define U3_SEL0 (1u << 2)
 
-typedef struct {
-    uint8_t sel;
-    bool rotated;  // mounted 180 degrees, so both axes are mirrored
-} panel_t;
+static geometry_t s_geo;
 
-// Seen from the front, [0] is the top row.
-static const panel_t LAYOUT[DISPLAY_PANELS_Y][DISPLAY_PANELS_X] = DISPLAY_LAYOUT;
+void flipdot_set_geometry(const geometry_t *g)
+{
+    s_geo = *g;
+}
+
+const geometry_t *flipdot_geometry(void)
+{
+    return &s_geo;
+}
 
 uint8_t flipdot_addr(uint8_t n)
 {
@@ -24,24 +28,24 @@ uint8_t flipdot_addr(uint8_t n)
 
 dot_location_t flipdot_locate(uint16_t x, uint16_t y)
 {
-    const panel_t *panel = &LAYOUT[y / PANEL_ROWS][x / PANEL_COLS];
-    uint8_t col = x % PANEL_COLS;
-    uint8_t row = y % PANEL_ROWS;
+    const panel_t *panel = &s_geo.panels[(y / s_geo.panel_rows) * s_geo.panels_x + x / s_geo.panel_cols];
+    uint8_t col = x % s_geo.panel_cols;
+    uint8_t row = y % s_geo.panel_rows;
     if (panel->rotated) {
-        col = PANEL_COLS - 1 - col;
-        row = PANEL_ROWS - 1 - row;
+        col = s_geo.panel_cols - 1 - col;
+        row = s_geo.panel_rows - 1 - row;
     }
     return (dot_location_t){.sel = panel->sel, .col = col, .row = row};
 }
 
 void flipdot_clear_padding(uint8_t *frame)
 {
-    if (DISPLAY_W % 8 == 0) {
+    if (s_geo.width % 8 == 0) {
         return;
     }
-    const uint8_t mask = (uint8_t)(0xFF << (8 - DISPLAY_W % 8));
-    for (int y = 0; y < DISPLAY_H; y++) {
-        frame[y * DISPLAY_STRIDE + DISPLAY_STRIDE - 1] &= mask;
+    const uint8_t mask = (uint8_t)(0xFF << (8 - s_geo.width % 8));
+    for (int y = 0; y < s_geo.height; y++) {
+        frame[y * s_geo.stride + s_geo.stride - 1] &= mask;
     }
 }
 

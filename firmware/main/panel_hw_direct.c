@@ -94,17 +94,9 @@ static bool sel_active(shift_frame_t frame, int sel)
     return sel < 6 ? (frame.u3 >> (2 + sel)) & 1 : (frame.u2 >> (5 + sel - 6)) & 1;
 }
 
-// A panel on an unwired COL-SEL line would simply never respond, so say so.
-static void check_layout(void)
+bool panel_hw_has_sel(uint8_t sel)
 {
-    for (int py = 0; py < DISPLAY_PANELS_Y; py++) {
-        for (int px = 0; px < DISPLAY_PANELS_X; px++) {
-            uint8_t sel = flipdot_locate(px * PANEL_COLS, py * PANEL_ROWS).sel;
-            if (sel >= 8 || SEL_PINS[sel] == GPIO_NUM_NC) {
-                ESP_LOGE(TAG, "panel at %d,%d uses COL-SEL%u, which has no GPIO here", px, py, sel);
-            }
-        }
-    }
+    return sel < 8 && SEL_PINS[sel] != GPIO_NUM_NC;
 }
 
 // Points the single RMT channel at one strobe pin, parking the other as a driven-
@@ -164,8 +156,6 @@ void panel_hw_init(void)
     const rmt_copy_encoder_config_t enc_cfg = {};
     ESP_ERROR_CHECK(rmt_new_copy_encoder(&enc_cfg, &s_encoder));
     ESP_ERROR_CHECK(rmt_enable(s_rmt));
-
-    check_layout();
 }
 
 // The panel swaps ribbon pins 6 and 7 (pin 6 = ROW2, pin 7 = ROW1). With ROW_PINS[i]

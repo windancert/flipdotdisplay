@@ -9,8 +9,8 @@ menu "Flip-dot display"
         bool "Show the panel orientation test at boot"
         default n
         help
-            Lights a corner marker on each panel in turn, so the layout table in
-            local_config.h can be checked against the physical wiring.
+            Lights a corner marker on each panel in turn, so the stored geometry
+            can be checked against the physical wiring.
 
     config FLIPDOT_DIRECT_DRIVE
         bool "Direct drive (no 74HCT595 shift registers)"

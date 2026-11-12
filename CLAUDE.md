@@ -161,6 +161,10 @@ parallel to both ribbons; only COL-SEL is per ribbon (0-3 on ribbon A / top row,
 full 4 x 2 target without rewiring. Full table in `firmware/README.md`, code in
 `firmware/main/panel_hw_direct.c`. Status LED is a WS2812 on GPIO21, RGB order.
 
+The display geometry (panel size, arrangement, COL-SEL line and rotation per panel)
+lives in NVS and is set with `POST /geometry`; see `firmware/README.md`. Only the WiFi
+credentials remain in the gitignored `firmware/local_config.h`.
+
 ## Status
 
 VERIFIED by experiment:
@@ -180,7 +184,7 @@ VERIFIED by experiment:
   crossed (only rows 1 and 15 dead, other rows misplaced), and a bad connection on
   the second ribbon. On this bench the arrangement is the reverse of the README:
   ribbon B (COL-SEL4) panel on top and upright, ribbon A (COL-SEL0) panel at the
-  bottom and rotated, so local_config.h has `{{4, false}}, {{0, true}}`.
+  bottom and rotated, so the geometry is `28x16 1x2 4 0r`.
 - Coils at 20 V with 200 us pulses flip reliably in both directions (S3 two-row bench,
   bench supply at 20 V). A few dots stay put in both colours (about 2 on one panel,
   4 on the other, one cluster of 3), probably mechanical; untested whether 24 V or a

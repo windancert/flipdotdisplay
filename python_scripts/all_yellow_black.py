@@ -3,24 +3,21 @@
 import socket
 import time
 
-DISPLAY_IP = "192.168.42.172"
-UDP_PORT = 7777
-
-# Rows are padded to whole bytes: 7 bytes/row * 16 rows = 112.
-COLS, ROWS = 56, 16          # two 28x16 panels side by side
-STRIDE = (COLS + 7) // 8
-FRAME_BYTES = STRIDE * ROWS
+from display import DISPLAY_IP, UDP_PORT, display_size, stride
 
 INTERVAL_S = 5
 DURATION_S = 60          # set to None to run until Ctrl-C
 
-ALL_YELLOW = bytes([0xFF]) * FRAME_BYTES   # 1 = yellow; padding bits are ignored
-ALL_BLACK = bytes(FRAME_BYTES)             # all zero
-
 
 def main():
+    cols, rows = display_size()
+    frame_bytes = stride(cols) * rows
+    print(f"display is {cols} x {rows} dots")
+    all_yellow = bytes([0xFF]) * frame_bytes   # 1 = yellow; padding bits are ignored
+    all_black = bytes(frame_bytes)             # all zero
+
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    frames = (("yellow", ALL_YELLOW), ("black", ALL_BLACK))
+    frames = (("yellow", all_yellow), ("black", all_black))
     start = time.monotonic()
     i = 0
     try:
@@ -33,7 +30,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
-        sock.sendto(ALL_BLACK, (DISPLAY_IP, UDP_PORT))   # leave it dark
+        sock.sendto(all_black, (DISPLAY_IP, UDP_PORT))   # leave it dark
         sock.close()
 
 

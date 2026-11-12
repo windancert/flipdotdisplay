@@ -4,19 +4,19 @@ Built against ESP-IDF 6.1. Not tried on older versions. Runs on a bare DevKitC-1
 has not yet driven a panel.
 
 ```sh
-cp local_config.example.h local_config.h   # display geometry and WiFi credentials
+cp local_config.example.h local_config.h   # WiFi credentials
 idf.py set-target esp32c6
 idf.py menuconfig          # optional, "Flip-dot display": UDP port, boot test
 idf.py build flash monitor
 ```
 
-`local_config.h` is gitignored, so it needs creating on each new checkout.
+`local_config.h` is gitignored, so it needs creating on each new checkout. The display
+geometry is not in it: see [Display geometry](#display-geometry).
 
 Host test of the addressing logic, no toolchain needed:
 
 ```sh
-cc -std=c11 -Wall -Wextra -Itest -Imain test/test_map.c main/flipdot_map.c -o test/test_map && test/test_map
-cc -std=c11 -Wall -Wextra -Itest/one_panel -Imain test/test_one_panel.c main/flipdot_map.c -o test/test_one_panel && test/test_one_panel
+cc -std=c11 -Wall -Wextra -Imain test/test_map.c main/flipdot_map.c main/geometry.c -o test/test_map && test/test_map
 ```
 
 ## Wiring
@@ -123,17 +123,34 @@ left header follows the ribbon's own order.
 GPIO33-37 are avoided because Waveshare lists them for PSRAM. The onboard WS2812 is
 on GPIO21 and takes its colours red first.
 
-For one panel per row, mounted as in the target build:
+For one panel per row, mounted as in the target build, the geometry is
+`28x16 1x2 0r 4`.
 
-```c
-#define DISPLAY_PANELS_X 1
-#define DISPLAY_PANELS_Y 2
-#define DISPLAY_LAYOUT \
-    {                  \
-        {{0, true}},   \
-        {{4, false}},  \
-    }
+## Display geometry
+
+The panel size, the arrangement of the panels and the COL-SEL line of each are kept in
+NVS, so they survive restarts and firmware updates, and are set over HTTP:
+
+```sh
+curl http://<display-ip>/geometry                            # read it
+curl --data "28x16 4x2 0r 1r 2r 3r 4 5 6 7" http://<display-ip>/geometry   # set it
 ```
+
+The text is the size of one panel in dots (columns x rows), the number of panels
+(across x down), then one entry per panel seen from the front, top row first and left
+to right: its COL-SEL line, followed by `r` if the panel is mounted rotated 180
+degrees. The example is the 4 x 2 target build; `28x16 1x2 4 0r` is the S3 bench.
+
+A valid new geometry is stored and the board restarts to apply it, blacking out the
+new display area. Anything invalid is refused with a 400 and a reason, and nothing
+changes: a panel needs 1 to 28 dots each way, there are at most 8 panels, and every
+panel needs its own COL-SEL line that this board has a GPIO for (the C6 direct-drive
+map has only COL-SEL0 and 1).
+
+Until a geometry is stored, or if the stored one no longer fits the board, the
+firmware uses one upright 28 x 16 panel on COL-SEL0. The frame size follows the
+geometry, so senders must match it; the serial log prints both at boot. Like the
+other endpoints, this one has no authentication.
 
 ## Status LED
 
@@ -180,6 +197,6 @@ including the code that limits coil pulses.
 ## Bring-up
 
 1. Check the strobe with a scope or LED on U3 QA **before connecting a panel**.
-2. Connect one panel on the COL-SEL line set in `local_config.h` and enable the boot test.
-3. Do the COL-SEL buzz test from `CLAUDE.md`, then fix the `DISPLAY_LAYOUT` table in
-   `local_config.h` if the headers shift the select lines.
+2. Connect one panel on COL-SEL0 (the default geometry) and enable the boot test.
+3. Do the COL-SEL buzz test from `CLAUDE.md`, then set the geometry over HTTP, swapping
+   the COL-SEL lines if the headers shift them.

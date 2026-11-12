@@ -89,6 +89,11 @@ void panel_hw_init(void)
     shift_and_latch(flipdot_idle_frame());
 }
 
+bool panel_hw_has_sel(uint8_t sel)
+{
+    return sel < 8;
+}
+
 void panel_hw_pulse(shift_frame_t frame, uint32_t width_us)
 {
     if (width_us > PANEL_PULSE_MAX_US) {
