@@ -2,18 +2,18 @@
 import socket
 import time
 
-DISPLAY_IP = "192.168.42.172"
-UDP_PORT = 7777
+from display import DISPLAY_IP, UDP_PORT, display_size, stride
 
-COLS, ROWS = 56, 16          # two 28x16 panels side by side
-STRIDE = (COLS + 7) // 8
-FRAME_BYTES = STRIDE * ROWS
 INTERVAL_S = 0.5
 
 
 def main():
+    cols, rows = display_size()
+    row_bytes = stride(cols)
+    print(f"display is {cols} x {rows} dots")
+
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    frame = bytearray(FRAME_BYTES)
+    frame = bytearray(row_bytes * rows)
 
     # Start from a known-blank display.
     sock.sendto(bytes(frame), (DISPLAY_IP, UDP_PORT))
@@ -21,9 +21,9 @@ def main():
 
     try:
         while True:                                  # each pass fills, the next clears
-            for y in range(ROWS):
-                for x in range(COLS):
-                    idx = y * STRIDE + x // 8
+            for y in range(rows):
+                for x in range(cols):
+                    idx = y * row_bytes + x // 8
                     bit = 0x80 >> (x % 8)            # MSB = leftmost dot
                     frame[idx] ^= bit                # flip this one dot
                     sock.sendto(bytes(frame), (DISPLAY_IP, UDP_PORT))
@@ -33,7 +33,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
-        sock.sendto(bytes(FRAME_BYTES), (DISPLAY_IP, UDP_PORT))   # clear on exit
+        sock.sendto(bytes(len(frame)), (DISPLAY_IP, UDP_PORT))   # clear on exit
         sock.close()
 
 

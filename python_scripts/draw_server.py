@@ -7,16 +7,17 @@ phone (same WiFi). Draw with your finger; the frame is forwarded over UDP.
 import socket
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-DISPLAY_IP = "192.168.42.172"
-UDP_PORT = 7777
-COLS, ROWS = 56, 16          # two 28x16 panels side by side
-STRIDE = (COLS + 7) // 8
-FRAME_BYTES = STRIDE * ROWS
+from display import DISPLAY_IP, UDP_PORT, display_size, stride
+
 HTTP_PORT = 8000
+
+# Set by main() from the display's geometry.
+COLS = ROWS = FRAME_BYTES = 0
+PAGE = ""
 
 _udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-PAGE = r"""<!doctype html>
+PAGE_TEMPLATE = r"""<!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -143,7 +144,7 @@ layout();
 </script>
 </body>
 </html>
-""".replace("__COLS__", str(COLS)).replace("__ROWS__", str(ROWS))
+"""
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -183,6 +184,12 @@ def lan_ip():
 
 
 def main():
+    global COLS, ROWS, FRAME_BYTES, PAGE
+    COLS, ROWS = display_size()
+    FRAME_BYTES = stride(COLS) * ROWS
+    PAGE = PAGE_TEMPLATE.replace("__COLS__", str(COLS)).replace("__ROWS__", str(ROWS))
+
+    print(f"display is {COLS} x {ROWS} dots")
     print(f"On your phone (same WiFi) open:  http://{lan_ip()}:{HTTP_PORT}/")
     print(f"Forwarding {FRAME_BYTES}-byte frames to {DISPLAY_IP}:{UDP_PORT}")
     ThreadingHTTPServer(("0.0.0.0", HTTP_PORT), Handler).serve_forever()

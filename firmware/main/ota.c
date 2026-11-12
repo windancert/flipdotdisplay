@@ -124,12 +124,8 @@ static esp_err_t handle_version(httpd_req_t *req)
     return httpd_resp_sendstr(req, body);
 }
 
-void ota_server_start(void)
+void ota_register(httpd_handle_t server)
 {
-    httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-    httpd_handle_t server;
-    ESP_ERROR_CHECK(httpd_start(&server, &config));
-
     const httpd_uri_t update = {.uri = "/update", .method = HTTP_POST, .handler = handle_update};
     const httpd_uri_t version = {.uri = "/version", .method = HTTP_GET, .handler = handle_version};
     ESP_ERROR_CHECK(httpd_register_uri_handler(server, &update));

@@ -4,15 +4,16 @@
 
 #include "esp_check.h"
 #include "esp_event.h"
+#include "esp_http_server.h"
 #include "esp_log.h"
 #include "esp_netif.h"
 #include "esp_wifi.h"
 #include "flipdot.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "geometry_store.h"
 #include "local_config.h"
 #include "lwip/sockets.h"
-#include "nvs_flash.h"
 #include "ota.h"
 #include "status_led.h"
 
@@ -38,13 +39,6 @@ static void on_wifi_event(void *arg, esp_event_base_t base, int32_t id, void *da
 
 static void wifi_start(void)
 {
-    esp_err_t err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        err = nvs_flash_init();
-    }
-    ESP_ERROR_CHECK(err);
-
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
     esp_netif_create_default_wifi_sta();
@@ -79,16 +73,27 @@ static void udp_task(void *arg)
 
     // One byte extra, so an oversized datagram shows up as the wrong length
     // instead of being silently truncated to a valid one.
-    static uint8_t buf[FRAME_BYTES + 1];
+    static uint8_t buf[GEOMETRY_MAX_FRAME_BYTES + 1];
+    const int frame_bytes = flipdot_geometry()->frame_bytes;
     for (;;) {
         int len = recv(sock, buf, sizeof(buf), 0);
-        if (len == FRAME_BYTES) {
+        if (len == frame_bytes) {
             flipdot_show(buf);
             status_led_flash();
         } else {
-            ESP_LOGW(TAG, "dropped datagram of %d bytes, expected %d", len, FRAME_BYTES);
+            ESP_LOGW(TAG, "dropped datagram of %d bytes, expected %d", len, frame_bytes);
         }
     }
+}
+
+// Firmware updates and the geometry, both on port 80.
+static void http_start(void)
+{
+    httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+    httpd_handle_t server;
+    ESP_ERROR_CHECK(httpd_start(&server, &config));
+    ota_register(server);
+    geometry_register(server);
 }
 
 void net_start(void)
@@ -99,7 +104,7 @@ void net_start(void)
         return;
     }
     wifi_start();
-    ota_server_start();
+    http_start();
     BaseType_t ok = xTaskCreate(udp_task, "udp", 4096, NULL, 4, NULL);
     configASSERT(ok == pdPASS);
 }
