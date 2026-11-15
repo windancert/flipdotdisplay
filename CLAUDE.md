@@ -152,7 +152,7 @@ The C6 has only two RMT TX channels and the status LED owns one, so both polarit
 strobes share a single RMT channel that is re-pointed through the GPIO matrix per
 pulse. A second strobe channel does not exist and panics at boot.
 
-## ESP32-S3 two-row direct drive (working, one panel per row)
+## ESP32-S3 two-row direct drive (working, two panels per row)
 
 Waveshare ESP32-S3-Pico (ESP32-S3R2, 16 MB flash, 2 MB PSRAM) driving two rows of
 panels, each row on its own ribbon. Address, polarity and strobe lines are wired in
@@ -184,16 +184,22 @@ VERIFIED by experiment:
   crossed (only rows 1 and 15 dead, other rows misplaced), and a bad connection on
   the second ribbon. On this bench the arrangement is the reverse of the README:
   ribbon B (COL-SEL4) panel on top and upright, ribbon A (COL-SEL0) panel at the
-  bottom and rotated, so the geometry is `28x16 1x2 4 0r`.
+  bottom and rotated, so the geometry was `28x16 1x2 4 0r`.
+- S3 bench at 2 x 2 (56 x 32), a chained second panel on each ribbon. On both ribbons
+  the second panel answers on the next COL-SEL line (5 after 4, 1 after 0). Seen from
+  the front: top row upright, COL-SEL4 left, 5 right; bottom row rotated, COL-SEL1
+  left, 0 right, so the chain on the rotated row runs right to left. Geometry
+  `28x16 2x2 4 5 1r 0r`, confirmed with a numbered pattern per panel.
 - Coils at 20 V with 200 us pulses flip reliably in both directions (S3 two-row bench,
   bench supply at 20 V). A few dots stay put in both colours (about 2 on one panel,
   4 on the other, one cluster of 3), probably mechanical; untested whether 24 V or a
   longer pulse frees them.
 
 NOT YET VERIFIED - do not assume:
-- WHY the second panel answers on COL-SEL1: the 26-way headers may shift the COL-SEL
-  lines by one position as the ribbon chains, or the panel may be strapped to SEL1.
-  Chaining works either way, but it matters for panels 3-5. TEST: buzz COL-SEL0
+- WHY a chained second panel answers on the next COL-SEL line (seen on the C6 and on
+  both S3 ribbons): the 26-way headers may shift the COL-SEL lines by one position as
+  the ribbon chains, or the panels may be strapped. A header shift would put panels 3
+  and 4 on the following lines as well; with strapping it depends on each panel. TEST: buzz COL-SEL0
   (pin 19) on one header against pins 19-23 on the other.
 
 ## Target build
