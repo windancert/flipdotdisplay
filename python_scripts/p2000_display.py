@@ -29,7 +29,8 @@ STATION_CAPCODE = 1106973
 
 PAGE_S = 4  # how long each page shows when the text needs more than one
 
-# 5x7 capitals and digits, "#" lit. Each character takes 6 columns including the
+# 5x7 letters and digits, "#" lit; the lowercase follows the HD44780 LCD font,
+# which keeps descenders inside the 7 rows. Each character takes 6 columns including the
 # gap, and each line 8 rows, so every 16-row panel holds exactly 2 lines and
 # 56 x 32 dots hold 9 characters on 4 lines.
 FONT = {
@@ -59,6 +60,32 @@ FONT = {
     "X": ["#...#", "#...#", ".#.#.", "..#..", ".#.#.", "#...#", "#...#"],
     "Y": ["#...#", "#...#", ".#.#.", "..#..", "..#..", "..#..", "..#.."],
     "Z": ["#####", "....#", "...#.", "..#..", ".#...", "#....", "#####"],
+    "a": [".....", ".....", ".###.", "....#", ".####", "#...#", ".####"],
+    "b": ["#....", "#....", "#.##.", "##..#", "#...#", "#...#", "####."],
+    "c": [".....", ".....", ".###.", "#....", "#....", "#...#", ".###."],
+    "d": ["....#", "....#", ".##.#", "#..##", "#...#", "#...#", ".####"],
+    "e": [".....", ".....", ".###.", "#...#", "#####", "#....", ".###."],
+    "f": ["..##.", ".#..#", ".#...", "###..", ".#...", ".#...", ".#..."],
+    "g": [".....", ".####", "#...#", "#...#", ".####", "....#", ".###."],
+    "h": ["#....", "#....", "#.##.", "##..#", "#...#", "#...#", "#...#"],
+    "i": ["..#..", ".....", ".##..", "..#..", "..#..", "..#..", ".###."],
+    "j": ["...#.", ".....", "..##.", "...#.", "...#.", "#..#.", ".##.."],
+    "k": ["#....", "#....", "#..#.", "#.#..", "##...", "#.#..", "#..#."],
+    "l": [".##..", "..#..", "..#..", "..#..", "..#..", "..#..", ".###."],
+    "m": [".....", ".....", "##.#.", "#.#.#", "#.#.#", "#...#", "#...#"],
+    "n": [".....", ".....", "#.##.", "##..#", "#...#", "#...#", "#...#"],
+    "o": [".....", ".....", ".###.", "#...#", "#...#", "#...#", ".###."],
+    "p": [".....", ".....", "####.", "#...#", "####.", "#....", "#...."],
+    "q": [".....", ".....", ".##.#", "#..##", ".####", "....#", "....#"],
+    "r": [".....", ".....", "#.##.", "##..#", "#....", "#....", "#...."],
+    "s": [".....", ".....", ".###.", "#....", ".###.", "....#", "####."],
+    "t": [".#...", ".#...", "###..", ".#...", ".#...", ".#..#", "..##."],
+    "u": [".....", ".....", "#...#", "#...#", "#...#", "#..##", ".##.#"],
+    "v": [".....", ".....", "#...#", "#...#", "#...#", ".#.#.", "..#.."],
+    "w": [".....", ".....", "#...#", "#...#", "#.#.#", "#.#.#", ".#.#."],
+    "x": [".....", ".....", "#...#", ".#.#.", "..#..", ".#.#.", "#...#"],
+    "y": [".....", ".....", "#...#", "#...#", ".####", "....#", ".###."],
+    "z": [".....", ".....", "#####", "...#.", "..#..", ".#...", "#####"],
     "0": [".###.", "#...#", "#..##", "#.#.#", "##..#", "#...#", ".###."],
     "1": ["..#..", ".##..", "..#..", "..#..", "..#..", "..#..", ".###."],
     "2": [".###.", "#...#", "....#", "...#.", "..#..", ".#...", "#####"],
@@ -98,30 +125,33 @@ def clean(message):
 
 
 def wrap(text, width):
-    """Word-wraps to lines of at most width characters, hyphenating longer words."""
+    """Word-wraps to lines of at most width characters.
+
+    A line may also break after a "/" within a word; words that still don't fit
+    are hyphenated.
+    """
     lines, line = [], ""
     for word in text.split():
-        while len(word) > width:
+        # Pieces of the word that may end a line, joined without a space.
+        for k, piece in enumerate(re.split(r"(?<=/)(?=.)", word)):
+            sep = "" if k else " "
+            if line and len(line) + len(sep) + len(piece) <= width:
+                line += sep + piece
+                continue
             if line:
                 lines.append(line)
-                line = ""
-            lines.append(word[:width - 1] + "-")
-            word = word[width - 1:]
-        if not line:
-            line = word
-        elif len(line) + 1 + len(word) <= width:
-            line += " " + word
-        else:
-            lines.append(line)
-            line = word
+            while len(piece) > width:
+                lines.append(piece[:width - 1] + "-")
+                piece = piece[width - 1:]
+            line = piece
     if line:
         lines.append(line)
     return lines
 
 
 def to_font(text):
-    """Capitals without accents, with anything the font lacks shown as "?"."""
-    plain = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode().upper()
+    """The text without accents, with anything the font lacks shown as "?"."""
+    plain = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
     return "".join(c if c in FONT else "?" for c in plain)
 
 
@@ -149,6 +179,9 @@ def frames_for(message, cols, rows):
     """The pages that show a message, each a ready frame."""
     per_page = (rows + 1) // LINE_H
     lines = wrap(to_font(clean(message)), (cols + 1) // CHAR_W)
+    # Spread the lines evenly, so 5 lines become 3 + 2 rather than 4 + 1.
+    count = max(1, -(-len(lines) // per_page))
+    per_page = -(-len(lines) // count) or 1
     pages = [lines[i:i + per_page] for i in range(0, len(lines), per_page)] or [[]]
     return [render(page, cols, rows) for page in pages]
 
