@@ -3,8 +3,8 @@
 
 #include "esp_http_server.h"
 
-// Reads the stored geometry, or the default if none is stored or it doesn't fit
-// this board, and hands it to flipdot_set_geometry. Needs NVS to be initialised.
+// Reads the stored geometry, or the default if none is stored or it is invalid,
+// and hands it to flipdot_set_geometry. Needs NVS to be initialised.
 void geometry_load(void);
 
 // Adds GET /geometry, which returns the text form, and POST /geometry, which stores

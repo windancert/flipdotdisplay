@@ -128,29 +128,11 @@ Arduino Uno driving one panel directly - Uno GPIO is 5 V so no level shifting ne
 Plus 10k pull-downs to ground on ribbon 10, 11 and 19, because Uno pins are
 high-impedance through the bootloader delay and on every upload reset.
 
-## ESP32-C6 direct-drive bench setup (working, two panels)
+## Earlier ESP32-C6 bench (retired)
 
-ESP32-C6 driving two daisy-chained panels side by side (56 x 16) straight from its
-GPIOs, no shift registers. Built with `CONFIG_FLIPDOT_DIRECT_DRIVE=y`; the pin map
-lives in `firmware/main/panel_hw_direct.c`.
-
-| C6 | Signal | Ribbon |
-|----|--------|--------|
-| GPIO18-22 | ROW0-4 | 5, 6, 7, 8, 9 (straight; firmware undoes the 6/7 crossing) |
-| GPIO4, 5, 6, 7, 0 | COL0-4 | 13-17 |
-| GPIO23 | COL-H/L | 18 |
-| GPIO1 | COL-SEL0 (left panel) | 19 |
-| GPIO2 | COL-SEL1 (right panel) | 20 |
-| GPIO10 | ROW-HIGH | 10 |
-| GPIO11 | ROW-LOW | 11 |
-| 3V3 | panel logic supply | 3 |
-| GND | GND | 1, 2 |
-
-Plus 10k pull-downs to ground on ribbon 10, 11, 19 and 20, and 24 V on pin 26.
-
-The C6 has only two RMT TX channels and the status LED owns one, so both polarity
-strobes share a single RMT channel that is re-pointed through the GPIO matrix per
-pulse. A second strobe channel does not exist and panics at boot.
+An ESP32-C6-DevKitC-1 drove two panels side by side in direct drive before the S3
+took over. Support for the C6, and for the 74HCT595 shift-register driver that only
+existed for it, has been removed from the firmware; both are in the git history.
 
 ## ESP32-S3 two-row direct drive (working, two panels per row)
 
@@ -159,7 +141,12 @@ panels, each row on its own ribbon. Address, polarity and strobe lines are wired
 parallel to both ribbons; only COL-SEL is per ribbon (0-3 on ribbon A / top row,
 4-7 on ribbon B / bottom row). The pin map reserves all 21 signals, enough for the
 full 4 x 2 target without rewiring. Full table in `firmware/README.md`, code in
-`firmware/main/panel_hw_direct.c`. Status LED is a WS2812 on GPIO21, RGB order.
+`firmware/main/panel_hw.c`. Status LED is a WS2812 on GPIO21, RGB order. The S3 is the
+only supported controller.
+
+Both polarity strobes share a single RMT channel that is re-pointed through the GPIO
+matrix per pulse, and the idle one is held low as a plain GPIO, so only one strobe is
+ever live.
 
 The display geometry (panel size, arrangement, COL-SEL line and rotation per panel)
 lives in NVS and is set with `POST /geometry`; see `firmware/README.md`. Only the WiFi
@@ -173,7 +160,7 @@ VERIFIED by experiment:
   the row/column address decoding is correct
 - The polarity model is correct (dots go both ways)
 - At least one stuck dot near the left edge, ~6 rows down (probably mechanical)
-- ROW-HIGH and ROW-LOW work as two separate polarity strobes (C6 direct drive pulses
+- ROW-HIGH and ROW-LOW work as two separate polarity strobes (direct drive pulses
   only one per dot, and dots go both ways)
 - The panel logic runs at 3.3 V on pin 3, driven directly from 3.3 V GPIOs
 - Two daisy-chained panels are addressed independently: driving COL-SEL1 (pin 20)
@@ -199,8 +186,8 @@ NOT YET VERIFIED - do not assume:
 - WHY a chained second panel answers on the next COL-SEL line (seen on the C6 and on
   both S3 ribbons): the 26-way headers may shift the COL-SEL lines by one position as
   the ribbon chains, or the panels may be strapped. A header shift would put panels 3
-  and 4 on the following lines as well; with strapping it depends on each panel. TEST: buzz COL-SEL0
-  (pin 19) on one header against pins 19-23 on the other.
+  and 4 on the following lines as well; with strapping it depends on each panel.
+  TEST: buzz COL-SEL0 (pin 19) on one header against pins 19-23 on the other.
 
 ## Target build
 
@@ -211,11 +198,10 @@ NOT YET VERIFIED - do not assume:
   `col = 27 - col; row = 15 - row`
 - Two ribbon chains of 4 (the 5-panel bus limit). Address and polarity lines are
   common to both chains; only the 8 COL-SEL lines are unique.
-- Controller: Waveshare ESP32-S3-Pico in direct drive, no shift registers (current
-  plan). Its pin map already covers all 21 signals; see `firmware/README.md`.
-  The earlier plan, an ESP32 + 3x 74HCT595 with OE through a BSS138 inverter, is still
-  in the firmware for the C6 only. Its reason for HCT parts (level shifting to 5 V) no
-  longer applies, since the panel logic is verified at 3.3 V.
+- Controller: Waveshare ESP32-S3-Pico in direct drive, no shift registers. Its pin
+  map already covers all 21 signals; see `firmware/README.md`. An earlier plan used
+  3x 74HCT595 for level shifting to 5 V, which the verified 3.3 V panel logic makes
+  unnecessary.
 - WiFi, not Ethernet (no drop at the location). The panels are ~3500 steel discs plus
   ground planes, so use a module with an external antenna mounted clear of the array,
   or put the ESP32 in the frame's bottom rail. Observed on the S3 bench: with the

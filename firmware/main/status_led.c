@@ -8,18 +8,9 @@
 #include "esp_check.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "sdkconfig.h"
 
-#if CONFIG_IDF_TARGET_ESP32C6
-// ESP32-C6-DevKitC-1. GPIO8 is a strapping pin, which only matters during reset.
-#define PIN_LED GPIO_NUM_8
-#elif CONFIG_IDF_TARGET_ESP32S3
 // Waveshare ESP32-S3-Pico. Its WS2812 takes red first, not green.
 #define PIN_LED GPIO_NUM_21
-#define LED_ORDER_RGB 1
-#else
-#error "No status LED pin for this target"
-#endif
 
 // 0.1 us per RMT tick, for the WS2812 bit timings below.
 #define RMT_RESOLUTION_HZ (10 * 1000 * 1000)
@@ -32,11 +23,7 @@
 #define LEVEL 16
 
 typedef struct {  // fields in the order the LED expects them
-#if LED_ORDER_RGB
     uint8_t r, g, b;
-#else
-    uint8_t g, r, b;
-#endif
 } colour_t;
 
 static const colour_t OFF = {.r = 0, .g = 0, .b = 0};

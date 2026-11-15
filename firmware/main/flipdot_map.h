@@ -1,4 +1,4 @@
-// Pure addressing logic: display coordinates -> 74HCT595 bit patterns.
+// Pure addressing logic: display coordinates -> panel input line patterns.
 // No ESP-IDF dependencies, so test/test_map.c can run it on the host.
 #pragma once
 
@@ -12,12 +12,12 @@
 
 typedef enum { DOT_BLACK = 0, DOT_YELLOW = 1 } dot_colour_t;
 
-// Bytes in the order they go out on SPI. The first byte travels furthest down
-// the chain and ends up in U3. Within a byte, bit 0 lands on QA, bit 7 on QH.
+// The state of every panel input line for one pulse. The grouping into three
+// bytes is that of the shift-register chain of an earlier design.
 typedef struct {
-    uint8_t u3;  // ROW-HIGH, ROW-LOW, COL-SEL0-5: outputs gated by the strobe OE
-    uint8_t u2;  // COL0-4, COL-SEL6-7
-    uint8_t u1;  // ROW0-4, COL-H/L
+    uint8_t u3;  // bits 0-7: ROW-HIGH, ROW-LOW, COL-SEL0-5
+    uint8_t u2;  // bits 0-6: COL0-4, COL-SEL6-7
+    uint8_t u1;  // bits 0-5: ROW0-4, COL-H/L
 } shift_frame_t;
 
 // Which physical panel and which of its dots sit at a display coordinate.
@@ -40,8 +40,7 @@ dot_location_t flipdot_locate(uint16_t x, uint16_t y);
 // Clears the padding bits at the end of each row, which address no dot.
 void flipdot_clear_padding(uint8_t *frame);
 
-// The bits to latch for one dot. The strobe bit is included, but stays invisible
-// to the panel until the U3 output enable is pulsed.
+// The lines for one dot, including the polarity strobe that panel_hw_pulse times.
 shift_frame_t flipdot_dot_frame(dot_location_t loc, dot_colour_t colour);
 
 // Everything deselected, strobes off.

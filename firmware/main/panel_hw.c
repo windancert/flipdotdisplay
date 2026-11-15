@@ -1,97 +1,165 @@
+// Panels wired straight to the GPIOs of a Waveshare ESP32-S3-Pico. The bits of a
+// shift_frame_t are fanned out to the GPIOs and the active polarity strobe is
+// pulsed by the RMT.
+//
+// Address, polarity and strobe lines are shared by every panel. With more than one
+// ribbon, each shared GPIO goes to the same pin on every ribbon; only the COL-SEL
+// lines are per panel. COL-SEL0-3 are pins 19-22 of ribbon A (top row), COL-SEL4-7
+// pins 19-22 of ribbon B (bottom row). Ribbon pins in brackets below.
+//
+// ROW0-4 are wired straight to ribbon pins 5-9; the panel's 6<->7 row crossing is
+// undone in firmware (ROW_BIT). COL-SEL and strobe lines need external 10k
+// pull-downs, since they float until panel_hw_init runs.
+//
+// Both polarity strobes share ONE RMT channel: its output is re-pointed to ROW-HIGH
+// or ROW-LOW through the GPIO matrix per pulse, and the idle polarity pin is driven
+// low as a plain GPIO, so only one strobe is ever live.
+
 #include "panel_hw.h"
 
 #include "driver/gpio.h"
 #include "driver/rmt_tx.h"
-#include "driver/spi_master.h"
 #include "esp_check.h"
 #include "esp_log.h"
+#include "esp_rom_gpio.h"
 #include "esp_rom_sys.h"
 #include "esp_timer.h"
+#include "flipdot_map.h"
 #include "freertos/FreeRTOS.h"
 #include "sdkconfig.h"
+#include "soc/gpio_sig_map.h"  // SIG_GPIO_OUT_IDX
+#include "soc/gpio_struct.h"   // read back the RMT output signal from the matrix
 
-#if !CONFIG_IDF_TARGET_ESP32C6
-// This pin map is for the C6; on the S3, GPIO19 and GPIO20 are USB.
-#error "The shift-register driver only has a C6 pin map; use CONFIG_FLIPDOT_DIRECT_DRIVE"
+#if !CONFIG_IDF_TARGET_ESP32S3
+#error "The pin map is for the Waveshare ESP32-S3-Pico"
 #endif
 
-// None of these are strapping pins, and all are broken out on both the
-// ESP32-C6-DevKitC-1 and the XIAO ESP32-C6.
-#define PIN_SER GPIO_NUM_18
-#define PIN_SRCLK GPIO_NUM_19
-#define PIN_RCLK GPIO_NUM_20
-#define PIN_STROBE GPIO_NUM_21  // high = U3 outputs enabled, through the inverter
+// Waveshare ESP32-S3-Pico, two ribbons, room for all eight panels. Header pins only,
+// avoiding GPIO33-37, which Waveshare lists for PSRAM. Each group is an unbroken run
+// down the header, apart from GND and RUN pins; Pico header pins in parentheses.
+// Left header, top to bottom: ROW0-4, COL0-4, COL-H/L, in the ribbon's own order.
+static const gpio_num_t ROW_PINS[5] = {GPIO_NUM_10, GPIO_NUM_9, GPIO_NUM_8, GPIO_NUM_7, GPIO_NUM_6};  // (35-29)
+static const gpio_num_t COL_PINS[5] = {GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_2, GPIO_NUM_1, GPIO_NUM_41};  // (27-22)
+#define PIN_COL_HL GPIO_NUM_42  // [18] (21)
+// Right header: COL-SEL0-7 at the top, the strobes at the bottom.
+static const gpio_num_t SEL_PINS[8] = {
+    GPIO_NUM_11, GPIO_NUM_12, GPIO_NUM_13, GPIO_NUM_14,  // ribbon A [19-22] (1-5)
+    GPIO_NUM_15, GPIO_NUM_16, GPIO_NUM_17, GPIO_NUM_18,  // ribbon B [19-22] (6-10)
+};
+#define PIN_ROW_HIGH GPIO_NUM_38  // [10] (17)
+#define PIN_ROW_LOW GPIO_NUM_39   // [11] (19)
 
-#define SPI_CLOCK_HZ (4 * 1000 * 1000)
+// Bit positions within shift_frame_t, matching flipdot_dot_frame(). ROW0-4 are
+// u1 bits 0-4, COL0-4 are u2 bits 0-4, COL-SEL0-5 u3 bits 2-7, COL-SEL6-7 u2 bits 5-6.
+#define U1_COL_HL_BIT (1u << 5)
+#define U3_ROW_HIGH_BIT (1u << 0)
+#define U3_ROW_LOW_BIT (1u << 1)
+
 #define RMT_RESOLUTION_HZ (1000 * 1000)
 #define RMT_DONE_TIMEOUT_MS 50
 
 // Measured 0.25 A ceiling applies at this dot rate, so never go faster.
 #define MIN_PULSE_PERIOD_US 335
+// Address lines settle before the strobe; HC decoders need only tens of ns.
+#define ADDR_SETTLE_US 2
 
 static const char *TAG = "panel_hw";
 
-static spi_device_handle_t s_spi;
 static rmt_channel_handle_t s_rmt;
 static rmt_encoder_handle_t s_encoder;
+static uint32_t s_strobe_sig;             // RMT TX output signal, read from the matrix
+static gpio_num_t s_rmt_pin = PIN_ROW_HIGH;  // strobe pin the RMT currently drives
 static int64_t s_last_pulse_us;
 
-static void shift_and_latch(shift_frame_t frame)
+static bool sel_active(shift_frame_t frame, int sel)
 {
-    const uint8_t bytes[] = {frame.u3, frame.u2, frame.u1};
-    spi_transaction_t t = {.length = sizeof(bytes) * 8, .tx_buffer = bytes};
-    ESP_ERROR_CHECK(spi_device_polling_transmit(s_spi, &t));
+    return sel < 6 ? (frame.u3 >> (2 + sel)) & 1 : (frame.u2 >> (5 + sel - 6)) & 1;
+}
 
-    gpio_set_level(PIN_RCLK, 1);
-    gpio_set_level(PIN_RCLK, 0);
+// Points the single RMT channel at one strobe pin, parking the other as a driven-
+// low GPIO, so only the chosen polarity can be energised.
+static void route_rmt_to(gpio_num_t pin)
+{
+    if (pin == s_rmt_pin) {
+        return;
+    }
+    // Park the pin the RMT is leaving: back to plain GPIO, held low.
+    esp_rom_gpio_connect_out_signal(s_rmt_pin, SIG_GPIO_OUT_IDX, false, false);
+    gpio_set_direction(s_rmt_pin, GPIO_MODE_OUTPUT);
+    gpio_set_level(s_rmt_pin, 0);
+    // Route the RMT output to the new pin; this also enables its output path.
+    esp_rom_gpio_connect_out_signal(pin, s_strobe_sig, false, false);
+    s_rmt_pin = pin;
 }
 
 void panel_hw_init(void)
 {
-    // The RMT idles low, which holds the strobe inactive from here on. Before
-    // this, the inverter's gate pull-down does the same.
+    // All driven pins start as outputs held low. The external 10k pull-downs on the
+    // strobe and select lines cover the window before this runs, while they float.
+    uint64_t mask = (1ULL << PIN_COL_HL) | (1ULL << PIN_ROW_HIGH) | (1ULL << PIN_ROW_LOW);
+    for (int i = 0; i < 5; i++) {
+        mask |= (1ULL << ROW_PINS[i]) | (1ULL << COL_PINS[i]);
+    }
+    for (int i = 0; i < 8; i++) {
+        mask |= 1ULL << SEL_PINS[i];
+    }
+    const gpio_config_t out_cfg = {.pin_bit_mask = mask, .mode = GPIO_MODE_OUTPUT};
+    ESP_ERROR_CHECK(gpio_config(&out_cfg));
+    for (int pin = 0; pin < 64; pin++) {
+        if (mask & (1ULL << pin)) {
+            gpio_set_level(pin, 0);
+        }
+    }
+
+    // One TX channel, initially bound to ROW-HIGH. Reading the signal it connected
+    // back out of the matrix means the reroute never depends on the channel number.
     const rmt_tx_channel_config_t rmt_cfg = {
-        .gpio_num = PIN_STROBE,
+        .gpio_num = PIN_ROW_HIGH,
         .clk_src = RMT_CLK_SRC_DEFAULT,
         .resolution_hz = RMT_RESOLUTION_HZ,
         .mem_block_symbols = SOC_RMT_MEM_WORDS_PER_CHANNEL,
         .trans_queue_depth = 1,
     };
     ESP_ERROR_CHECK(rmt_new_tx_channel(&rmt_cfg, &s_rmt));
-    const rmt_copy_encoder_config_t encoder_cfg = {};
-    ESP_ERROR_CHECK(rmt_new_copy_encoder(&encoder_cfg, &s_encoder));
+    s_strobe_sig = GPIO.func_out_sel_cfg[PIN_ROW_HIGH].func_sel;
+    s_rmt_pin = PIN_ROW_HIGH;
+
+    const rmt_copy_encoder_config_t enc_cfg = {};
+    ESP_ERROR_CHECK(rmt_new_copy_encoder(&enc_cfg, &s_encoder));
     ESP_ERROR_CHECK(rmt_enable(s_rmt));
-
-    const gpio_config_t rclk_cfg = {
-        .pin_bit_mask = 1ULL << PIN_RCLK,
-        .mode = GPIO_MODE_OUTPUT,
-    };
-    ESP_ERROR_CHECK(gpio_config(&rclk_cfg));
-    gpio_set_level(PIN_RCLK, 0);
-
-    const spi_bus_config_t bus_cfg = {
-        .mosi_io_num = PIN_SER,
-        .miso_io_num = -1,
-        .sclk_io_num = PIN_SRCLK,
-        .quadwp_io_num = -1,
-        .quadhd_io_num = -1,
-        .max_transfer_sz = sizeof(shift_frame_t),
-    };
-    ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &bus_cfg, SPI_DMA_DISABLED));
-    const spi_device_interface_config_t dev_cfg = {
-        .clock_speed_hz = SPI_CLOCK_HZ,
-        .mode = 0,
-        .spics_io_num = -1,
-        .queue_size = 1,
-    };
-    ESP_ERROR_CHECK(spi_bus_add_device(SPI2_HOST, &dev_cfg, &s_spi));
-
-    shift_and_latch(flipdot_idle_frame());
 }
 
-bool panel_hw_has_sel(uint8_t sel)
+// The panel swaps ribbon pins 6 and 7 (pin 6 = ROW2, pin 7 = ROW1). With ROW_PINS[i]
+// wired straight to ribbon pin 5 + i, undo that here: ROW_PINS[1] (pin 6) carries
+// row address bit 2, ROW_PINS[2] (pin 7) carries bit 1.
+static const uint8_t ROW_BIT[5] = {0, 2, 1, 3, 4};
+
+static void set_lines(shift_frame_t frame)
 {
-    return sel < 8;
+    for (int i = 0; i < 5; i++) {
+        gpio_set_level(ROW_PINS[i], (frame.u1 >> ROW_BIT[i]) & 1);
+        gpio_set_level(COL_PINS[i], (frame.u2 >> i) & 1);
+    }
+    gpio_set_level(PIN_COL_HL, (frame.u1 & U1_COL_HL_BIT) ? 1 : 0);
+    for (int i = 0; i < 8; i++) {
+        gpio_set_level(SEL_PINS[i], sel_active(frame, i));
+    }
+}
+
+static void strobe(uint32_t width_us)
+{
+    // The RMT ends the pulse itself, so a hung CPU, a WiFi interrupt or the
+    // scheduler cannot stretch it.
+    const rmt_symbol_word_t pulse = {
+        .level0 = 1,
+        .duration0 = width_us,
+        .level1 = 0,
+        .duration1 = 1,
+    };
+    const rmt_transmit_config_t tx_cfg = {.loop_count = 0, .flags.eot_level = 0};
+    s_last_pulse_us = esp_timer_get_time();
+    ESP_ERROR_CHECK(rmt_transmit(s_rmt, s_encoder, &pulse, sizeof(pulse), &tx_cfg));
+    ESP_ERROR_CHECK(rmt_tx_wait_all_done(s_rmt, RMT_DONE_TIMEOUT_MS));
 }
 
 void panel_hw_pulse(shift_frame_t frame, uint32_t width_us)
@@ -106,23 +174,21 @@ void panel_hw_pulse(shift_frame_t frame, uint32_t width_us)
         esp_rom_delay_us((uint32_t)wait_us);
     }
 
-    // The latch only reaches the panel's address lines: the strobe bits stay
-    // behind U3's disabled outputs, so the address is settled before any current
-    // flows, and a crash at this point leaves the coil off.
-    shift_and_latch(frame);
+    // Address and select settle while both strobes are low, so no current flows
+    // until the pulse, and a crash here leaves every coil off.
+    set_lines(frame);
+    esp_rom_delay_us(ADDR_SETTLE_US);
 
-    // The RMT ends the pulse by itself. From here on a hung CPU cannot hold the
-    // coil on, and neither WiFi interrupts nor the scheduler can stretch it.
-    const rmt_symbol_word_t pulse = {
-        .level0 = 1,
-        .duration0 = width_us,
-        .level1 = 0,
-        .duration1 = 1,
-    };
-    const rmt_transmit_config_t tx_cfg = {.loop_count = 0, .flags.eot_level = 0};
-    s_last_pulse_us = esp_timer_get_time();
-    ESP_ERROR_CHECK(rmt_transmit(s_rmt, s_encoder, &pulse, sizeof(pulse), &tx_cfg));
-    ESP_ERROR_CHECK(rmt_tx_wait_all_done(s_rmt, RMT_DONE_TIMEOUT_MS));
+    // Exactly one polarity strobe fires per dot: ROW-HIGH for yellow, ROW-LOW for
+    // black. The idle frame sets neither, so nothing is energised.
+    if (frame.u3 & U3_ROW_HIGH_BIT) {
+        route_rmt_to(PIN_ROW_HIGH);
+        strobe(width_us);
+    } else if (frame.u3 & U3_ROW_LOW_BIT) {
+        route_rmt_to(PIN_ROW_LOW);
+        strobe(width_us);
+    }
 
-    shift_and_latch(flipdot_idle_frame());
+    // Back to idle: deselect and clear the address.
+    set_lines(flipdot_idle_frame());
 }

@@ -8,7 +8,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "nvs.h"
-#include "panel_hw.h"
 
 #define NVS_NAMESPACE "flipdot"
 #define NVS_KEY "geometry"
@@ -16,18 +15,6 @@
 #define RESTART_DELAY_MS 500
 
 static const char *TAG = "geometry";
-
-// geometry_parse only knows the 8 COL-SEL lines exist; this board may wire fewer.
-static bool fits_board(const geometry_t *g, const char **err)
-{
-    for (int i = 0; i < g->panels_x * g->panels_y; i++) {
-        if (!panel_hw_has_sel(g->panels[i].sel)) {
-            *err = "a panel uses a COL-SEL line this board has no GPIO for";
-            return false;
-        }
-    }
-    return true;
-}
 
 static bool read_stored(char *text, size_t size)
 {
@@ -60,9 +47,9 @@ void geometry_load(void)
     char text[GEOMETRY_TEXT_MAX];
     geometry_t g;
     const char *err = "nothing stored";
-    if (!read_stored(text, sizeof(text)) || !geometry_parse(text, &g, &err) || !fits_board(&g, &err)) {
+    if (!read_stored(text, sizeof(text)) || !geometry_parse(text, &g, &err)) {
         ESP_LOGW(TAG, "using the default geometry: %s", err);
-        bool ok = geometry_parse(GEOMETRY_DEFAULT, &g, &err) && fits_board(&g, &err);
+        bool ok = geometry_parse(GEOMETRY_DEFAULT, &g, &err);
         configASSERT(ok);
     }
     flipdot_set_geometry(&g);
@@ -97,7 +84,7 @@ static esp_err_t handle_set(httpd_req_t *req)
 
     geometry_t g;
     const char *err;
-    if (!geometry_parse(text, &g, &err) || !fits_board(&g, &err)) {
+    if (!geometry_parse(text, &g, &err)) {
         return httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST, err);
     }
 
