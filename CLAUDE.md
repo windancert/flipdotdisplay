@@ -243,7 +243,12 @@ NOT YET VERIFIED - do not assume:
 
 ## Message formatting
 
-Source is a P2000 receiver (RTL-SDR + own Python script) on a Raspberry Pi.
+Source is a P2000 receiver (RTL-SDR + own Python script) on a Raspberry Pi. It
+publishes to the MQTT broker at 192.168.42.223:1883 (login required): `p2000/melding`
+carries every message, `p2000/kazerne` only those for the station, both as JSON
+`{"message", "capcodes", "timestamp", "received"}` with zero-padded capcodes, and the
+broker retains the last of each. `python_scripts/p2000_display.py` shows the latest
+station alarm; its login lives in the gitignored `python_scripts/mqtt_config.py`.
 
 Filter on capcode **1106973** (Kazernealarm Eindhoven-Centrum) - that is the one that
 corresponds to trucks actually rolling. 1106998 is the station's own Lichtkrant feed

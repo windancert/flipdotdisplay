@@ -1,0 +1,3 @@
+# MQTT login. Never commit this.
+mqtt_config.py
+__pycache__/
