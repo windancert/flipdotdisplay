@@ -3,6 +3,9 @@
 
 Run this on a PC that can reach the display, then open the printed URL on your
 phone (same WiFi). Draw with your finger; the frame is forwarded over UDP.
+"Life" runs Conway's Game of Life on whatever is drawn, until pressed again or
+the pattern stops changing. You can keep drawing while it runs. On an empty
+display it first scatters a few well-known patterns to start from.
 """
 import socket
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -34,6 +37,8 @@ PAGE_TEMPLATE = r"""<!doctype html>
   #toggle.yellow { background: #f2c014; }
   #toggle.black { background: #555; color: #fff; }
   #clear { background: #2b2b2b; color: #ddd; }
+  #life { background: #2b2b2b; color: #ddd; }
+  #life.running { background: #3a7d44; color: #fff; }
   #wrap { display: flex; align-items: center; justify-content: center;
     height: calc(100% - 56px); }
   canvas { touch-action: none; background: #1a1a1a; border-radius: 6px; }
@@ -43,6 +48,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
   <div id="bar">
     <button id="toggle" class="yellow">Drawing: YELLOW</button>
     <button id="clear">Clear</button>
+    <button id="life">Life</button>
   </div>
   <div id="wrap"><canvas id="c"></canvas></div>
 <script>
@@ -137,6 +143,76 @@ toggle.onclick = () => {
   toggle.className = paintVal ? "yellow" : "black";
 };
 document.getElementById("clear").onclick = () => { grid.fill(0); draw(); sendNow(); };
+
+// Conway's Game of Life on the current drawing. The edges wrap around, so gliders
+// come back on the other side. The display adopts at most 4 frames a second, so
+// a generation every 500 ms leaves it time to finish flipping each one.
+const GEN_MS = 500;
+const life = document.getElementById("life");
+let lifeTimer = null;
+
+function neighbours(x, y) {
+  let n = 0;
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+    if (dx || dy) n += grid[((y + dy + ROWS) % ROWS) * COLS + (x + dx + COLS) % COLS];
+  }
+  return n;
+}
+
+function generation() {
+  const next = new Uint8Array(COLS * ROWS);
+  let changed = false;
+  for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) {
+    const i = y * COLS + x, n = neighbours(x, y);
+    next[i] = (n === 3 || (n === 2 && grid[i])) ? 1 : 0;
+    if (next[i] !== grid[i]) changed = true;
+  }
+  if (!changed) { stopLife(); return; }     // a still life or an empty display
+  grid.set(next); draw(); sendNow();
+}
+
+// Classic patterns, "#" alive. Gliders and the spaceship travel, the R-pentomino
+// and the acorn grow chaotically for a long time, the pulsar oscillates.
+const PATTERNS = [
+  [".#.", "..#", "###"],                                   // glider
+  [".#..#", "#....", "#...#", "####."],                    // lightweight spaceship
+  [".##", "##.", ".#."],                                   // R-pentomino
+  [".#.....", "...#...", "##..###"],                       // acorn
+  ["..###...###..", ".............", "#....#.#....#", "#....#.#....#",
+   "#....#.#....#", "..###...###..", ".............", "..###...###..",
+   "#....#.#....#", "#....#.#....#", "#....#.#....#", ".............",
+   "..###...###.."],                                       // pulsar
+];
+
+// Drops 3 to 5 random patterns, randomly mirrored, at random places. The edges
+// wrap, so a pattern may straddle them. Patterns too big for the display are skipped.
+function seed() {
+  const fits = PATTERNS.filter(p => p.length <= ROWS && p[0].length <= COLS);
+  const count = 3 + Math.floor(Math.random() * 3);
+  for (let k = 0; k < count; k++) {
+    const p = fits[Math.floor(Math.random() * fits.length)];
+    const h = p.length, w = p[0].length;
+    const flipX = Math.random() < 0.5, flipY = Math.random() < 0.5;
+    const ox = Math.floor(Math.random() * COLS), oy = Math.floor(Math.random() * ROWS);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      if (p[flipY ? h - 1 - y : y][flipX ? w - 1 - x : x] === "#") {
+        grid[((oy + y) % ROWS) * COLS + (ox + x) % COLS] = 1;
+      }
+    }
+  }
+  draw(); sendNow();
+}
+
+function stopLife() {
+  clearInterval(lifeTimer); lifeTimer = null;
+  life.textContent = "Life"; life.className = "";
+}
+life.onclick = () => {
+  if (lifeTimer) { stopLife(); return; }
+  if (grid.every(v => !v)) seed();
+  lifeTimer = setInterval(generation, GEN_MS);
+  life.textContent = "Stop"; life.className = "running";
+};
 
 window.addEventListener("resize", layout);
 window.addEventListener("orientationchange", layout);
