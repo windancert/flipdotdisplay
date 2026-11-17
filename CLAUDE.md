@@ -243,23 +243,35 @@ NOT YET VERIFIED - do not assume:
   or put the ESP32 in the frame's bottom rail. Observed on the S3 bench: with the
   ribbons wired up near the Pico's ceramic antenna, pings went from 0% loss / 35 ms
   to 20% loss / 138 ms. Keep wiring away from the antenna end of the board.
-- Power: **USB-C PD at 20 V** (decided; not yet built). Needs a PD trigger chip
-  requesting 20 V; at most ~0.62 A peak and ~0.21 A continuous, so any 20 V profile
-  suffices. Design rules:
-  - NEVER put 20 V on the Pico's USB-C or VSYS, which take 3.7-6 V. The 20 V goes to
-    the coil rail (ribbon pin 26) and to a buck converter rated well above 20 V
-    (~28 V or more) that feeds the Pico's VSYS with 5 V.
-  - USB-PD limits sink capacitance before the 20 V contract is made, so put the bulk
-    capacitance (470 uF) behind a load switch, typically a P-MOSFET, enabled by the
-    trigger chip's power-good output.
-  - Chargers without a 20 V profile (many phone chargers stop at 9 or 12 V) leave the
-    rail too low to flip reliably. Plan: the PD trigger's power-good output switches
-    the coil rail in hardware AND goes to GPIO40, so firmware can refuse to pulse and
-    show it on the status LED (not implemented yet). An ADC divider is not an option:
-    the S3's ADC pins are GPIO1-20, all used by the pin map, and GPIO40 has no ADC.
-  - Draft schematic (rev 0): https://claude.ai/artifact/8Sb9KLrSTWjDoLQiBUVHx7
-  - Keep the series Schottky plus 220-470 uF ahead of the buck input, so coil pulses
-    cannot brown out the ESP32.
+- Power: **USB-C PD at 20 V** (decided; not yet built). At most ~0.62 A peak and
+  ~0.21 A continuous, so any 20 V profile suffices. Current plan is built from modules
+  (schematic and full wiring sheet: https://claude.ai/artifact/J4humSQehcH98LzdNP86HB):
+  - PD trigger: **Joy-IT COM-ZY12PDN-ST** (Reichelt DEBO USB-PD 1). USB-C in, screw
+    terminals out, voltage set with its button (LED dark blue = 20 V). It has NO
+    power-good or status pin.
+  - Buck: **Recom R-78E5.0-1.0**, 5 V into the Pico's VSYS through a Schottky (SS14),
+    so the Pico's own USB-C can stay plugged in for flashing. Input 7-28 V: on a 5 V
+    only charger the Pico does not boot. Output capacitance must stay under 220 uF
+    (100 uF planned).
+  - NEVER put 20 V on the Pico's USB-C or VSYS, which take 3.7-6 V.
+  - The module's 20 V goes straight to the coil rail (ribbon pin 26) with 470 uF bulk,
+    a unidirectional TVS (SMBJ24A) across it, and a series Schottky (SS34) plus
+    4.7 uF into the buck. A coil pulse dips the 470 uF by only ~0.3 V, so the buck
+    needs no large reservoir of its own. The TVS clamps near 39 V, above the R-78E's
+    28 V limit: accepted risk, or use a buck rated to 40 V.
+  - No coil-rail switch, on one condition not yet tested: with ~490 uF across the
+    module's output, the charger in use must still settle on 20 V every time it is
+    plugged in (USB-PD limits sink capacitance before the 20 V contract). If it does
+    not, fall back to the earlier revision of the same page (version 2): a P-MOSFET
+    switch turned on by a ~17 V zener detector, which also reports RAIL_OK to GPIO40.
+  - Without a rail check, a charger below 20 V or a module left on another voltage only
+    makes dots fail to flip (lower voltage is safe for the coils). Firmware should
+    therefore redraw every dot now and then, e.g. on each new P2000 message, so missed
+    flips get repaired (not implemented yet).
+  - An ADC divider is not an option for rail sensing: the S3's ADC pins are GPIO1-20,
+    all used by the pin map, and GPIO40 has no ADC.
+  - The older discrete design (CH224K with power-good to GPIO40, AP63205 buck, which
+    also runs a 5 V charger) is rev 0: https://claude.ai/artifact/8Sb9KLrSTWjDoLQiBUVHx7
 - Coil supply chains through the ribbons (fine at 0.62 A peak on 28 AWG).
 - Star ground: coil return and logic return join at one point near the power input.
 
