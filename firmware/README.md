@@ -148,6 +148,9 @@ including the code that limits coil pulses.
 
 1. Check ROW-HIGH and ROW-LOW (GPIO38 and 39) with a scope or LED **before connecting
    a panel**: low at all times except during a pulse.
-2. Connect one panel on COL-SEL0 (the default geometry) and enable the boot test.
-3. Do the COL-SEL buzz test from `CLAUDE.md`, then set the geometry over HTTP, swapping
-   the COL-SEL lines if the headers shift them.
+2. Connect one panel on COL-SEL0 (the default geometry) and enable the boot test. The
+   ribbon goes to the panel's input header; `CLAUDE.md` ("Panel select") has the
+   continuity test that tells input from output.
+3. Chain further panels from output to input. Each panel shifts the select lines down
+   by one, so the n-th panel on a ribbon answers on that ribbon's n-th COL-SEL line
+   (0-3 on ribbon A, 4-7 on ribbon B). Set the geometry over HTTP to match.
