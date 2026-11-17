@@ -66,15 +66,21 @@ Source: https://github.com/prefixFelix/mobitec-flipdot (docs/img/26pin.png)
 | 17  | COL4   | 18  | COL-H/L |
 | 19  | COL-SEL0 | 20 | COL-SEL1 |
 | 21  | COL-SEL2 | 22 | COL-SEL3 |
-| 23  | COL-SEL4 | 24 | n/c |
+| 23  | COL-SEL4 | 24 | COL-SEL5 (n/c in the source, see below) |
 | 25  | n/c    | 26  | 24 V |
 
 NOTE: pins 6 and 7 are crossed (6 = ROW2, 7 = ROW1). Everything else runs in order.
 
+Each panel has two of these headers, an input (towards the controller) and an output
+(towards the next panel); see "Panel select" below for how to tell them apart. The
+source pinout lists pin 24 as n/c, but on the input header it carries a sixth select
+position through to the output.
+
 Orientation fingerprint: pins 1+2 are the only adjacent pair both common with the
 ground plane. Pins 12, 24 and 25 are the only pads with no track at all, and they sit
 asymmetrically (12 and 24 in the even row, 25 in the odd row), which identifies both
-the low-numbered end and which row is odd.
+the low-numbered end and which row is odd. This cannot hold on the INPUT header, where
+pin 24 is tracked to output pin 23; it is expected to hold on the output header only.
 
 ## Addressing scheme
 
@@ -92,8 +98,32 @@ Colour is current direction through the coil:
 - yellow: COL-H/L low, pulse ROW-HIGH
 - black:  COL-H/L high, pulse ROW-LOW
 
-COL-SEL0..4 select which panel on a shared chain responds. One-hot, so **max 5 panels
-per ribbon chain**.
+### Panel select
+
+COL-SEL selects which panel on a shared chain responds, one-hot: one line per panel,
+one line high at a time. Every panel listens only to pin 19 of its INPUT header, and
+the panel passes the remaining select lines to its OUTPUT header shifted down by one
+(measured, 0 ohm):
+
+| Input pin | Output pin |
+|-----------|------------|
+| 19 | - (this panel's own select, does not continue) |
+| 20 | 19 |
+| 21 | 20 |
+| 22 | 21 |
+| 23 | 22 |
+| 24 | 23 |
+
+So all panels are identical and a panel's position in the chain sets its address: the
+first panel answers on the controller's COL-SEL0, the next on COL-SEL1, and so on. The
+input pins 19-24 give **6 select positions per ribbon chain** (the source pinout's
+limit of 5 comes from listing pin 24 as n/c). Unlike the row and column lines, which
+carry a binary address decoded on every panel, one line per panel needs no address
+setting on the panels.
+
+Telling input from output (unpowered, continuity meter): the header whose pin 19 has
+no connection to any pin of the other header is the INPUT; the OUTPUT header's pin 19
+beeps through to the input's pin 20.
 
 ## Reference firmware
 
@@ -182,12 +212,18 @@ VERIFIED by experiment:
   4 on the other, one cluster of 3), probably mechanical; untested whether 24 V or a
   longer pulse frees them.
 
+- The panel shifts the COL-SEL lines by one position from input to output header
+  (input 20-24 -> output 19-23, input 19 stays on the panel), measured with a
+  continuity meter on one panel. This is why a chained panel answers on the next
+  COL-SEL line, and panels 3 and 4 on a ribbon will answer on COL-SEL2 and 3 (6 and 7).
+  Table and input/output rule under "Panel select".
+
 NOT YET VERIFIED - do not assume:
-- WHY a chained second panel answers on the next COL-SEL line (seen on the C6 and on
-  both S3 ribbons): the 26-way headers may shift the COL-SEL lines by one position as
-  the ribbon chains, or the panels may be strapped. A header shift would put panels 3
-  and 4 on the following lines as well; with strapping it depends on each panel.
-  TEST: buzz COL-SEL0 (pin 19) on one header against pins 19-23 on the other.
+- That output pin 24 has no connection (expected: it would come from input pin 25,
+  which is unused), and so that the orientation fingerprint holds on the output header.
+- That a sixth panel on a chain answers on pin 24. Nothing drives pin 24 yet; the
+  firmware's pin map wires pins 19-22 only.
+- That every panel shifts the same way; only one panel was measured.
 
 ## Target build
 
@@ -196,7 +232,7 @@ NOT YET VERIFIED - do not assume:
 - Top row mounted rotated 180 degrees, so the bare-PCB strips move to the outer edges
   and the two dot fields meet. Firmware must mirror BOTH axes for that row:
   `col = 27 - col; row = 15 - row`
-- Two ribbon chains of 4 (the 5-panel bus limit). Address and polarity lines are
+- Two ribbon chains of 4 (the bus has 6 select positions). Address and polarity lines are
   common to both chains; only the 8 COL-SEL lines are unique.
 - Controller: Waveshare ESP32-S3-Pico in direct drive, no shift registers. Its pin
   map already covers all 21 signals; see `firmware/README.md`. An earlier plan used
