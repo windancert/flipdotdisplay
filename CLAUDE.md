@@ -43,6 +43,8 @@ address-driven H-bridge matrix.
   during a diagonal wipe: at most 0.04 A on the bench supply (its finest resolution),
   consistent with the model's ~0.02 A per 250 ms frame. A stuck 400 us pulse (the
   firmware ceiling) would peak at ~0.94 A.
+- The firmware now pulses 260 us (see Status): at 20 V that peaks at ~0.74 A, the same
+  as 200 us at 24 V, with ~110 uC per flip, so ~0.33 A for continuous sweeping (model).
 
 DANGER: 24 V across 16 ohm continuously is 36 W (25 W at 20 V) in a coil the size of a
 shirt button.
@@ -209,8 +211,8 @@ VERIFIED by experiment:
   `28x16 2x2 4 5 1r 0r`, confirmed with a numbered pattern per panel.
 - Coils at 20 V with 200 us pulses flip reliably in both directions (S3 two-row bench,
   bench supply at 20 V). A few dots stay put in both colours (about 2 on one panel,
-  4 on the other, one cluster of 3), probably mechanical; untested whether 24 V or a
-  longer pulse frees them.
+  4 on the other, one cluster of 3). With 260 us pulses at 20 V those dots flip too
+  (2 x 2 bench, diagonal wipe), so the firmware uses 260 us for both colours.
 
 - The panel shifts the COL-SEL lines by one position from input to output header
   (input 20-24 -> output 19-23, input 19 stays on the panel), measured with a
