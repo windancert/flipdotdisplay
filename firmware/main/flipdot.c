@@ -9,11 +9,12 @@
 #include "freertos/task.h"
 #include "panel_hw.h"
 
-// 200 us is what the bench panel flips reliably with at 24 V. The reference
-// firmware doubles yellow; try that if yellow flips turn out unreliable, but it
-// raises the peak coil current from 0.75 A to about 1.1 A.
-#define PULSE_BLACK_US 200
-#define PULSE_YELLOW_US 200
+// 260 us at 20 V reaches the 0.75 A peak coil current that 200 us gave at 24 V,
+// where the bench panel flipped reliably. The reference firmware doubles yellow;
+// try that if yellow flips turn out unreliable, but at 20 V and 520 us that
+// pushes the peak coil current to about 1.03 A.
+#define PULSE_BLACK_US 260
+#define PULSE_YELLOW_US 260
 
 // Differential updates mean a sender alternating two frames would hit the same
 // coil at the full dot rate, for which the coil has no thermal margin. Limiting
