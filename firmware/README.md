@@ -83,14 +83,15 @@ NVS, so they survive restarts and firmware updates, and are set over HTTP:
 
 ```sh
 curl http://<display-ip>/geometry                            # read it
-curl --data "28x16 4x2 0r 1r 2r 3r 4 5 6 7" http://<display-ip>/geometry   # set it
+curl --data "28x16 4x2 4 5 6 7 3r 2r 1r 0r" http://<display-ip>/geometry   # set it
 ```
 
 The text is the size of one panel in dots (columns x rows), the number of panels
 (across x down), then one entry per panel seen from the front, top row first and left
 to right: its COL-SEL line, followed by `r` if the panel is mounted rotated 180
-degrees. The example is the 4 x 2 target build; `28x16 2x2 4 5 1r 0r` is the 2 x 2
-bench.
+degrees. The example is the 4 x 2 bench: ribbon B's chain runs left to right along
+the upright top row, ribbon A's right to left along the rotated bottom row, because
+rotating a panel moves its input header to the other side.
 
 A valid new geometry is stored and the board restarts to apply it, blacking out the
 new display area. Anything invalid is refused with a 400 and a reason, and nothing
