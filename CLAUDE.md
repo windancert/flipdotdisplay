@@ -37,7 +37,9 @@ address-driven H-bridge matrix.
 - Full-panel sweep: 448 dots in ~150 ms, i.e. ~335 us per dot
 - Only ONE coil is ever energised at a time, so current does NOT scale with panel count
 - The RL model (16 ohm, 290 us) predicts ~83 uC per 200 us pulse at 24 V, i.e. 0.25 A
-  at one dot per 335 us, matching the measured sweep current. It is trustworthy.
+  at one dot per 335 us, matching the measured sweep current. It ignores the voltage
+  lost in the panel's drivers, though, and at 20 V with 260 us it overestimates the
+  measured sweep current by about a quarter (below), so treat it as an upper bound.
 - At **20 V** (the planned USB-C PD supply): peak 0.62 A at the end of a 200 us pulse,
   ~70 uC per flip, ~0.21 A for continuous sweeping (model). Measured on the S3 bench
   during a diagonal wipe: at most 0.04 A on the bench supply (its finest resolution),
@@ -45,6 +47,11 @@ address-driven H-bridge matrix.
   firmware ceiling) would peak at ~0.94 A.
 - The firmware now pulses 260 us (see Status): at 20 V that peaks at ~0.74 A, the same
   as 200 us at 24 V, with ~110 uC per flip, so ~0.33 A for continuous sweeping (model).
+  **Measured** on the 2 x 2 bench, alternating the whole display yellow/black at full
+  speed (1792 dots per 0.62 s redraw): 0.24-0.25 A at 20.2 V, supply in CV (not
+  limiting). The model overestimates by about a quarter here. Likely causes, not
+  verified: the panel's source and sink drivers drop a few volts, so the coil sees
+  less than the rail, and the real time between dots exceeds the 335 us minimum.
 
 DANGER: 24 V across 16 ohm continuously is 36 W (25 W at 20 V) in a coil the size of a
 shirt button.
