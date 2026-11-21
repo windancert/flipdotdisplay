@@ -297,11 +297,26 @@ NOT YET VERIFIED - do not assume:
 ## Message formatting
 
 Source is a P2000 receiver (RTL-SDR + own Python script) on a Raspberry Pi. It
-publishes to the MQTT broker at 192.168.42.223:1883 (login required): `p2000/melding`
-carries every message, `p2000/kazerne` only those for the station, both as JSON
-`{"message", "capcodes", "timestamp", "received"}` with zero-padded capcodes, and the
-broker retains the last of each. `python_scripts/p2000_display.py` shows the latest
-station alarm; its login lives in the gitignored `python_scripts/mqtt_config.py`.
+publishes to the MQTT broker at 192.168.42.223:1883 (login required), all at QoS 0:
+
+| Topic | Payload | Retained |
+|-------|---------|----------|
+| `p2000/melding` | every decoded message, nationwide (seen: Zandvoort, Rotterdam, Schagerbrug) | yes, the last one |
+| `p2000/kazerne` | only messages for the station (capcode 1106973) | yes, the last one |
+| `p2000/event` | the same messages as `p2000/melding`, published at the same moment | no |
+| `p2000/status` | the plain text `online` | yes |
+
+Messages are JSON `{"message", "capcodes", "timestamp", "received"}` with zero-padded
+capcodes (`"001420070"`), `timestamp` in Unix seconds and `received` in ISO 8601 with
+the local offset. Use `p2000/event` to react only to new messages: unlike
+`p2000/melding`, subscribing to it does not replay an old one. `p2000/status` is
+probably the receiver's MQTT last will, turning `offline` when it drops off the broker;
+only `online` has been seen, so that is unverified.
+
+`python_scripts/p2000_display.py` shows the latest station alarm from `p2000/kazerne`;
+with `--all` it shows every message from `p2000/melding` instead, each on a single
+page packed as full as it goes. Its login lives in the gitignored
+`python_scripts/mqtt_config.py`.
 
 Filter on capcode **1106973** (Kazernealarm Eindhoven-Centrum) - that is the one that
 corresponds to trucks actually rolling. 1106998 is the station's own Lichtkrant feed
