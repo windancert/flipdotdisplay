@@ -77,10 +77,13 @@ more than the firmware's 400 us ceiling.
 
 ## Ordering
 
-Upload `flipdot_carrier_gerbers.zip` to any board maker (JLCPCB, Aisler, PCBWay and
-others). The defaults are fine: 2 layers, 1.6 mm, 1 oz copper, HASL, any colour. The
-tightest rules used are 0.2 mm clearance, 0.3 mm tracks and 0.3 mm via holes, within
-every maker's standard process.
+Planned maker: **Aisler** (Germany), 2-layer standard boards. Aisler reads KiCad files
+directly: upload `flipdot_carrier.kicad_pcb` (or `flipdot_carrier_gerbers.zip`) and check
+its preview of both sides. The tightest rules used are 0.2 mm clearance, 0.3 mm tracks
+and 0.3 mm via holes, within every maker's standard process. Parts from Reichelt.
+
+Order only after the 20 V charger test (see CLAUDE.md, Power): if the charger does not
+settle on 20 V with ~490 uF on the module's output, the board needs a coil-rail switch.
 
 ## Assembly
 
