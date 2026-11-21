@@ -11,6 +11,7 @@ Needs paho-mqtt 2 (pip install paho-mqtt) and mqtt_config.py, copied from
 mqtt_config.example.py.
 
     python3 p2000_display.py                      # run
+    python3 p2000_display.py --all                # every message nationwide
     python3 p2000_display.py --preview "P 1 ..."  # print how a message would look
 """
 import argparse
@@ -26,6 +27,9 @@ from display import DISPLAY_IP, UDP_PORT, display_size, stride
 # Kazernealarm Eindhoven-Centrum: the trucks actually roll. Other capcodes on the
 # same message (the station's Lichtkrant, volunteer drivers) don't count.
 STATION_CAPCODE = 1106973
+
+# Every message the receiver decodes, nationwide, for --all.
+ALL_TOPIC = "p2000/melding"
 
 PAGE_S = 4  # how long each page shows when the text needs more than one
 
@@ -175,10 +179,42 @@ def render(lines, cols, rows):
     return bytes(frame)
 
 
-def frames_for(message, cols, rows):
-    """The pages that show a message, each a ready frame."""
+def pack(text, width):
+    """Fills every line to the full width, hyphenating words wherever they break."""
+    lines, line = [], ""
+    for word in text.split():
+        if line and len(line) + 1 + len(word) <= width:
+            line += " " + word
+            continue
+        if line:
+            # Start the word on this line if a useful part of it fits.
+            room = width - len(line) - 1
+            if room >= 3 and len(word) > room:
+                lines.append(line + " " + word[:room - 1] + "-")
+                word = word[room - 1:]
+            else:
+                lines.append(line)
+        while len(word) > width:
+            lines.append(word[:width - 1] + "-")
+            word = word[width - 1:]
+        line = word
+    if line:
+        lines.append(line)
+    return lines
+
+
+def frames_for(message, cols, rows, one_page=False):
+    """The pages that show a message, each a ready frame.
+
+    With one_page, as much of the message as fits on a single page, the rest cut off.
+    """
     per_page = (rows + 1) // LINE_H
-    lines = wrap(to_font(clean(message)), (cols + 1) // CHAR_W)
+    text, width = to_font(clean(message)), (cols + 1) // CHAR_W
+    lines = wrap(text, width)
+    if one_page:
+        if len(lines) > per_page:
+            lines = pack(text, width)
+        return [render(lines[:per_page], cols, rows)]
     # Spread the lines evenly, so 5 lines become 3 + 2 rather than 4 + 1.
     count = max(1, -(-len(lines) // per_page))
     per_page = -(-len(lines) // count) or 1
@@ -193,8 +229,8 @@ def preview(frame, cols, rows):
                       for x in range(cols)))
 
 
-def for_station(payload):
-    """The message text if it is for the station's capcode, else None."""
+def message_text(payload, station_only=True):
+    """The message text, or None if unreadable or (station_only) not for the station."""
     try:
         alarm = json.loads(payload)
         capcodes = {int(c) for c in alarm.get("capcodes", [])}
@@ -202,14 +238,15 @@ def for_station(payload):
     except (ValueError, KeyError, TypeError):
         print(f"ignored unreadable message: {payload[:200]!r}")
         return None
-    return message if STATION_CAPCODE in capcodes else None
+    return message if not station_only or STATION_CAPCODE in capcodes else None
 
 
-def run():
+def run(show_all):
     import paho.mqtt.client as mqtt
 
     import mqtt_config
 
+    topic = ALL_TOPIC if show_all else mqtt_config.MQTT_TOPIC
     cols, rows = display_size()
     print(f"display is {cols} x {rows} dots")
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -219,13 +256,14 @@ def run():
     def on_connect(client, userdata, flags, reason, properties):
         print(f"MQTT {mqtt_config.MQTT_HOST}: {reason}")
         if not reason.is_failure:
-            client.subscribe(mqtt_config.MQTT_TOPIC)
+            client.subscribe(topic)
 
     def on_message(client, userdata, msg):
-        message = for_station(msg.payload)
+        message = message_text(msg.payload, station_only=not show_all)
         if message is None:
             return
-        new = frames_for(message, cols, rows)
+        # Messages for the whole country follow each other too fast for pages.
+        new = frames_for(message, cols, rows, one_page=show_all)
         print(f"{time.strftime('%H:%M:%S')}  {message}\n          -> {clean(message)}")
         with lock:
             pages[:] = new
@@ -261,6 +299,8 @@ def main():
                         help="print the pages for a P2000 message and exit")
     parser.add_argument("--size", default="56x32", metavar="COLSxROWS",
                         help="display size for --preview (default 56x32)")
+    parser.add_argument("--all", action="store_true",
+                        help=f"show every P2000 message nationwide ({ALL_TOPIC}), not just the station's")
     args = parser.parse_args()
     if args.preview:
         cols, rows = map(int, args.size.split("x"))
@@ -269,7 +309,7 @@ def main():
             print()
             preview(frame, cols, rows)
         return
-    run()
+    run(args.all)
 
 
 if __name__ == "__main__":
