@@ -1,0 +1,13 @@
+# KiCad local state and backups
+*.kicad_prl
+*-backups/
+fp-info-cache
+\#auto_saved_files#
+_autosave-*
+# build by-products (tools/build.py)
+erc.rpt
+drc.rpt
+flipdot_carrier.net
+fab/
+tools/__pycache__/
+~*.lck
