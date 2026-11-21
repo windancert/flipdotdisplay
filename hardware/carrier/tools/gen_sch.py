@@ -266,6 +266,7 @@ def main():
             "GND pins 8, 13, 18, 23, 28 and 33 are joined on the Pico itself and left unconnected here.\n"
             "Pin 18 is next to the antenna, kept clear of copper.",
             63.5, 185.42)
+    sh.text("Test points: Keystone 5000-series miniature loops.", 50.8, 266.7)
     sh.text("10k pull-downs: hold every COL-SEL line and both strobes low while the ESP32 boots.",
             50.8, 226.06)
     sh.text("Ribbon pins 6 and 7 are crossed on the panel (6 = ROW2, 7 = ROW1).\n"

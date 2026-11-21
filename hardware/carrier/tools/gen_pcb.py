@@ -105,6 +105,9 @@ def build():
             f.SetTextThickness(mm(0.12))
             f.SetPosition(pt(x - 5.08, y))
             f.SetTextAngleDegrees(0)
+        if ref.startswith("TP"):  # the silkscreen label says which net; no TPn clutter
+            fp.Reference().SetVisible(False)
+            fp.Value().SetVisible(False)
         if ref == "J3":
             fp.Reference().SetPosition(pt(77.6, 77.5))
         board.Add(fp)
@@ -241,6 +244,11 @@ def add_silk(board):
     add_text(board, "-", 88.9, 71.6, 1.5, bold=True)
     add_text(board, "USB", 52.71, 26.0, 1.0)
     add_text(board, "ANTENNA END", 52.71, 84.0, 0.8)
+    for net, label, x, y in design.TESTPOINTS:
+        if y < 10:
+            add_text(board, label, x, y + 3.2, 0.8)
+        else:
+            add_text(board, label, x + 4.0, y, 0.8)
     add_text(board, "FLIP-DOT CARRIER", 14.5, 62.0, 1.2, bold=True)
     add_text(board, "rev A  2026-11", 14.5, 64.4, 1.0)
     add_text(board, "20 V NEVER ON PICO VSYS", 14.5, 66.4, 0.8)

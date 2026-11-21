@@ -91,6 +91,22 @@ for i, net in enumerate(PULLDOWNS):
                   {1: net, 2: "GND"}, (50.8 + i * 20.32, 238.76),
                   (38.1, PULLDOWN_Y[i], 180), {}))
 
+# Test points (Keystone 5000-series miniature loops): net, silkscreen label, board x, y.
+# Signals along the top edge left of the USB plug; 3.3 V and a GND right of it; 20 V,
+# 5 V, VSYS and a second GND in the power corner.
+TESTPOINTS = [
+    ("ROW_HIGH", "R-HI", 17.78, 6.35), ("ROW_LOW", "R-LO", 22.86, 6.35),
+    ("ROW4", "ROW4", 27.94, 6.35), ("COL4", "COL4", 33.02, 6.35),
+    ("SEL0", "SEL0", 38.1, 6.35), ("SEL4", "SEL4", 43.18, 6.35),
+    ("+3V3", "3V3", 63.5, 6.35), ("GND", "GND", 68.58, 6.35),
+    ("+20V", "20V", 102.87, 62.23), ("+5V", "5V", 102.87, 66.04),
+    ("VSYS", "VSYS", 102.87, 69.85), ("GND", "GND", 102.87, 73.66),
+]
+for i, (net, label, x, y) in enumerate(TESTPOINTS):
+    PARTS.append((f"TP{i + 1}", "Connector:TestPoint", label,
+                  "TestPoint:TestPoint_Keystone_5000-5004_Miniature", {1: net},
+                  (50.8 + i * 15.24, 276.86), (x, y, 0), {}))
+
 BOARD_W, BOARD_H = 111.0, 85.0
 # The Pico's antenna is on the short edge opposite USB, between the GPIO39/40 and
 # GPIO41/42 pins, at the board's bottom edge. From the GPIO38 pin to the board edge,

@@ -3396,6 +3396,129 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Connector:TestPoint"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.762)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "TP"
+				(at 0 6.858 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TestPoint"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "test point"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "test point tp"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Pin* Test*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TestPoint_0_1"
+				(circle
+					(center 0 3.302)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_1_1"
+				(pin passive line
+					(at 0 0 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Mechanical:MountingHole"
 			(pin_names
 				(offset 1.016)
@@ -10346,6 +10469,1477 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 50.8 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "444299dd-980a-5360-ad07-9ea82911cbb0")
+		(property "Reference" "TP1"
+			(at 50.8 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R-HI"
+			(at 50.8 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 55.88 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 55.88 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 50.8 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 50.8 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 50.8 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0c82e909-c20e-5372-87be-0cdc925513eb")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 50.8 276.86)
+			(xy 50.8 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7d9095ca-a634-5d3d-ae1d-d1d949f67745")
+	)
+	(label "ROW_HIGH"
+		(at 50.8 279.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "57f72eca-2141-5ef1-a4e7-102146b687c5")
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 66.04 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "87c9731b-3a25-52cf-becd-8566469a90d0")
+		(property "Reference" "TP2"
+			(at 66.04 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R-LO"
+			(at 66.04 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 71.12 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 71.12 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 66.04 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 66.04 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 66.04 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4c7a3269-2715-5e9e-a968-2189a7a5b277")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 66.04 276.86)
+			(xy 66.04 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6184778c-1e7b-5c72-b31f-1a030d57c1b8")
+	)
+	(label "ROW_LOW"
+		(at 66.04 279.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0bde83f7-df3b-5a40-8b85-d882d7b1a045")
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 81.28 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7f57e423-3363-5db6-82cf-0cde2b926033")
+		(property "Reference" "TP3"
+			(at 81.28 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ROW4"
+			(at 81.28 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 86.36 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 86.36 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 81.28 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 81.28 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 81.28 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ace52cd8-0e54-52c1-b375-57f7a82de8da")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 276.86)
+			(xy 81.28 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e794349a-8ba5-50a0-967f-cdcab3d9561a")
+	)
+	(label "ROW4"
+		(at 81.28 279.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "375ed8dc-63e7-5282-ba2b-f2232533df3c")
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 96.52 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b8071531-a3f5-5e69-81d2-17ad3e266a10")
+		(property "Reference" "TP4"
+			(at 96.52 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COL4"
+			(at 96.52 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 101.6 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 101.6 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 96.52 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 96.52 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 96.52 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8c1a61b5-8860-5ff7-81fc-56b03b3627b5")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 96.52 276.86)
+			(xy 96.52 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "df550048-a4b6-54b5-a4f5-25dae9c3e8e0")
+	)
+	(label "COL4"
+		(at 96.52 279.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "71181e35-b62d-5378-83c8-676b4fb1e3ab")
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 111.76 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "219e803d-d30d-5a01-8f3b-50a360532c8e")
+		(property "Reference" "TP5"
+			(at 111.76 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SEL0"
+			(at 111.76 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 116.84 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 111.76 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 111.76 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 111.76 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "94ae0a76-dce9-5020-af3f-164697131eaf")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 111.76 276.86)
+			(xy 111.76 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6dff7351-693c-5a96-9bcf-94fd000c7945")
+	)
+	(label "SEL0"
+		(at 111.76 279.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3f0ea24a-536e-55f7-b841-68347b0588e6")
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 127 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7dc61f8f-527f-511e-92e6-20c9adfc8563")
+		(property "Reference" "TP6"
+			(at 127 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SEL4"
+			(at 127 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 132.08 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 132.08 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 127 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 127 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 127 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e653ff19-d734-53c8-8ed6-104a50d6862d")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 276.86)
+			(xy 127 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e4b5e544-b96f-5843-9b72-ecad668caf39")
+	)
+	(label "SEL4"
+		(at 127 279.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d2672568-4fde-5361-b9f8-ec8ca0cf6eb3")
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 142.24 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "647b1b47-12e6-5715-92e1-cfae41b4bfb1")
+		(property "Reference" "TP7"
+			(at 142.24 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "3V3"
+			(at 142.24 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 147.32 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 147.32 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 142.24 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 142.24 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 142.24 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fb0e461f-7875-51c9-854a-0a883458d60a")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 142.24 276.86)
+			(xy 142.24 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "54722710-0b2a-56db-9647-e222a2e13fd7")
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 142.24 279.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5053ca3b-786e-5796-a828-68a0063b69b2")
+		(property "Reference" "#PWR39"
+			(at 142.24 283.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 142.24 275.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 142.24 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 142.24 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 142.24 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "global power"
+			(at 142.24 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "960cdb95-d743-5a89-a81d-a1a2cd609e90")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "#PWR39")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 157.48 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a433e649-93d9-5e6d-84ee-0e3c2153ebc3")
+		(property "Reference" "TP8"
+			(at 157.48 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 157.48 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 162.56 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 162.56 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 157.48 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 157.48 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 157.48 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "1d05e243-d51c-52b2-afd6-ea1ca277e409")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 157.48 276.86)
+			(xy 157.48 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "68f8ae58-9b2c-5878-97a1-7f67ff3c28ad")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 157.48 279.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9f009a02-a538-53c5-a0ee-95b7f8844a9f")
+		(property "Reference" "#PWR40"
+			(at 157.48 285.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 157.48 283.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 157.48 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 157.48 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 157.48 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "global power"
+			(at 157.48 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a046344b-811d-52fb-b33e-13b0784b18f9")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "#PWR40")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 172.72 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "51215a6a-9d10-5ebc-b873-4887eaa041f2")
+		(property "Reference" "TP9"
+			(at 172.72 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "20V"
+			(at 172.72 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 177.8 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 177.8 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 172.72 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 172.72 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 172.72 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2437e710-9488-56e5-a116-d4f37c27df78")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 276.86)
+			(xy 172.72 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fca276c9-be04-5a2f-874f-eda0fd84c761")
+	)
+	(symbol
+		(lib_id "flipdot:+20V")
+		(at 172.72 279.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7640e40c-dd83-5971-8861-952067f9e1ed")
+		(property "Reference" "#PWR41"
+			(at 172.72 283.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+20V"
+			(at 172.72 275.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 172.72 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 172.72 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+20V\""
+			(at 172.72 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "global power"
+			(at 172.72 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5d2b71a2-b2c6-5fb6-96bb-0e454af00999")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "#PWR41")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 187.96 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f099615c-b1de-57af-a9e7-b358df1098ed")
+		(property "Reference" "TP10"
+			(at 187.96 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "5V"
+			(at 187.96 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 193.04 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 187.96 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 187.96 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 187.96 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9b90088f-5ddf-562d-a702-f7cae145e929")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 187.96 276.86)
+			(xy 187.96 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18f34510-8f0b-5a03-9865-a1d429be355e")
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 187.96 279.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b3f54d2c-d4b9-5d9f-a006-a0e65b31188c")
+		(property "Reference" "#PWR42"
+			(at 187.96 283.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+5V"
+			(at 187.96 275.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 187.96 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 187.96 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 187.96 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "global power"
+			(at 187.96 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "eb82b72b-00f0-5c82-b425-e656069ae06a")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "#PWR42")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 203.2 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "89474202-fd49-5f5b-84a5-c4aa3b634e72")
+		(property "Reference" "TP11"
+			(at 203.2 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VSYS"
+			(at 203.2 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 208.28 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 208.28 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 203.2 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 203.2 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 203.2 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b53ff1bb-d55d-5c37-88f4-fa40a89f84ed")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 203.2 276.86)
+			(xy 203.2 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6db4fd9e-c7c8-5899-84b5-d1130b04401f")
+	)
+	(label "VSYS"
+		(at 203.2 279.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "4ac356bf-466f-5bfb-99ca-e6b58cdb84be")
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 218.44 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8b7bae2e-254a-501d-a4c6-61f71d32dcee")
+		(property "Reference" "TP12"
+			(at 218.44 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 218.44 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 223.52 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 223.52 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 218.44 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 218.44 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 218.44 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "80d609ff-d749-5f10-b625-514b49cfacf0")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 218.44 276.86)
+			(xy 218.44 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e474bf94-2ebb-51a3-b93b-419096c72402")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 218.44 279.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e567afa7-2d16-5114-83ea-9fecc7ef7fb1")
+		(property "Reference" "#PWR43"
+			(at 218.44 285.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 218.44 283.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 218.44 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 218.44 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 218.44 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "global power"
+			(at 218.44 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8e87450b-dd70-57ee-91a4-738332c91f9e")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "#PWR43")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 330.2 254 0)
 		(unit 1)
@@ -10649,8 +12243,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a442a156-3e3d-5fef-8c12-f14ae90c63da")
-		(property "Reference" "#FLG39"
+		(uuid "ff71320b-95c5-59d9-a570-83c40171a690")
+		(property "Reference" "#FLG44"
 			(at 30.48 84.45 0)
 			(effects
 				(font
@@ -10699,12 +12293,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "9e1a0ffd-e28a-5757-832c-a2d9e5686014")
+			(uuid "2199eeb2-258f-59ae-bcd8-1cf518e8fefe")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#FLG39")
+					(reference "#FLG44")
 					(unit 1)
 				)
 			)
@@ -10718,8 +12312,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "9f009a02-a538-53c5-a0ee-95b7f8844a9f")
-		(property "Reference" "#PWR40"
+		(uuid "8aaa2111-588f-5a61-9d50-7660aa835aa3")
+		(property "Reference" "#PWR45"
 			(at 30.48 92.71 0)
 			(effects
 				(font
@@ -10768,12 +12362,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "a046344b-811d-52fb-b33e-13b0784b18f9")
+			(uuid "8b6e0117-f28d-5271-8929-94004fb25e20")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR40")
+					(reference "#PWR45")
 					(unit 1)
 				)
 			)
@@ -10787,8 +12381,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "23f96381-162a-55c3-9fed-434cae3a3ccf")
-		(property "Reference" "#FLG41"
+		(uuid "e9e4bed8-bb1b-55ef-8ab2-40aef610af08")
+		(property "Reference" "#FLG46"
 			(at 45.72 84.45 0)
 			(effects
 				(font
@@ -10837,12 +12431,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "5dc2b69d-13be-5016-a887-059af4ea153c")
+			(uuid "9b3f2f3f-cba8-59a4-810b-25e497d538dc")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#FLG41")
+					(reference "#FLG46")
 					(unit 1)
 				)
 			)
@@ -10856,8 +12450,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b3f54d2c-d4b9-5d9f-a006-a0e65b31188c")
-		(property "Reference" "#PWR42"
+		(uuid "8dcbf7bd-2fee-5870-a998-48da0a6c5adc")
+		(property "Reference" "#PWR47"
 			(at 45.72 90.17 0)
 			(effects
 				(font
@@ -10906,12 +12500,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "eb82b72b-00f0-5c82-b425-e656069ae06a")
+			(uuid "86b137a8-f802-535f-a9a0-48ebaca66373")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR42")
+					(reference "#PWR47")
 					(unit 1)
 				)
 			)
@@ -10925,8 +12519,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "afa41a4f-0fa8-5e90-8ded-01742e622943")
-		(property "Reference" "#FLG43"
+		(uuid "1ca6b9a2-fe14-5deb-9ce9-c1f20fca3c9c")
+		(property "Reference" "#FLG48"
 			(at 60.96 84.45 0)
 			(effects
 				(font
@@ -10975,12 +12569,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "0d19910f-8767-5a45-9e3f-4a6da7c73e2e")
+			(uuid "bf014401-ad41-5a24-b256-f554342415d0")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#FLG43")
+					(reference "#FLG48")
 					(unit 1)
 				)
 			)
@@ -10994,8 +12588,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "855c304f-dee8-54df-ac57-314f943a6535")
-		(property "Reference" "#PWR44"
+		(uuid "2e9f00f4-ae90-5a08-8a3e-1891c12b7da1")
+		(property "Reference" "#PWR49"
 			(at 60.96 90.17 0)
 			(effects
 				(font
@@ -11044,12 +12638,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "493b78ee-4308-5295-8692-12d10028e96b")
+			(uuid "0e0be16c-2e87-5f60-8745-964216e53f2c")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR44")
+					(reference "#PWR49")
 					(unit 1)
 				)
 			)
@@ -11063,8 +12657,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "bd3fc2b6-0eca-5e85-a6f8-37683774f198")
-		(property "Reference" "#FLG45"
+		(uuid "2618e1c7-7d72-58ae-80e9-fb10484016d3")
+		(property "Reference" "#FLG50"
 			(at 76.2 84.45 0)
 			(effects
 				(font
@@ -11113,12 +12707,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "aba11911-514d-548a-adb8-924a8ffa0dcb")
+			(uuid "a14222de-4401-5f23-af49-cde6fc1b68bf")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#FLG45")
+					(reference "#FLG50")
 					(unit 1)
 				)
 			)
@@ -11155,6 +12749,17 @@
 			(justify left bottom)
 		)
 		(uuid "cbdb865d-a226-50bb-967a-b23fb4182e65")
+	)
+	(text "Test points: Keystone 5000-series miniature loops."
+		(exclude_from_sim no)
+		(at 50.8 266.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "34ae82c8-5262-5a59-a00e-42ab73792b1b")
 	)
 	(text "10k pull-downs: hold every COL-SEL line and both strobes low while the ESP32 boots."
 		(exclude_from_sim no)

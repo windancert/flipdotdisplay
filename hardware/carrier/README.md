@@ -45,6 +45,7 @@ schematic), **not yet ordered or built**.
 | C3 | 1 | 100 uF, 16 V, radial, 6.3 mm diameter, 2.5 mm lead spacing | buck output (keep under 220 uF) |
 | C4, C5 | 2 | 100 nF ceramic, 5 mm lead spacing | 3.3 V decoupling at each ribbon header |
 | R1-R10 | 10 | 10k, 1/4 W | pull-downs: R1-R8 on COL-SEL0-7, R9 ROW-HIGH, R10 ROW-LOW |
+| TP1-TP12 | 12 | Keystone 5000-series miniature test point (5000 red, 5001 black, 5003 orange, 5004 yellow) | suggested: red 20V, black GND, orange 5V/VSYS/3V3, yellow signals |
 | - | 1 | Joy-IT COM-ZY12PDN-ST (Reichelt DEBO USB-PD 1) | off the board, two wires to J3 |
 
 ## Before ordering
@@ -60,6 +61,19 @@ schematic), **not yet ordered or built**.
 3. **Ribbon pin 1.** The triangle on the silkscreen next to each header marks pin 1.
    Pin 1 is GND, pin 26 is 20 V. With the ribbons crimped as on the bench (pin 1 to
    pin 1), the red stripe goes on the triangle side.
+
+## Test points
+
+Labelled loops for a meter probe or a scope clip:
+
+| Where | Test points |
+|-------|-------------|
+| top edge, left of the USB plug | R-HI, R-LO (the two strobes), ROW4, COL4 (top address bits), SEL0, SEL4 (first panel on each ribbon) |
+| top edge, right of the USB plug | 3V3, GND |
+| power corner, bottom right | 20V, 5V, VSYS, GND |
+
+The strobes are the ones to watch on a scope: each pulse should be about 260 us, never
+more than the firmware's 400 us ceiling.
 
 ## Ordering
 
@@ -89,13 +103,15 @@ With the Pico **out** of its socket and no ribbons connected:
 
 1. Set the PD trigger to 20 V (LED dark blue) and connect it to J3: + on the left,
    - on the right, as marked.
-2. Measure against GND (J1 pin 1, or the - of J3):
-   - J1 pin 26 and J2 pin 26: about 20 V.
-   - VSYS, socket pin 39 (right-hand row, second from the top):
+2. Measure against a GND test point:
+   - 20V test point, J1 pin 26 and J2 pin 26: about 20 V.
+   - 5V test point: about 5 V.
+   - VSYS test point (also socket pin 39, right-hand row, second from the top):
      about 4.7 V (5 V minus the diode). **If this reads 20 V, stop.**
    - Every other socket pin: 0 V.
 3. Unplug, insert the Pico (USB towards the top edge), power up again. The
-   status LED should go blue, then yellow and green as on the bench.
+   status LED should go blue, then yellow and green as on the bench. The 3V3 test
+   point should now read about 3.3 V.
 4. Unpower, then connect one ribbon between the board and a panel and check its
    orientation with a continuity meter, still unpowered: J3 - to the panel's ground
    plane (or its ribbon pin 1 or 2) must beep, J3 + to the panel's ground must not.
