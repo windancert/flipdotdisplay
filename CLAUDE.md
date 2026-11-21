@@ -173,13 +173,14 @@ An ESP32-C6-DevKitC-1 drove two panels side by side in direct drive before the S
 took over. Support for the C6, and for the 74HCT595 shift-register driver that only
 existed for it, has been removed from the firmware; both are in the git history.
 
-## ESP32-S3 two-row direct drive (working, two panels per row)
+## ESP32-S3 two-row direct drive (working, full 4 x 2)
 
 Waveshare ESP32-S3-Pico (ESP32-S3R2, 16 MB flash, 2 MB PSRAM) driving two rows of
-panels, each row on its own ribbon. Address, polarity and strobe lines are wired in
-parallel to both ribbons; only COL-SEL is per ribbon (0-3 on ribbon A / top row,
-4-7 on ribbon B / bottom row). The pin map reserves all 21 signals, enough for the
-full 4 x 2 target without rewiring. Full table in `firmware/README.md`, code in
+four panels, each row on its own ribbon. Address, polarity and strobe lines are wired
+in parallel to both ribbons; only COL-SEL is per ribbon (0-3 on ribbon A, 4-7 on
+ribbon B). On the bench ribbon B feeds the top row (upright) and ribbon A the bottom
+row (rotated), the reverse of the README's wiring table. The pin map covers all 21
+signals of the 4 x 2 build. Full table in `firmware/README.md`, code in
 `firmware/main/panel_hw.c`. Status LED is a WS2812 on GPIO21, RGB order. The S3 is the
 only supported controller.
 
@@ -220,19 +221,28 @@ VERIFIED by experiment:
   bench supply at 20 V). A few dots stay put in both colours (about 2 on one panel,
   4 on the other, one cluster of 3). With 260 us pulses at 20 V those dots flip too
   (2 x 2 bench, diagonal wipe), so the firmware uses 260 us for both colours.
-
+- At 260 us, yellow flips still fail now and then: switching the whole display
+  between yellow and black five times, no dot ever stayed yellow, but a few stayed
+  black, and which ones varied from round to round. So yellow drive is marginal, not
+  mechanical. Untested fix: a longer yellow pulse only (~320 us, ~0.82 A peak at 20 V).
 - The panel shifts the COL-SEL lines by one position from input to output header
   (input 20-24 -> output 19-23, input 19 stays on the panel), measured with a
   continuity meter on one panel. This is why a chained panel answers on the next
-  COL-SEL line, and panels 3 and 4 on a ribbon will answer on COL-SEL2 and 3 (6 and 7).
-  Table and input/output rule under "Panel select".
+  COL-SEL line. Table and input/output rule under "Panel select".
+- Full 4 x 2 (112 x 32) on the S3 bench, four panels chained per ribbon, every panel
+  answering on its chain position as the shift predicts. Seen from the front: top row
+  upright, COL-SEL 4 5 6 7 left to right; bottom row rotated, its chain running right
+  to left, COL-SEL 3 2 1 0 left to right. Geometry `28x16 4x2 4 5 6 7 3r 2r 1r 0r`,
+  confirmed with a numbered pattern per panel and a full diagonal wipe.
 
 NOT YET VERIFIED - do not assume:
 - That output pin 24 has no connection (expected: it would come from input pin 25,
   which is unused), and so that the orientation fingerprint holds on the output header.
 - That a sixth panel on a chain answers on pin 24. Nothing drives pin 24 yet; the
   firmware's pin map wires pins 19-22 only.
-- That every panel shifts the same way; only one panel was measured.
+- That every panel shifts the same way with a meter; only one panel was measured. The
+  4 x 2 bench shows it electrically for the first three panels on each ribbon (the
+  fourth passes nothing on).
 
 ## Target build
 
