@@ -17,3 +17,15 @@ def display_size():
 def stride(cols):
     """Bytes per frame row: 1 bit per dot, padded to whole bytes."""
     return (cols + 7) // 8
+
+
+def rotate180(frame, cols, rows):
+    """The frame turned upside down, for reading the display from the other way up."""
+    row_bytes = stride(cols)
+    out = bytearray(len(frame))
+    for y in range(rows):
+        for x in range(cols):
+            if frame[y * row_bytes + x // 8] & (0x80 >> (x % 8)):
+                rx, ry = cols - 1 - x, rows - 1 - y
+                out[ry * row_bytes + rx // 8] |= 0x80 >> (rx % 8)
+    return bytes(out)
