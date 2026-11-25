@@ -5,7 +5,7 @@
 	(uuid "2f90ea78-ed23-53a4-973a-4d4032529e21")
 	(paper "A3")
 	(title_block
-		(title "Flip-dot carrier board")
+		(title "Flipdot S3 driver")
 		(date "2026-11-21")
 		(rev "A")
 		(comment 1 "Waveshare ESP32-S3-Pico to two Mobitec ribbons, 20 V coil rail")

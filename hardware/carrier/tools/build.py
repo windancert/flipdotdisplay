@@ -13,9 +13,14 @@ import subprocess
 import sys
 import zipfile
 
-KICAD = "C:/Program Files/KiCad/10.0/bin"
-CLI = f"{KICAD}/kicad-cli.exe"
-KPY = f"{KICAD}/python.exe"
+if sys.platform == "darwin":
+    KICAD = "/Applications/KiCad/KiCad.app/Contents"
+    CLI = f"{KICAD}/MacOS/kicad-cli"
+    KPY = f"{KICAD}/Frameworks/Python.framework/Versions/Current/bin/python3"
+else:
+    KICAD = "C:/Program Files/KiCad/10.0/bin"
+    CLI = f"{KICAD}/kicad-cli.exe"
+    KPY = f"{KICAD}/python.exe"
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
 P = "flipdot_carrier"

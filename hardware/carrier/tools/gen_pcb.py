@@ -249,7 +249,7 @@ def add_silk(board):
             add_text(board, label, x, y + 3.2, 0.8)
         else:
             add_text(board, label, x + 4.0, y, 0.8)
-    add_text(board, "FLIP-DOT CARRIER", 14.5, 62.0, 1.2, bold=True)
+    add_text(board, "FLIPDOT S3 DRIVER", 14.5, 62.0, 1.2, bold=True)
     add_text(board, "rev A  2026-11", 14.5, 64.4, 1.0)
     add_text(board, "20 V NEVER ON PICO VSYS", 14.5, 66.4, 0.8)
 
@@ -307,7 +307,7 @@ def main():
     add_gnd_pour(board, netinfo)
     add_silk(board)
     tb = board.GetTitleBlock()
-    tb.SetTitle("Flip-dot carrier board")
+    tb.SetTitle("Flipdot S3 driver")
     tb.SetRevision("A")
     tb.SetDate("2026-11-21")
     board.SetTitleBlock(tb)

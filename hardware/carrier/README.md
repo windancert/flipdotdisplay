@@ -1,4 +1,4 @@
-# Carrier board, rev A
+# Flipdot S3 driver, rev A
 
 A two-layer board that replaces the breadboard: it holds the Waveshare ESP32-S3-Pico in
 sockets, the two ribbon headers, the 10k pull-downs and the 20 V / 5 V power stage. The

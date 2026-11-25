@@ -4,6 +4,7 @@
 fp-info-cache
 \#auto_saved_files#
 _autosave-*
+.history/
 # build by-products (tools/build.py)
 erc.rpt
 drc.rpt

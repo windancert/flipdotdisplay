@@ -8,7 +8,7 @@
 	)
 	(paper "A4")
 	(title_block
-		(title "Flip-dot carrier board")
+		(title "Flipdot S3 driver")
 		(date "2026-11-21")
 		(rev "A")
 	)
@@ -14431,7 +14431,7 @@
 			)
 		)
 	)
-	(gr_text "FLIP-DOT CARRIER"
+	(gr_text "FLIPDOT S3 DRIVER"
 		(at 114.5 112 0)
 		(layer "F.SilkS")
 		(uuid "d92eefcd-b3b2-4a4c-aa08-af820c132c73")

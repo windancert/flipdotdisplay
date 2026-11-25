@@ -291,7 +291,7 @@ NOT YET VERIFIED - do not assume:
     all used by the pin map, and GPIO40 has no ADC.
   - The older discrete design (CH224K with power-good to GPIO40, AP63205 buck, which
     also runs a 5 V charger) is rev 0: https://claude.ai/artifact/8Sb9KLrSTWjDoLQiBUVHx7
-- Carrier PCB, rev A: `hardware/carrier/` (KiCad 10). A through-hole board holding the
+- Carrier PCB "Flipdot S3 driver", rev A: `hardware/carrier/` (KiCad 10). A through-hole board holding the
   Pico in sockets, both ribbon headers, the 10 pull-downs and the module power stage
   (through-hole substitutes: SA24A for the SMBJ24A, 1N5819 for the SS34 and SS14). The
   PD trigger stays off the board, wired to a screw terminal. Schematic and board are

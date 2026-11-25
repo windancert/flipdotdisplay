@@ -223,7 +223,7 @@ class Sheet:
     def write(self, path):
         doc = ["kicad_sch", ["version", SCH_VERSION], ["generator", q("eeschema")],
                ["generator_version", q("10.0")], ["uuid", ROOT], ["paper", q("A3")],
-               ["title_block", ["title", q("Flip-dot carrier board")], ["date", q("2026-11-21")],
+               ["title_block", ["title", q("Flipdot S3 driver")], ["date", q("2026-11-21")],
                 ["rev", q("A")],
                 ["comment", 1, q("Waveshare ESP32-S3-Pico to two Mobitec ribbons, 20 V coil rail")]],
                ["lib_symbols"] + list(self.lib_symbols.values())]
