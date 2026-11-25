@@ -22,7 +22,7 @@ import threading
 import time
 import unicodedata
 
-from display import DISPLAY_IP, UDP_PORT, display_size, stride
+from display import DISPLAY_IP, UDP_PORT, display_size, rotate180, stride
 
 # Kazernealarm Eindhoven-Centrum: the trucks actually roll. Other capcodes on the
 # same message (the station's Lichtkrant, volunteer drivers) don't count.
@@ -241,7 +241,7 @@ def message_text(payload, station_only=True):
     return message if not station_only or STATION_CAPCODE in capcodes else None
 
 
-def run(show_all):
+def run(show_all, upside_down=False):
     import paho.mqtt.client as mqtt
 
     import mqtt_config
@@ -264,6 +264,8 @@ def run(show_all):
             return
         # Messages for the whole country follow each other too fast for pages.
         new = frames_for(message, cols, rows, one_page=show_all)
+        if upside_down:
+            new = [rotate180(frame, cols, rows) for frame in new]
         print(f"{time.strftime('%H:%M:%S')}  {message}\n          -> {clean(message)}")
         with lock:
             pages[:] = new
@@ -277,19 +279,32 @@ def run(show_all):
     # Resending the current page each round covers lost datagrams and a display
     # that restarted; the display only flips dots that differ.
     page = 0
+    unreachable = False
     try:
         while True:
             with lock:
                 page = page % len(pages)
                 frame = pages[page]
-            sock.sendto(frame, (DISPLAY_IP, UDP_PORT))
+            try:
+                sock.sendto(frame, (DISPLAY_IP, UDP_PORT))
+                if unreachable:
+                    print(f"{time.strftime('%H:%M:%S')}  display reachable again")
+                unreachable = False
+            except OSError as err:
+                # The display restarted or dropped off WiFi; the next round retries.
+                if not unreachable:
+                    print(f"{time.strftime('%H:%M:%S')}  display unreachable: {err}")
+                unreachable = True
             page += 1
             time.sleep(PAGE_S)
     except KeyboardInterrupt:
         pass
     finally:
         client.loop_stop()
-        sock.sendto(bytes(stride(cols) * rows), (DISPLAY_IP, UDP_PORT))  # leave it dark
+        try:
+            sock.sendto(bytes(stride(cols) * rows), (DISPLAY_IP, UDP_PORT))  # leave it dark
+        except OSError:
+            pass
         sock.close()
 
 
@@ -301,6 +316,8 @@ def main():
                         help="display size for --preview (default 56x32)")
     parser.add_argument("--all", action="store_true",
                         help=f"show every P2000 message nationwide ({ALL_TOPIC}), not just the station's")
+    parser.add_argument("--upside-down", action="store_true",
+                        help="turn the text 180 degrees, for reading the display the other way up")
     args = parser.parse_args()
     if args.preview:
         cols, rows = map(int, args.size.split("x"))
@@ -309,7 +326,7 @@ def main():
             print()
             preview(frame, cols, rows)
         return
-    run(args.all)
+    run(args.all, args.upside_down)
 
 
 if __name__ == "__main__":
