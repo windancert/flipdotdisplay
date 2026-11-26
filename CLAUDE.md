@@ -289,6 +289,17 @@ NOT YET VERIFIED - do not assume:
     plugged in (USB-PD limits sink capacitance before the 20 V contract). If it does
     not, fall back to the earlier revision of the same page (version 2): a P-MOSFET
     switch turned on by a ~17 V zener detector, which also reports RAIL_OK to GPIO40.
+    **Tested 2026-11-26, depends on the charger**:
+    - Charger 1, Anker PowerPort Atom III 65W Slim (A2046): PD module alone reached 20 V (5 V, then 20 V ~330 ms later); with
+      470 uF on its output, about half the plug-ins (3 of 7 on the scope, matching
+      the LED) never came up: a spike of 1-5 V that collapses, and the output stays
+      off (still ~1 V after a minute plugged in), so it latches off, no retry.
+    - Charger 2, Anker Prime 200W 6-port GaN (A2683), USB-C to C cable: 8 of 8 with the same 470 uF, LED on every time:
+      5 V, ~0.5 s later 9 V, then 20 V. (On a USB-A to C cable it gives 5 V only, as
+      expected without PD.)
+    So without the switch the display is only reliable on a charger that passed
+    this test. **Open item:** the switched rail is postponed (decided 2026-11-26),
+    not dropped; rev A has no switch for now. Revisit before ordering the board.
   - Without a rail check, a charger below 20 V or a module left on another voltage only
     makes dots fail to flip (lower voltage is safe for the coils). Firmware should
     therefore redraw every dot now and then, e.g. on each new P2000 message, so missed

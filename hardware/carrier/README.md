@@ -103,6 +103,10 @@ and 0.3 mm via holes, within every maker's standard process. Parts from Reichelt
 
 Order only after the 20 V charger test (see CLAUDE.md, Power): if the charger does not
 settle on 20 V with ~490 uF on the module's output, the board needs a coil-rail switch.
+**Result: it depends on the charger.** One charger failed about half the time with
+470 uF directly on the module's output, another passed every time (see CLAUDE.md).
+**Open item:** the switched coil rail (version 2 of the power page) is postponed, not
+dropped; this board has no switch yet. Decide before ordering.
 
 ## Assembly
 
