@@ -6528,7 +6528,7 @@
 				)
 			)
 		)
-		(property "Value" "SA24A"
+		(property "Value" "P6KE30CA"
 			(at 55.88 53.34 0)
 			(effects
 				(font
@@ -6576,7 +6576,7 @@
 				)
 			)
 		)
-		(property "Note" "Unidirectional TVS, 24 V standoff (through-hole SMBJ24A)"
+		(property "Note" "Bidirectional TVS, 25.6 V standoff, either way round (Reichelt P6KE 30CA)"
 			(at 55.88 50.8 0)
 			(effects
 				(font

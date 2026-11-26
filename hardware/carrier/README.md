@@ -39,7 +39,7 @@ schematic), **not yet ordered or built**.
 | J1, J2 | 2 | 2x13 shrouded box header, 2.54 mm, straight | ribbon A (COL-SEL0-3), ribbon B (COL-SEL4-7) |
 | J3 | 1 | 2-pole screw terminal, 5.08 mm pitch | 20 V in, from the PD trigger module |
 | U2 | 1 | Recom R-78E5.0-1.0 | 5 V buck, SIP-3 |
-| D1 | 1 | SA24A, DO-15 | unidirectional TVS, through-hole version of the SMBJ24A |
+| D1 | 1 | P6KE30CA, DO-15 (Reichelt P6KE 30CA) | bidirectional TVS, 25.6 V standoff, clamps ~41 V; fits either way round |
 | D2, D3 | 2 | 1N5819, DO-41 | Schottky; replace the SS34 and SS14 of the module plan |
 | C1 | 1 | 470 uF, 35 V or higher, radial, 12.5 mm max diameter, 5 mm lead spacing | coil rail bulk |
 | C2 | 1 | 4.7 uF, 50 V, radial, 5 mm diameter, 2 mm lead spacing | buck input |
@@ -113,7 +113,8 @@ dropped; this board has no switch yet. Decide before ordering.
 Solder the lowest parts first so the board lies flat on the bench:
 
 1. R1-R10 (either way round).
-2. D1, D2, D3: the band is the cathode, the silkscreen marks it with a K.
+2. D2, D3: the band is the cathode, the silkscreen marks it with a K. D1 (bidirectional)
+   goes either way round.
 3. C4, C5 (either way round), R11 (either way round), and the 14 test point loops
    TP1-TP14 (either way round; the colours suggested in the parts list).
 4. The two 1x20 female headers for the S3 Pico. Plug the S3 Pico into them first so they line

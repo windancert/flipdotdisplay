@@ -37,11 +37,12 @@
 // Waveshare ESP32-S3-Pico, two ribbons, room for all eight panels. Header pins only,
 // avoiding GPIO33-37, which Waveshare lists for PSRAM. Each group is an unbroken run
 // down the header, apart from GND and RUN pins; S3 Pico header pins in parentheses.
-// Left header, top to bottom: ROW0-4, COL0-4, COL-H/L, in the ribbon's own order.
+// Seen from above with USB at the top (pin 1 top left).
+// Right header, top to bottom: ROW0-4, COL0-4, COL-H/L, in the ribbon's own order.
 static const gpio_num_t ROW_PINS[5] = {GPIO_NUM_10, GPIO_NUM_9, GPIO_NUM_8, GPIO_NUM_7, GPIO_NUM_6};  // (35-29)
 static const gpio_num_t COL_PINS[5] = {GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_2, GPIO_NUM_1, GPIO_NUM_41};  // (27-22)
 #define PIN_COL_HL GPIO_NUM_42  // [18] (21)
-// Right header: COL-SEL0-7 at the top, the strobes at the bottom.
+// Left header: COL-SEL0-7 at the top, the strobes at the bottom.
 static const gpio_num_t SEL_PINS[8] = {
     GPIO_NUM_11, GPIO_NUM_12, GPIO_NUM_13, GPIO_NUM_14,  // ribbon A [19-22] (1-5)
     GPIO_NUM_15, GPIO_NUM_16, GPIO_NUM_17, GPIO_NUM_18,  // ribbon B [19-22] (6-10)
