@@ -5,7 +5,7 @@
 	(uuid "2f90ea78-ed23-53a4-973a-4d4032529e21")
 	(paper "A3")
 	(title_block
-		(title "Flipdot S3 driver")
+		(title "Flipdot S3 Pico driver")
 		(date "2026-11-21")
 		(rev "A")
 		(comment 1 "Waveshare ESP32-S3-Pico to two Mobitec ribbons, 20 V coil rail")
@@ -1921,148 +1921,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flipdot:+20V"
-			(power global)
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "+20V"
-				(at 0 3.556 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"+20V\""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "+20V_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27)
-						(xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54)
-						(xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0)
-						(xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+20V_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Connector:Screw_Terminal_01x02"
 			(pin_names
 				(offset 1.016)
@@ -2263,6 +2121,148 @@
 						)
 					)
 					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "flipdot:+20V"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "+20V"
+				(at 0 3.556 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+20V\""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "+20V_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27)
+						(xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54)
+						(xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0)
+						(xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+20V_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3099,6 +3099,146 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:R"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 0 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:C"
 			(pin_numbers
 				(hide yes)
@@ -3238,146 +3378,6 @@
 				(pin passive line
 					(at 0 -3.81 90)
 					(length 2.794)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Device:R"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "R"
-				(at 2.032 0 90)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "R"
-				(at 0 0 90)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at -1.778 0 90)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Resistor"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "R res resistor"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "R_*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "R_0_1"
-				(rectangle
-					(start -1.016 -2.54)
-					(end 1.016 2.54)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "R_1_1"
-				(pin passive line
-					(at 0 3.81 270)
-					(length 1.27)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -3.81 90)
-					(length 1.27)
 					(name ""
 						(effects
 							(font
@@ -5471,74 +5471,15 @@
 		)
 		(uuid "b2df52f2-6edb-5fd8-a915-22f4762556d1")
 	)
-	(symbol
-		(lib_id "flipdot:+20V")
+	(label "COIL_20V"
 		(at 226.06 116.84 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "7d0b4968-708d-584c-84a7-6c2daf0eb2c7")
-		(property "Reference" "#PWR07"
-			(at 226.06 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify left bottom)
 		)
-		(property "Value" "+20V"
-			(at 226.06 113.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 226.06 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 226.06 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+20V\""
-			(at 226.06 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ki_keywords" "global power"
-			(at 226.06 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0a4e2e3b-353b-5136-b632-07db276788ca")
-		)
-		(instances
-			(project "flipdot_carrier"
-				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR07")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "906fb38e-a51a-5a56-9414-4a68ddbe3257")
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_02x13_Odd_Even")
@@ -5711,8 +5652,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "4905d1a1-65b1-52f4-aa2b-b3d0c7f683ff")
-		(property "Reference" "#PWR08"
+		(uuid "7d0b4968-708d-584c-84a7-6c2daf0eb2c7")
+		(property "Reference" "#PWR07"
 			(at 208.28 168.91 0)
 			(effects
 				(font
@@ -5761,12 +5702,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "4bb407de-e7a6-5018-871f-954246544463")
+			(uuid "0a4e2e3b-353b-5136-b632-07db276788ca")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR08")
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -5791,8 +5732,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "9fdae859-073e-5164-a3c8-0777323ba28e")
-		(property "Reference" "#PWR09"
+		(uuid "4905d1a1-65b1-52f4-aa2b-b3d0c7f683ff")
+		(property "Reference" "#PWR08"
 			(at 226.06 168.91 0)
 			(effects
 				(font
@@ -5841,12 +5782,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "7f10d489-9981-529d-bc15-462d7bcb1d71")
+			(uuid "4bb407de-e7a6-5018-871f-954246544463")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR09")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -5871,8 +5812,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "9919a20b-8c47-57c5-835f-6b2ca603d2ab")
-		(property "Reference" "#PWR10"
+		(uuid "9fdae859-073e-5164-a3c8-0777323ba28e")
+		(property "Reference" "#PWR09"
 			(at 208.28 168.91 0)
 			(effects
 				(font
@@ -5921,12 +5862,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "f21cf6bc-a348-5777-aca5-b3ea939ced34")
+			(uuid "7f10d489-9981-529d-bc15-462d7bcb1d71")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR10")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -6320,74 +6261,15 @@
 		)
 		(uuid "148455c1-09b3-51c9-9d6d-b851f8ab7c6b")
 	)
-	(symbol
-		(lib_id "flipdot:+20V")
+	(label "COIL_20V"
 		(at 226.06 193.04 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "0f31445f-94b2-56a4-a85c-dadff84daf37")
-		(property "Reference" "#PWR11"
-			(at 226.06 196.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify left bottom)
 		)
-		(property "Value" "+20V"
-			(at 226.06 189.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 226.06 193.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 226.06 193.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+20V\""
-			(at 226.06 193.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ki_keywords" "global power"
-			(at 226.06 193.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4509c93f-560e-50b9-a976-b1523cf38f5d")
-		)
-		(instances
-			(project "flipdot_carrier"
-				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR11")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "12e24232-e1eb-514a-991d-f05249118ced")
 	)
 	(symbol
 		(lib_id "Connector:Screw_Terminal_01x02")
@@ -6488,8 +6370,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "cfcb8ea9-2e1e-5b9c-a5d9-fcbf4e762fbd")
-		(property "Reference" "#PWR12"
+		(uuid "9919a20b-8c47-57c5-835f-6b2ca603d2ab")
+		(property "Reference" "#PWR10"
 			(at 22.86 54.61 0)
 			(effects
 				(font
@@ -6538,12 +6420,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "666428a8-8b26-5bf1-aaa9-bdef9b865a9a")
+			(uuid "f21cf6bc-a348-5777-aca5-b3ea939ced34")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR12")
+					(reference "#PWR10")
 					(unit 1)
 				)
 			)
@@ -6568,8 +6450,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "1c400ddd-0abe-5a43-9668-bb6b8d2c7db3")
-		(property "Reference" "#PWR13"
+		(uuid "0f31445f-94b2-56a4-a85c-dadff84daf37")
+		(property "Reference" "#PWR11"
 			(at 22.86 59.69 0)
 			(effects
 				(font
@@ -6618,12 +6500,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "89c255d8-b9fb-5dc3-b054-1e4fab97af09")
+			(uuid "4509c93f-560e-50b9-a976-b1523cf38f5d")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR13")
+					(reference "#PWR11")
 					(unit 1)
 				)
 			)
@@ -6737,8 +6619,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c4cebea6-72dd-5f8d-a3ae-c3892f649e0c")
-		(property "Reference" "#PWR14"
+		(uuid "cfcb8ea9-2e1e-5b9c-a5d9-fcbf4e762fbd")
+		(property "Reference" "#PWR12"
 			(at 49.53 54.61 0)
 			(effects
 				(font
@@ -6787,12 +6669,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "658af928-c91f-51d6-a87e-32bf71c77fa2")
+			(uuid "666428a8-8b26-5bf1-aaa9-bdef9b865a9a")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR14")
+					(reference "#PWR12")
 					(unit 1)
 				)
 			)
@@ -6817,8 +6699,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "2b832096-c17b-5b95-aaa9-ed320d7a9423")
-		(property "Reference" "#PWR15"
+		(uuid "1c400ddd-0abe-5a43-9668-bb6b8d2c7db3")
+		(property "Reference" "#PWR13"
 			(at 62.23 57.15 0)
 			(effects
 				(font
@@ -6867,12 +6749,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "3eaee8db-8698-5d34-a706-9c05e5caec67")
+			(uuid "89c255d8-b9fb-5dc3-b054-1e4fab97af09")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR15")
+					(reference "#PWR13")
 					(unit 1)
 				)
 			)
@@ -6979,8 +6861,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "788f4483-c59e-56d6-83a2-ea1f737781db")
-		(property "Reference" "#PWR16"
+		(uuid "c4cebea6-72dd-5f8d-a3ae-c3892f649e0c")
+		(property "Reference" "#PWR14"
 			(at 78.74 48.26 0)
 			(effects
 				(font
@@ -7029,12 +6911,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "2b01d3e1-9718-53ab-b8c0-a278535d0007")
+			(uuid "658af928-c91f-51d6-a87e-32bf71c77fa2")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR16")
+					(reference "#PWR14")
 					(unit 1)
 				)
 			)
@@ -7059,8 +6941,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "76658864-3179-5f8b-98f3-be780f35dc62")
-		(property "Reference" "#PWR17"
+		(uuid "2b832096-c17b-5b95-aaa9-ed320d7a9423")
+		(property "Reference" "#PWR15"
 			(at 78.74 63.5 0)
 			(effects
 				(font
@@ -7109,12 +6991,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "7e456071-6a53-5aee-a0ce-5b9e27c75cc9")
+			(uuid "3eaee8db-8698-5d34-a706-9c05e5caec67")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR17")
+					(reference "#PWR15")
 					(unit 1)
 				)
 			)
@@ -7240,8 +7122,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "899affc0-9249-5608-a17a-59e713ab728a")
-		(property "Reference" "#PWR18"
+		(uuid "788f4483-c59e-56d6-83a2-ea1f737781db")
+		(property "Reference" "#PWR16"
 			(at 107.95 54.61 0)
 			(effects
 				(font
@@ -7290,12 +7172,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "d5b0ae70-9468-552d-8a51-190e5ebc58a9")
+			(uuid "2b01d3e1-9718-53ab-b8c0-a278535d0007")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR18")
+					(reference "#PWR16")
 					(unit 1)
 				)
 			)
@@ -7423,8 +7305,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f09822da-cdbe-525b-8c78-3bf78f439daf")
-		(property "Reference" "#PWR19"
+		(uuid "76658864-3179-5f8b-98f3-be780f35dc62")
+		(property "Reference" "#PWR17"
 			(at 124.46 63.5 0)
 			(effects
 				(font
@@ -7473,12 +7355,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "b9b76196-0e73-557b-858c-9c335fb99626")
+			(uuid "7e456071-6a53-5aee-a0ce-5b9e27c75cc9")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR19")
+					(reference "#PWR17")
 					(unit 1)
 				)
 			)
@@ -7610,8 +7492,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "bbe440de-ea01-52a4-9b55-16c0e1ef9ef8")
-		(property "Reference" "#PWR20"
+		(uuid "899affc0-9249-5608-a17a-59e713ab728a")
+		(property "Reference" "#PWR18"
 			(at 152.4 67.31 0)
 			(effects
 				(font
@@ -7660,12 +7542,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "1605dbed-9b06-5b2d-8566-890c2d4fbf41")
+			(uuid "d5b0ae70-9468-552d-8a51-190e5ebc58a9")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR20")
+					(reference "#PWR18")
 					(unit 1)
 				)
 			)
@@ -7690,8 +7572,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "227dda02-8b18-53e3-bfd5-804a69422390")
-		(property "Reference" "#PWR21"
+		(uuid "f09822da-cdbe-525b-8c78-3bf78f439daf")
+		(property "Reference" "#PWR19"
 			(at 162.56 54.61 0)
 			(effects
 				(font
@@ -7740,12 +7622,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "8189ff01-08f9-506a-98fb-3f1a6b3f7c9e")
+			(uuid "b9b76196-0e73-557b-858c-9c335fb99626")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR21")
+					(reference "#PWR19")
 					(unit 1)
 				)
 			)
@@ -7852,8 +7734,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "d4b9b106-c0a3-5c78-8ad8-9a8be3ff4480")
-		(property "Reference" "#PWR22"
+		(uuid "bbe440de-ea01-52a4-9b55-16c0e1ef9ef8")
+		(property "Reference" "#PWR20"
 			(at 182.88 48.26 0)
 			(effects
 				(font
@@ -7902,12 +7784,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "023158cc-ef53-5071-958e-e0fb771c444a")
+			(uuid "1605dbed-9b06-5b2d-8566-890c2d4fbf41")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR22")
+					(reference "#PWR20")
 					(unit 1)
 				)
 			)
@@ -7932,8 +7814,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "652f0a1b-4b9b-54e4-a145-76679b194e34")
-		(property "Reference" "#PWR23"
+		(uuid "227dda02-8b18-53e3-bfd5-804a69422390")
+		(property "Reference" "#PWR21"
 			(at 182.88 63.5 0)
 			(effects
 				(font
@@ -7982,12 +7864,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "2349b3ad-8f73-534e-bfdc-548e19592e0e")
+			(uuid "8189ff01-08f9-506a-98fb-3f1a6b3f7c9e")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR23")
+					(reference "#PWR21")
 					(unit 1)
 				)
 			)
@@ -8113,8 +7995,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f2a2e587-3f9b-52df-8966-e41555e8868b")
-		(property "Reference" "#PWR24"
+		(uuid "d4b9b106-c0a3-5c78-8ad8-9a8be3ff4480")
+		(property "Reference" "#PWR22"
 			(at 214.63 54.61 0)
 			(effects
 				(font
@@ -8163,16 +8045,206 @@
 			)
 		)
 		(pin "1"
-			(uuid "e2ba1061-43df-5350-9703-a54f097d7604")
+			(uuid "023158cc-ef53-5071-958e-e0fb771c444a")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR24")
+					(reference "#PWR22")
 					(unit 1)
 				)
 			)
 		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 101.6 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f54288e4-d34d-54fe-b22c-a4755e7ec0d1")
+		(property "Reference" "R11"
+			(at 103.63 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0.1R 10%"
+			(at 101.6 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0614_L14.3mm_D5.7mm_P20.32mm_Horizontal"
+			(at 99.82 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 101.6 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 101.6 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 101.6 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 101.6 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Note" "Vitrohm BW235, 0.1 ohm 10%, 2 W wirewound (Reichelt 2W DRAHT 0,1); a wire link if no current sense is wanted"
+			(at 101.6 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9a18dcf6-45ce-5ee2-8c71-c80406f19c9d")
+		)
+		(pin "2"
+			(uuid "a92595b1-fe26-56e1-aea0-0a5c8f25a711")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "R11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 101.6 72.39)
+			(xy 101.6 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c08ceca-0f1d-531d-ab9e-38846413779a")
+	)
+	(symbol
+		(lib_id "flipdot:+20V")
+		(at 101.6 69.85 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "652f0a1b-4b9b-54e4-a145-76679b194e34")
+		(property "Reference" "#PWR23"
+			(at 101.6 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+20V"
+			(at 101.6 66.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 101.6 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 101.6 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+20V\""
+			(at 101.6 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "global power"
+			(at 101.6 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2349b3ad-8f73-534e-bfdc-548e19592e0e")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "#PWR23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 101.6 80.01)
+			(xy 101.6 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4de0d528-2409-5038-b270-9203c9cdbe26")
+	)
+	(label "COIL_20V"
+		(at 101.6 82.55 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b5e5824d-0ab6-5f4a-947c-16e2e1429f9c")
 	)
 	(symbol
 		(lib_id "Device:C")
@@ -8275,8 +8347,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3a3583a8-df6f-5d7f-911f-feda35ab014c")
-		(property "Reference" "#PWR25"
+		(uuid "f2a2e587-3f9b-52df-8966-e41555e8868b")
+		(property "Reference" "#PWR24"
 			(at 276.86 99.06 0)
 			(effects
 				(font
@@ -8325,12 +8397,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "6d55289e-d41c-5289-8b61-5b012b5b7755")
+			(uuid "e2ba1061-43df-5350-9703-a54f097d7604")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR25")
+					(reference "#PWR24")
 					(unit 1)
 				)
 			)
@@ -8355,8 +8427,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "e20ee954-5d58-5a24-9f20-9c3a235d6a6a")
-		(property "Reference" "#PWR26"
+		(uuid "3a3583a8-df6f-5d7f-911f-feda35ab014c")
+		(property "Reference" "#PWR25"
 			(at 276.86 114.3 0)
 			(effects
 				(font
@@ -8405,12 +8477,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "fa59c4bb-c6cd-5705-9727-7b668abf5170")
+			(uuid "6d55289e-d41c-5289-8b61-5b012b5b7755")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR26")
+					(reference "#PWR25")
 					(unit 1)
 				)
 			)
@@ -8517,8 +8589,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "244a05a8-975a-591b-93c3-7e47d03ef626")
-		(property "Reference" "#PWR27"
+		(uuid "e20ee954-5d58-5a24-9f20-9c3a235d6a6a")
+		(property "Reference" "#PWR26"
 			(at 276.86 175.26 0)
 			(effects
 				(font
@@ -8567,12 +8639,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "950469dc-7e8e-5de7-a51a-1c0ddc92bc32")
+			(uuid "fa59c4bb-c6cd-5705-9727-7b668abf5170")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR27")
+					(reference "#PWR26")
 					(unit 1)
 				)
 			)
@@ -8597,8 +8669,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "4d47ed45-05b9-52a9-b5da-5e472b005ac3")
-		(property "Reference" "#PWR28"
+		(uuid "244a05a8-975a-591b-93c3-7e47d03ef626")
+		(property "Reference" "#PWR27"
 			(at 276.86 190.5 0)
 			(effects
 				(font
@@ -8647,12 +8719,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "317dd456-6a2c-5e8e-be5d-fd411d1424d7")
+			(uuid "950469dc-7e8e-5de7-a51a-1c0ddc92bc32")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR28")
+					(reference "#PWR27")
 					(unit 1)
 				)
 			)
@@ -8778,8 +8850,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "0422fc50-77dd-5452-af22-01cafda3d1e5")
-		(property "Reference" "#PWR29"
+		(uuid "4d47ed45-05b9-52a9-b5da-5e472b005ac3")
+		(property "Reference" "#PWR28"
 			(at 50.8 251.46 0)
 			(effects
 				(font
@@ -8828,12 +8900,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "2cef3aae-1b51-5f88-a84a-8938a0ba345e")
+			(uuid "317dd456-6a2c-5e8e-be5d-fd411d1424d7")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR29")
+					(reference "#PWR28")
 					(unit 1)
 				)
 			)
@@ -8959,8 +9031,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c0c991ca-232c-59d8-b5c9-fd0d796b1d65")
-		(property "Reference" "#PWR30"
+		(uuid "0422fc50-77dd-5452-af22-01cafda3d1e5")
+		(property "Reference" "#PWR29"
 			(at 71.12 251.46 0)
 			(effects
 				(font
@@ -9009,12 +9081,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "532c84b7-db8c-5a2c-a01a-00a64e63a80a")
+			(uuid "2cef3aae-1b51-5f88-a84a-8938a0ba345e")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR30")
+					(reference "#PWR29")
 					(unit 1)
 				)
 			)
@@ -9140,8 +9212,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c3471777-415d-5b82-a73e-ac1be03a3c2e")
-		(property "Reference" "#PWR31"
+		(uuid "c0c991ca-232c-59d8-b5c9-fd0d796b1d65")
+		(property "Reference" "#PWR30"
 			(at 91.44 251.46 0)
 			(effects
 				(font
@@ -9190,12 +9262,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "e6ba4cc7-81b5-5233-bb05-7aeacf9ffb2b")
+			(uuid "532c84b7-db8c-5a2c-a01a-00a64e63a80a")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR31")
+					(reference "#PWR30")
 					(unit 1)
 				)
 			)
@@ -9321,8 +9393,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b1b3f697-beba-5160-b025-f6ade6154cc5")
-		(property "Reference" "#PWR32"
+		(uuid "c3471777-415d-5b82-a73e-ac1be03a3c2e")
+		(property "Reference" "#PWR31"
 			(at 111.76 251.46 0)
 			(effects
 				(font
@@ -9371,12 +9443,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "4ec3cda0-aa73-5cb4-9284-66743d300790")
+			(uuid "e6ba4cc7-81b5-5233-bb05-7aeacf9ffb2b")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR32")
+					(reference "#PWR31")
 					(unit 1)
 				)
 			)
@@ -9502,8 +9574,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "0a9352a3-b8bf-55a8-9a46-f855ab0dfbbd")
-		(property "Reference" "#PWR33"
+		(uuid "b1b3f697-beba-5160-b025-f6ade6154cc5")
+		(property "Reference" "#PWR32"
 			(at 132.08 251.46 0)
 			(effects
 				(font
@@ -9552,12 +9624,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "6638ace8-ea3c-5fba-83fd-111d83c80a37")
+			(uuid "4ec3cda0-aa73-5cb4-9284-66743d300790")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR33")
+					(reference "#PWR32")
 					(unit 1)
 				)
 			)
@@ -9683,8 +9755,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "e8e60178-00e5-591c-88b3-05442f9044f7")
-		(property "Reference" "#PWR34"
+		(uuid "0a9352a3-b8bf-55a8-9a46-f855ab0dfbbd")
+		(property "Reference" "#PWR33"
 			(at 152.4 251.46 0)
 			(effects
 				(font
@@ -9733,12 +9805,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "64d9c8c8-2827-5535-a038-211302e71e04")
+			(uuid "6638ace8-ea3c-5fba-83fd-111d83c80a37")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR34")
+					(reference "#PWR33")
 					(unit 1)
 				)
 			)
@@ -9864,8 +9936,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "2b9ea7c6-8a5c-5020-98ba-73071f51418b")
-		(property "Reference" "#PWR35"
+		(uuid "e8e60178-00e5-591c-88b3-05442f9044f7")
+		(property "Reference" "#PWR34"
 			(at 172.72 251.46 0)
 			(effects
 				(font
@@ -9914,12 +9986,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "4e8370a8-ba90-5530-a187-d23e1f1756e8")
+			(uuid "64d9c8c8-2827-5535-a038-211302e71e04")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR35")
+					(reference "#PWR34")
 					(unit 1)
 				)
 			)
@@ -10045,8 +10117,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6a9c7676-5827-5ca0-86da-3d80dc87cb3d")
-		(property "Reference" "#PWR36"
+		(uuid "2b9ea7c6-8a5c-5020-98ba-73071f51418b")
+		(property "Reference" "#PWR35"
 			(at 193.04 251.46 0)
 			(effects
 				(font
@@ -10095,12 +10167,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "9db10191-9ff9-52ad-be59-226bb710f3f7")
+			(uuid "4e8370a8-ba90-5530-a187-d23e1f1756e8")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR36")
+					(reference "#PWR35")
 					(unit 1)
 				)
 			)
@@ -10226,8 +10298,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "afda9609-47fa-5d08-af38-67027e8b024b")
-		(property "Reference" "#PWR37"
+		(uuid "6a9c7676-5827-5ca0-86da-3d80dc87cb3d")
+		(property "Reference" "#PWR36"
 			(at 213.36 251.46 0)
 			(effects
 				(font
@@ -10276,12 +10348,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "520e1986-e6c0-53f7-8a32-cf771c582063")
+			(uuid "9db10191-9ff9-52ad-be59-226bb710f3f7")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR37")
+					(reference "#PWR36")
 					(unit 1)
 				)
 			)
@@ -10407,8 +10479,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "dbee3e36-db79-5e69-96fd-44bb8e76094c")
-		(property "Reference" "#PWR38"
+		(uuid "afda9609-47fa-5d08-af38-67027e8b024b")
+		(property "Reference" "#PWR37"
 			(at 233.68 251.46 0)
 			(effects
 				(font
@@ -10457,12 +10529,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "c6170c12-b4ff-51b8-b83d-2b69e5cd20c6")
+			(uuid "520e1986-e6c0-53f7-8a32-cf771c582063")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR38")
+					(reference "#PWR37")
 					(unit 1)
 				)
 			)
@@ -11152,8 +11224,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5053ca3b-786e-5796-a828-68a0063b69b2")
-		(property "Reference" "#PWR39"
+		(uuid "dbee3e36-db79-5e69-96fd-44bb8e76094c")
+		(property "Reference" "#PWR38"
 			(at 142.24 283.21 0)
 			(effects
 				(font
@@ -11202,12 +11274,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "960cdb95-d743-5a89-a81d-a1a2cd609e90")
+			(uuid "c6170c12-b4ff-51b8-b83d-2b69e5cd20c6")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR39")
+					(reference "#PWR38")
 					(unit 1)
 				)
 			)
@@ -11309,8 +11381,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "9f009a02-a538-53c5-a0ee-95b7f8844a9f")
-		(property "Reference" "#PWR40"
+		(uuid "5053ca3b-786e-5796-a828-68a0063b69b2")
+		(property "Reference" "#PWR39"
 			(at 157.48 285.75 0)
 			(effects
 				(font
@@ -11359,12 +11431,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "a046344b-811d-52fb-b33e-13b0784b18f9")
+			(uuid "960cdb95-d743-5a89-a81d-a1a2cd609e90")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR40")
+					(reference "#PWR39")
 					(unit 1)
 				)
 			)
@@ -11466,8 +11538,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "7640e40c-dd83-5971-8861-952067f9e1ed")
-		(property "Reference" "#PWR41"
+		(uuid "9f009a02-a538-53c5-a0ee-95b7f8844a9f")
+		(property "Reference" "#PWR40"
 			(at 172.72 283.21 0)
 			(effects
 				(font
@@ -11516,12 +11588,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "5d2b71a2-b2c6-5fb6-96bb-0e454af00999")
+			(uuid "a046344b-811d-52fb-b33e-13b0784b18f9")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR41")
+					(reference "#PWR40")
 					(unit 1)
 				)
 			)
@@ -11623,8 +11695,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b3f54d2c-d4b9-5d9f-a006-a0e65b31188c")
-		(property "Reference" "#PWR42"
+		(uuid "7640e40c-dd83-5971-8861-952067f9e1ed")
+		(property "Reference" "#PWR41"
 			(at 187.96 283.21 0)
 			(effects
 				(font
@@ -11673,12 +11745,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "eb82b72b-00f0-5c82-b425-e656069ae06a")
+			(uuid "5d2b71a2-b2c6-5fb6-96bb-0e454af00999")
 		)
 		(instances
 			(project "flipdot_carrier"
 				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
-					(reference "#PWR42")
+					(reference "#PWR41")
 					(unit 1)
 				)
 			)
@@ -11878,8 +11950,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "e567afa7-2d16-5114-83ea-9fecc7ef7fb1")
-		(property "Reference" "#PWR43"
+		(uuid "b3f54d2c-d4b9-5d9f-a006-a0e65b31188c")
+		(property "Reference" "#PWR42"
 			(at 218.44 285.75 0)
 			(effects
 				(font
@@ -11928,6 +12000,163 @@
 			)
 		)
 		(pin "1"
+			(uuid "eb82b72b-00f0-5c82-b425-e656069ae06a")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "#PWR42")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 233.68 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fcbc159e-4d35-5072-bc6d-a824403a6ba7")
+		(property "Reference" "TP13"
+			(at 233.68 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "I+"
+			(at 233.68 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 238.76 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 238.76 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 233.68 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 233.68 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 233.68 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7eafa552-4bd1-5169-b0c5-d3cf0cca6af8")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 233.68 276.86)
+			(xy 233.68 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3ddd7a75-4134-5e82-a2ec-665157a7d0d6")
+	)
+	(symbol
+		(lib_id "flipdot:+20V")
+		(at 233.68 279.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e567afa7-2d16-5114-83ea-9fecc7ef7fb1")
+		(property "Reference" "#PWR43"
+			(at 233.68 283.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+20V"
+			(at 233.68 275.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 233.68 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 233.68 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+20V\""
+			(at 233.68 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "global power"
+			(at 233.68 279.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
 			(uuid "8e87450b-dd70-57ee-91a4-738332c91f9e")
 		)
 		(instances
@@ -11938,6 +12167,104 @@
 				)
 			)
 		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 248.92 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c54f2273-fc73-507b-8261-6c457c984efa")
+		(property "Reference" "TP14"
+			(at 248.92 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "I-"
+			(at 248.92 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 254 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 254 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 248.92 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 248.92 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 248.92 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e0b28981-f3b7-5ce8-8dcc-590d0de866a3")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 248.92 276.86)
+			(xy 248.92 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c247d479-0630-508e-a19a-1e68d12079e0")
+	)
+	(label "COIL_20V"
+		(at 248.92 279.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c28d51fc-0541-57c9-a276-4e7b270ef4a4")
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
@@ -12728,7 +13055,7 @@
 		)
 		(uuid "c23f8b6c-c6a1-5f0c-9d7e-068eb4509284")
 	)
-	(text "Power: 20 V from the USB-C PD trigger module (Joy-IT ZY12PDN, set to 20 V) into J3.\n+20V goes straight to the coils (ribbon pin 26). D2 and the R-78E make 5 V for the Pico;\nD3 lets the Pico's own USB-C stay plugged in for flashing. NEVER 20 V on VSYS."
+	(text "Power: 20 V from the USB-C PD trigger module (Joy-IT ZY12PDN, set to 20 V) into J3.\n+20V reaches the coils (ribbon pin 26) through R11, 0.1 ohm for measuring the coil current\non a scope across test points I+ and I- (100 mV = 1 A). D2 and the R-78E make 5 V for the S3 Pico;\nD3 lets the S3 Pico's own USB-C stay plugged in for flashing. NEVER 20 V on VSYS."
 		(exclude_from_sim no)
 		(at 25.4 27.94 0)
 		(effects
@@ -12737,9 +13064,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "b6fb6fd9-bbe6-5c28-adde-fe44e29e8feb")
+		(uuid "377f4eef-dcbb-5d94-aaef-bbc9be83b1cd")
 	)
-	(text "ESP32-S3-Pico pins: Raspberry Pi Pico numbering, see firmware/README.md.\nGND pins 8, 13, 18, 23, 28 and 33 are joined on the Pico itself and left unconnected here.\nPin 18 is next to the antenna, kept clear of copper."
+	(text "ESP32-S3-Pico pins: Raspberry Pi Pico numbering, see firmware/README.md.\nGND pins 8, 13, 18, 23, 28 and 33 are joined on the S3 Pico itself and left unconnected here.\nPin 18 is next to the antenna, kept clear of copper."
 		(exclude_from_sim no)
 		(at 63.5 185.42 0)
 		(effects
@@ -12748,7 +13075,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "cbdb865d-a226-50bb-967a-b23fb4182e65")
+		(uuid "bf5f4990-9dec-5d60-bc99-1c2fbf548e74")
 	)
 	(text "Test points: Keystone 5000-series miniature loops."
 		(exclude_from_sim no)

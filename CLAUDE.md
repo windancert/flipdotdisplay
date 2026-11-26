@@ -41,7 +41,7 @@ address-driven H-bridge matrix.
   lost in the panel's drivers, though, and at 20 V with 260 us it overestimates the
   measured sweep current by about a quarter (below), so treat it as an upper bound.
 - At **20 V** (the planned USB-C PD supply): peak 0.62 A at the end of a 200 us pulse,
-  ~70 uC per flip, ~0.21 A for continuous sweeping (model). Measured on the S3 bench
+  ~70 uC per flip, ~0.21 A for continuous sweeping (model). Measured on the S3 Pico bench
   during a diagonal wipe: at most 0.04 A on the bench supply (its finest resolution),
   consistent with the model's ~0.02 A per 250 ms frame. A stuck 400 us pulse (the
   firmware ceiling) would peak at ~0.94 A.
@@ -49,9 +49,11 @@ address-driven H-bridge matrix.
   as 200 us at 24 V, with ~110 uC per flip, so ~0.33 A for continuous sweeping (model).
   **Measured** on the 2 x 2 bench, alternating the whole display yellow/black at full
   speed (1792 dots per 0.62 s redraw): 0.24-0.25 A at 20.2 V, supply in CV (not
-  limiting). The model overestimates by about a quarter here. Likely causes, not
-  verified: the panel's source and sink drivers drop a few volts, so the coil sees
-  less than the rail, and the real time between dots exceeds the 335 us minimum.
+  limiting). The model overestimates by about a quarter here. Part of that is
+  measured: on the scope the time between dot pulses is ~375-405 us, not the 335 us
+  minimum, which accounts for 10-20%. The rest is probably the panel's source and
+  sink drivers dropping a few volts, so the coil sees less than the rail (not
+  verified).
 
 DANGER: 24 V across 16 ohm continuously is 36 W (25 W at 20 V) in a coil the size of a
 shirt button.
@@ -169,7 +171,7 @@ high-impedance through the bootloader delay and on every upload reset.
 
 ## Earlier ESP32-C6 bench (retired)
 
-An ESP32-C6-DevKitC-1 drove two panels side by side in direct drive before the S3
+An ESP32-C6-DevKitC-1 drove two panels side by side in direct drive before the S3 Pico
 took over. Support for the C6, and for the 74HCT595 shift-register driver that only
 existed for it, has been removed from the firmware; both are in the git history.
 
@@ -181,7 +183,7 @@ in parallel to both ribbons; only COL-SEL is per ribbon (0-3 on ribbon A, 4-7 on
 ribbon B). On the bench ribbon B feeds the top row (upright) and ribbon A the bottom
 row (rotated), the reverse of the README's wiring table. The pin map covers all 21
 signals of the 4 x 2 build. Full table in `firmware/README.md`, code in
-`firmware/main/panel_hw.c`. Status LED is a WS2812 on GPIO21, RGB order. The S3 is the
+`firmware/main/panel_hw.c`. Status LED is a WS2812 on GPIO21, RGB order. The S3 Pico is the
 only supported controller.
 
 Both polarity strobes share a single RMT channel that is re-pointed through the GPIO
@@ -212,12 +214,12 @@ VERIFIED by experiment:
   the second ribbon. On this bench the arrangement is the reverse of the README:
   ribbon B (COL-SEL4) panel on top and upright, ribbon A (COL-SEL0) panel at the
   bottom and rotated, so the geometry was `28x16 1x2 4 0r`.
-- S3 bench at 2 x 2 (56 x 32), a chained second panel on each ribbon. On both ribbons
+- S3 Pico bench at 2 x 2 (56 x 32), a chained second panel on each ribbon. On both ribbons
   the second panel answers on the next COL-SEL line (5 after 4, 1 after 0). Seen from
   the front: top row upright, COL-SEL4 left, 5 right; bottom row rotated, COL-SEL1
   left, 0 right, so the chain on the rotated row runs right to left. Geometry
   `28x16 2x2 4 5 1r 0r`, confirmed with a numbered pattern per panel.
-- Coils at 20 V with 200 us pulses flip reliably in both directions (S3 two-row bench,
+- Coils at 20 V with 200 us pulses flip reliably in both directions (S3 Pico two-row bench,
   bench supply at 20 V). A few dots stay put in both colours (about 2 on one panel,
   4 on the other, one cluster of 3). With 260 us pulses at 20 V those dots flip too
   (2 x 2 bench, diagonal wipe), so the firmware uses 260 us for both colours.
@@ -225,11 +227,15 @@ VERIFIED by experiment:
   between yellow and black five times, no dot ever stayed yellow, but a few stayed
   black, and which ones varied from round to round. So yellow drive is marginal, not
   mechanical. Untested fix: a longer yellow pulse only (~320 us, ~0.82 A peak at 20 V).
+- Strobes on a scope (Rigol DHO814, at the S3 Pico's GPIO38 and GPIO39, 4 x 2 bench):
+  ROW-HIGH pulses only for yellow flips, ROW-LOW only for black, each 260.0 us
+  (259.9-260.1 us), ~3.3 V high, one dot every ~375-405 us. The idle strobe stays
+  low throughout.
 - The panel shifts the COL-SEL lines by one position from input to output header
   (input 20-24 -> output 19-23, input 19 stays on the panel), measured with a
   continuity meter on one panel. This is why a chained panel answers on the next
   COL-SEL line. Table and input/output rule under "Panel select".
-- Full 4 x 2 (112 x 32) on the S3 bench, four panels chained per ribbon, every panel
+- Full 4 x 2 (112 x 32) on the S3 Pico bench, four panels chained per ribbon, every panel
   answering on its chain position as the shift predicts. Seen from the front: top row
   upright, COL-SEL 4 5 6 7 left to right; bottom row rotated, its chain running right
   to left, COL-SEL 3 2 1 0 left to right. Geometry `28x16 4x2 4 5 6 7 3r 2r 1r 0r`,
@@ -259,8 +265,8 @@ NOT YET VERIFIED - do not assume:
   unnecessary.
 - WiFi, not Ethernet (no drop at the location). The panels are ~3500 steel discs plus
   ground planes, so use a module with an external antenna mounted clear of the array,
-  or put the ESP32 in the frame's bottom rail. Observed on the S3 bench: with the
-  ribbons wired up near the Pico's ceramic antenna, pings went from 0% loss / 35 ms
+  or put the ESP32 in the frame's bottom rail. Observed on the S3 Pico bench: with the
+  ribbons wired up near the S3 Pico's ceramic antenna, pings went from 0% loss / 35 ms
   to 20% loss / 138 ms. Keep wiring away from the antenna end of the board.
 - Power: **USB-C PD at 20 V** (decided; not yet built). At most ~0.62 A peak and
   ~0.21 A continuous, so any 20 V profile suffices. Current plan is built from modules
@@ -268,11 +274,11 @@ NOT YET VERIFIED - do not assume:
   - PD trigger: **Joy-IT COM-ZY12PDN-ST** (Reichelt DEBO USB-PD 1). USB-C in, screw
     terminals out, voltage set with its button (LED dark blue = 20 V). It has NO
     power-good or status pin.
-  - Buck: **Recom R-78E5.0-1.0**, 5 V into the Pico's VSYS through a Schottky (SS14),
-    so the Pico's own USB-C can stay plugged in for flashing. Input 7-28 V: on a 5 V
-    only charger the Pico does not boot. Output capacitance must stay under 220 uF
+  - Buck: **Recom R-78E5.0-1.0**, 5 V into the S3 Pico's VSYS through a Schottky (SS14),
+    so the S3 Pico's own USB-C can stay plugged in for flashing. Input 7-28 V: on a 5 V
+    only charger the S3 Pico does not boot. Output capacitance must stay under 220 uF
     (100 uF planned).
-  - NEVER put 20 V on the Pico's USB-C or VSYS, which take 3.7-6 V.
+  - NEVER put 20 V on the S3 Pico's USB-C or VSYS, which take 3.7-6 V.
   - The module's 20 V goes straight to the coil rail (ribbon pin 26) with 470 uF bulk,
     a unidirectional TVS (SMBJ24A) across it, and a series Schottky (SS34) plus
     4.7 uF into the buck. A coil pulse dips the 470 uF by only ~0.3 V, so the buck
@@ -287,19 +293,19 @@ NOT YET VERIFIED - do not assume:
     makes dots fail to flip (lower voltage is safe for the coils). Firmware should
     therefore redraw every dot now and then, e.g. on each new P2000 message, so missed
     flips get repaired (not implemented yet).
-  - An ADC divider is not an option for rail sensing: the S3's ADC pins are GPIO1-20,
+  - An ADC divider is not an option for rail sensing: the S3 Pico's ADC pins are GPIO1-20,
     all used by the pin map, and GPIO40 has no ADC.
   - The older discrete design (CH224K with power-good to GPIO40, AP63205 buck, which
     also runs a 5 V charger) is rev 0: https://claude.ai/artifact/8Sb9KLrSTWjDoLQiBUVHx7
-- Carrier PCB "Flipdot S3 driver", rev A: `hardware/carrier/` (KiCad 10). A through-hole board holding the
-  Pico in sockets, both ribbon headers, the 10 pull-downs and the module power stage
+- Carrier PCB "Flipdot S3 Pico driver", rev A: `hardware/carrier/` (KiCad 10). A through-hole board holding the
+  S3 Pico in sockets, both ribbon headers, the 10 pull-downs, a 0.1 ohm coil current-sense resistor (R11, test points I+ and I-) and the module power stage
   (through-hole substitutes: SA24A for the SMBJ24A, 1N5819 for the SS34 and SS14). The
   PD trigger stays off the board, wired to a screw terminal. Schematic and board are
   generated by `hardware/carrier/tools/build.py` (own autorouter); ERC and DRC clean.
-  Ribbon B on the left edge, ribbon A on the right (where each chain starts), the Pico
-  upright between them with its antenna at the bottom edge. The Pico's antenna is on the
+  Ribbon B on the left edge, ribbon A on the right (where each chain starts), the S3 Pico
+  upright between them with its antenna at the bottom edge. The S3 Pico's antenna is on the
   short edge opposite USB, between the GPIO39/40 and GPIO41/42 pins (user-confirmed).
-  Pico row spacing measured at 17.8 mm, matching the Pico footprint (17.78 mm).
+  S3 Pico row spacing measured at 17.8 mm, matching the Raspberry Pi Pico footprint (17.78 mm).
   Not yet ordered; see its README for the remaining checks.
 - Coil supply chains through the ribbons (fine at 0.62 A peak on 28 AWG).
 - Star ground: coil return and logic return join at one point near the power input.

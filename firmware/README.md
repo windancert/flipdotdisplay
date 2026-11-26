@@ -29,18 +29,19 @@ row (COL-SEL0-3), ribbon B the bottom row (COL-SEL4-7). The first panel on each
 ribbon answers on that ribbon's pin 19.
 
 Each group is an unbroken run down one header (apart from GND and RUN pins), and the
-left header follows the ribbon's own order.
+right header follows the ribbon's own order. Left and right are seen from above, USB at
+the top: pins 1-20 run down the left side from pin 1 at the top, 21-40 up the right side.
 
-| S3 GPIO | Pico header pin | Signal | Ribbon pin | Ribbons |
+| S3 Pico GPIO | S3 Pico header pin | Signal | Ribbon pin | Ribbons |
 |---------|-----------------|--------|------------|---------|
-| 10, 9, 8, 7, 6 | left 35, 34, 32, 31, 29 | ROW0-4 | 5, 6, 7, 8, 9 (straight; firmware undoes the 6/7 crossing) | both |
-| 5, 4, 2, 1, 41 | left 27, 26, 25, 24, 22 | COL0-4 | 13-17 | both |
-| 42 | left 21 | COL-H/L | 18 | both |
-| 11, 12, 13, 14 | right 1, 2, 4, 5 | COL-SEL0-3 | 19-22 | A only |
-| 15, 16, 17, 18 | right 6, 7, 9, 10 | COL-SEL4-7 | 19-22 | B only |
-| 38 | right 17 | ROW-HIGH | 10 | both |
-| 39 | right 19 | ROW-LOW | 11 | both |
-| 3V3 | left 36 | logic supply | 3 | both |
+| 10, 9, 8, 7, 6 | right 35, 34, 32, 31, 29 | ROW0-4 | 5, 6, 7, 8, 9 (straight; firmware undoes the 6/7 crossing) | both |
+| 5, 4, 2, 1, 41 | right 27, 26, 25, 24, 22 | COL0-4 | 13-17 | both |
+| 42 | right 21 | COL-H/L | 18 | both |
+| 11, 12, 13, 14 | left 1, 2, 4, 5 | COL-SEL0-3 | 19-22 | A only |
+| 15, 16, 17, 18 | left 6, 7, 9, 10 | COL-SEL4-7 | 19-22 | B only |
+| 38 | left 17 | ROW-HIGH | 10 | both |
+| 39 | left 19 | ROW-LOW | 11 | both |
+| 3V3 | right 36 | logic supply | 3 | both |
 | GND | any GND | GND | 1, 2 | both |
 
 10k pull-downs to ground on ROW-HIGH, ROW-LOW and every COL-SEL line that is wired,

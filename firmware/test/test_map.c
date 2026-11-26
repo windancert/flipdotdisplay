@@ -202,7 +202,7 @@ static void test_one_panel_has_padded_rows(void)
 
 static void test_bench_layout(void)
 {
-    // The S3 bench: ribbon B's panel upright on top, ribbon A's rotated below.
+    // The S3 Pico bench: ribbon B's panel upright on top, ribbon A's rotated below.
     use("28x16 1x2 4 0r");
     dot_location_t top = flipdot_locate(0, 0);
     assert(top.sel == 4 && top.col == 0 && top.row == 0);

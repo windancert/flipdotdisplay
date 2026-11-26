@@ -3,6 +3,7 @@
 Board coordinates are millimetres from the board's top-left corner, y down,
 seen from the component side.
 """
+import sys
 
 # Ribbon pins 5-18 are the same on both ribbons. Ribbon pins 6 and 7 are crossed on
 # the panel (6 = ROW2, 7 = ROW1); the GPIOs run straight and the firmware undoes it.
@@ -14,7 +15,8 @@ SHARED = {
 
 
 def ribbon(sels):
-    m = {1: "GND", 2: "GND", 3: "+3V3", 26: "+20V"}
+    # The coils get their 20 V through the current-sense resistor R11.
+    m = {1: "GND", 2: "GND", 3: "+3V3", 26: "COIL_20V"}
     m.update(SHARED)
     for i, s in enumerate(sels):
         m[19 + i] = s
@@ -22,8 +24,8 @@ def ribbon(sels):
 
 
 # Waveshare ESP32-S3-Pico header pins (Raspberry Pi Pico numbering), from
-# firmware/README.md and firmware/main/panel_hw.c. The Pico's other GND pins
-# (8, 13, 18, 23, 28, 33) are joined on the Pico itself and left unconnected here;
+# firmware/README.md and firmware/main/panel_hw.c. The S3 Pico's other GND pins
+# (8, 13, 18, 23, 28, 33) are joined on the S3 Pico itself and left unconnected here;
 # pin 18 sits next to the antenna, which wants as little copper around it as possible.
 PICO = {
     1: "SEL0", 2: "SEL1", 3: "GND", 4: "SEL2", 5: "SEL3", 6: "SEL4", 7: "SEL5",
@@ -44,7 +46,12 @@ PICO_PIN_NAMES = {
 
 POWER_NETS = {"GND", "+3V3", "+5V", "+20V"}  # drawn with power symbols
 
-FP = "C:/Program Files/KiCad/10.0/share/kicad/footprints"
+# KiCad 10's own libraries, at its default install path.
+if sys.platform == "darwin":
+    KICAD_SHARE = "/Applications/KiCad/KiCad.app/Contents/SharedSupport"
+else:
+    KICAD_SHARE = "C:/Program Files/KiCad/10.0/share/kicad"
+FP = f"{KICAD_SHARE}/footprints"
 
 # ref, symbol, value, footprint, {pin: net}, schematic (x, y), board (x, y, rot), extra fields
 PARTS = [
@@ -76,13 +83,19 @@ PARTS = [
      {1: "+5V", 2: "GND"}, (182.88, 50.8), (69.85, 78.74, 0), {}),
     ("D3", "Device:D_Schottky", "1N5819", "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal",
      {1: "VSYS", 2: "+5V"}, (208.28, 50.8), (96.52, 78.74, 90), {}),
+    # Current sense for the coils: 0.1 ohm behind C1, so it carries the coil pulses
+    # themselves. Scope across the I+ and I- test points: 100 mV is 1 A.
+    ("R11", "Device:R", "0.1R 10%", "Resistor_THT:R_Axial_DIN0614_L14.3mm_D5.7mm_P20.32mm_Horizontal",
+     {1: "+20V", 2: "COIL_20V"}, (101.6, 76.2), (71.12, 49.0, 0),
+     {"Note": "Vitrohm BW235, 0.1 ohm 10%, 2 W wirewound (Reichelt 2W DRAHT 0,1); "
+              "a wire link if no current sense is wanted"}),
     ("C4", "Device:C", "100nF", "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
      {1: "+3V3", 2: "GND"}, (276.86, 101.6), (15.24, 19.05, 90), {}),
     ("C5", "Device:C", "100nF", "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
      {1: "+3V3", 2: "GND"}, (276.86, 177.8), (95.25, 19.05, 90), {}),
 ]
 
-# Each pull-down level with its Pico pin where there is room (3.81 mm apart).
+# Each pull-down level with its S3 Pico pin where there is room (3.81 mm apart).
 PULLDOWN_Y = [31.75 + 3.81 * i for i in range(8)] + [72.39, 77.47]
 PULLDOWNS = ["SEL0", "SEL1", "SEL2", "SEL3", "SEL4", "SEL5", "SEL6", "SEL7", "ROW_HIGH", "ROW_LOW"]
 for i, net in enumerate(PULLDOWNS):
@@ -101,6 +114,7 @@ TESTPOINTS = [
     ("+3V3", "3V3", 63.5, 6.35), ("GND", "GND", 68.58, 6.35),
     ("+20V", "20V", 102.87, 62.23), ("+5V", "5V", 102.87, 66.04),
     ("VSYS", "VSYS", 102.87, 69.85), ("GND", "GND", 102.87, 73.66),
+    ("+20V", "I+", 71.12, 43.94), ("COIL_20V", "I-", 88.9, 43.94),
 ]
 for i, (net, label, x, y) in enumerate(TESTPOINTS):
     PARTS.append((f"TP{i + 1}", "Connector:TestPoint", label,
@@ -108,9 +122,9 @@ for i, (net, label, x, y) in enumerate(TESTPOINTS):
                   (50.8 + i * 15.24, 276.86), (x, y, 0), {}))
 
 BOARD_W, BOARD_H = 111.0, 85.0
-# The Pico's antenna is on the short edge opposite USB, between the GPIO39/40 and
+# The S3 Pico's antenna is on the short edge opposite USB, between the GPIO39/40 and
 # GPIO41/42 pins, at the board's bottom edge. From the GPIO38 pin to the board edge,
-# across the Pico plus a margin: no copper fill and no vias, and tracks only where
+# across the S3 Pico plus a margin: no copper fill and no vias, and tracks only where
 # they have to reach a pin.
 ANTENNA_AREA = (40.0, 70.0, 66.5, 85.0)
 HOLES = [(3.5, 3.5), (107.5, 3.5), (3.5, 81.5), (107.5, 81.5)]

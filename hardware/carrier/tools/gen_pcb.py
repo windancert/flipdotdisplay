@@ -21,6 +21,7 @@ PROJECT = "flipdot_carrier"
 OX, OY = 100.0, 50.0  # board origin on the KiCad page
 
 POWER = {"GND": (0.8, 0.25, 1.0, 0.5), "+20V": (0.8, 0.25, 1.0, 0.5),
+         "/COIL_20V": (0.8, 0.25, 1.0, 0.5),
          "/VIN_BUCK": (0.6, 0.25, 1.0, 0.5), "+5V": (0.6, 0.25, 1.0, 0.5),
          "/VSYS": (0.6, 0.25, 1.0, 0.5), "+3V3": (0.6, 0.25, 1.0, 0.5)}
 SIGNAL = (0.3, 0.2, 0.6, 0.3)
@@ -154,13 +155,13 @@ def make_router(board, fps, nets):
             poly = [(pcbnew.ToMM(ol.CVertex(i).x) - OX, pcbnew.ToMM(ol.CVertex(i).y) - OY)
                     for i in range(ol.TotalVertices())]
             r.keepouts.append(poly)
-    # The antenna end of the Pico: route around it if at all possible.
+    # The antenna end of the S3 Pico: route around it if at all possible.
     r.cost_zones.append(design.ANTENNA_AREA + (10.0,))
     r.via_keepouts.append(design.ANTENNA_AREA)
     return r
 
 
-ORDER_FIRST = ["+20V", "/VIN_BUCK", "+5V", "/VSYS", "+3V3", "/ROW_HIGH", "/ROW_LOW"]
+ORDER_FIRST = ["+20V", "/COIL_20V", "/VIN_BUCK", "+5V", "/VSYS", "+3V3", "/ROW_HIGH", "/ROW_LOW"]
 
 
 def route_all(r, nets):
@@ -249,9 +250,9 @@ def add_silk(board):
             add_text(board, label, x, y + 3.2, 0.8)
         else:
             add_text(board, label, x + 4.0, y, 0.8)
-    add_text(board, "FLIPDOT S3 DRIVER", 14.5, 62.0, 1.2, bold=True)
+    add_text(board, "FLIPDOT S3 PICO DRIVER", 14.5, 62.0, 1.2, bold=True)
     add_text(board, "rev A  2026-11", 14.5, 64.4, 1.0)
-    add_text(board, "20 V NEVER ON PICO VSYS", 14.5, 66.4, 0.8)
+    add_text(board, "20 V NEVER ON S3 PICO VSYS", 14.5, 66.4, 0.8)
 
 
 def write_project():
@@ -307,7 +308,7 @@ def main():
     add_gnd_pour(board, netinfo)
     add_silk(board)
     tb = board.GetTitleBlock()
-    tb.SetTitle("Flipdot S3 driver")
+    tb.SetTitle("Flipdot S3 Pico driver")
     tb.SetRevision("A")
     tb.SetDate("2026-11-21")
     board.SetTitleBlock(tb)

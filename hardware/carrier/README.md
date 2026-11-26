@@ -1,16 +1,17 @@
-# Flipdot S3 driver, rev A
+# Flipdot S3 Pico driver, rev A
 
 A two-layer board that replaces the breadboard: it holds the Waveshare ESP32-S3-Pico in
-sockets, the two ribbon headers, the 10k pull-downs and the 20 V / 5 V power stage. The
+sockets, the two ribbon headers, the 10k pull-downs, the 20 V / 5 V power stage and a
+0.1 ohm resistor for measuring the coil current on a scope. The
 circuit is the bench wiring from `firmware/README.md` plus the module power plan in
 `CLAUDE.md`, so the firmware does not change. Everything is through-hole and can be
 soldered by hand. Board size 111 x 85 mm, four M3 holes.
 
 Layout: ribbon B (COL-SEL4-7) on the left edge and ribbon A (COL-SEL0-3) on the right,
 matching where each chain starts on the display: the top row's chain starts at its left
-end, and the bottom row is rotated, so its chain starts at the right end. The Pico sits
+end, and the bottom row is rotated, so its chain starts at the right end. The S3 Pico sits
 upright in the middle, USB towards the top edge, antenna at the bottom edge pointing away
-from the panels. The pull-downs are between the left header and the Pico, the power stage
+from the panels. The pull-downs are between the left header and the S3 Pico, the power stage
 below the shared lines on the right, with the 20 V screw terminal on the bottom edge.
 
 Status: designed and checked by KiCad (ERC and DRC clean, the board matches the
@@ -33,8 +34,8 @@ schematic), **not yet ordered or built**.
 | Ref | Qty | Part | Notes |
 |-----|-----|------|-------|
 | U1 | 1 | Waveshare ESP32-S3-Pico | plugs in, not soldered |
-| - | 2 | 1x20 female header, 2.54 mm | the Pico's socket |
-| - | 2 | 1x20 male pin header, 2.54 mm | soldered to the Pico, if it has none |
+| - | 2 | 1x20 female header, 2.54 mm | the S3 Pico's socket |
+| - | 2 | 1x20 male pin header, 2.54 mm | soldered to the S3 Pico, if it has none |
 | J1, J2 | 2 | 2x13 shrouded box header, 2.54 mm, straight | ribbon A (COL-SEL0-3), ribbon B (COL-SEL4-7) |
 | J3 | 1 | 2-pole screw terminal, 5.08 mm pitch | 20 V in, from the PD trigger module |
 | U2 | 1 | Recom R-78E5.0-1.0 | 5 V buck, SIP-3 |
@@ -45,19 +46,20 @@ schematic), **not yet ordered or built**.
 | C3 | 1 | 100 uF, 16 V, radial, 6.3 mm diameter, 2.5 mm lead spacing | buck output (keep under 220 uF) |
 | C4, C5 | 2 | 100 nF ceramic, 5 mm lead spacing | 3.3 V decoupling at each ribbon header |
 | R1-R10 | 10 | 10k, 1/4 W | pull-downs: R1-R8 on COL-SEL0-7, R9 ROW-HIGH, R10 ROW-LOW |
-| TP1-TP12 | 12 | Keystone 5000-series miniature test point (5000 red, 5001 black, 5003 orange, 5004 yellow) | suggested: red 20V, black GND, orange 5V/VSYS/3V3, yellow signals |
+| R11 | 1 | 0.1 ohm, 10%, 2 W wirewound, Vitrohm BW235 (Reichelt 2W DRAHT 0,1), body 14.3 x 5.7 mm, 20.32 mm lead spacing | coil current sense; a wire link if not wanted |
+| TP1-TP14 | 14 | Keystone 5000-series miniature test point (5000 red, 5001 black, 5003 orange, 5004 yellow) | suggested: red 20V, black GND, orange 5V/VSYS/3V3, yellow signals |
 | - | 1 | Joy-IT COM-ZY12PDN-ST (Reichelt DEBO USB-PD 1) | off the board, two wires to J3 |
 
 ## Before ordering
 
-1. **Pico row spacing.** Confirmed: the Waveshare board's pin rows measure 17.8 mm
+1. **S3 Pico row spacing.** Confirmed: the Waveshare board's pin rows measure 17.8 mm
    apart, matching the Raspberry Pi Pico footprint (17.78 mm), pin 1 next to USB.
-2. **Antenna end.** Confirmed: the Pico's antenna is on the short edge opposite USB,
+2. **Antenna end.** Confirmed: the S3 Pico's antenna is on the short edge opposite USB,
    between the pins for GPIO39/40 and GPIO41/42. That end sits at the board's bottom
    edge (marked ANTENNA END). From the GPIO38 pin down to the board edge, across the
-   Pico's width plus a margin, there is no ground fill and no vias on either layer; the
+   S3 Pico's width plus a margin, there is no ground fill and no vias on either layer; the
    only copper is the four signal pins there and the tracks that reach them from the
-   sides. The Pico's GND pin 18 is left unconnected for the same reason.
+   sides. The S3 Pico's GND pin 18 is left unconnected for the same reason.
 3. **Ribbon pin 1.** The triangle on the silkscreen next to each header marks pin 1.
    Pin 1 is GND, pin 26 is 20 V. With the ribbons crimped as on the bench (pin 1 to
    pin 1), the red stripe goes on the triangle side.
@@ -71,9 +73,26 @@ Labelled loops for a meter probe or a scope clip:
 | top edge, left of the USB plug | R-HI, R-LO (the two strobes), ROW4, COL4 (top address bits), SEL0, SEL4 (first panel on each ribbon) |
 | top edge, right of the USB plug | 3V3, GND |
 | power corner, bottom right | 20V, 5V, VSYS, GND |
+| above R11, which sits above D1 | I+, I- (coil current) |
 
 The strobes are the ones to watch on a scope: each pulse should be about 260 us, never
 more than the firmware's 400 us ceiling.
+
+**Coil current.** The coils get their 20 V through R11 (0.1 ohm), which sits behind C1 so
+it carries the pulses themselves. Probe I+ on one channel and I- on another, both ground
+clips on GND, both channels AC-coupled at about 20 mV/div, and show CH1 - CH2: 100 mV is
+1 A, so a 0.74 A pulse reads about 74 mV. Trigger on R-HI or R-LO with a third channel.
+R11 takes about 0.6 % off the coil current (0.1 ohm against the coil's 16 ohm).
+
+I+ is tapped straight off R11's pad. Ribbon A's current also leaves R11 straight from its
+pad, but ribbon B's runs past the I- test point first, through about 4.5 mm of track, so
+pulses on the top row (ribbon B) read about 3 % high.
+
+R11 is only good to 10 %, so measure its real value once, before the S3 Pico goes in and
+with no ribbons connected: set the bench supply to about 1 V with a 0.5 A current limit,
+connect + to I- and - to I+ (at that voltage the current can only flow through R11),
+read the current on the supply and the millivolts between I+ and I- on a multimeter, and
+divide. Use that value instead of 0.1 ohm when converting scope readings to amps.
 
 ## Ordering
 
@@ -91,8 +110,9 @@ Solder the lowest parts first so the board lies flat on the bench:
 
 1. R1-R10 (either way round).
 2. D1, D2, D3: the band is the cathode, the silkscreen marks it with a K.
-3. C4, C5 (either way round).
-4. The two 1x20 female headers for the Pico. Plug the Pico into them first so they line
+3. C4, C5 (either way round), R11 (either way round), and the 14 test point loops
+   TP1-TP14 (either way round; the colours suggested in the parts list).
+4. The two 1x20 female headers for the S3 Pico. Plug the S3 Pico into them first so they line
    up, then solder.
 5. J1, J2: the notch in the shroud goes on the side the silkscreen outline shows.
 6. C1, C2, C3: the long leg is +, the stripe on the can is -, the silkscreen marks +.
@@ -102,7 +122,7 @@ Solder the lowest parts first so the board lies flat on the bench:
 
 ## First power-up
 
-With the Pico **out** of its socket and no ribbons connected:
+With the S3 Pico **out** of its socket and no ribbons connected:
 
 1. Set the PD trigger to 20 V (LED dark blue) and connect it to J3: + on the left,
    - on the right, as marked.
@@ -112,7 +132,7 @@ With the Pico **out** of its socket and no ribbons connected:
    - VSYS test point (also socket pin 39, right-hand row, second from the top):
      about 4.7 V (5 V minus the diode). **If this reads 20 V, stop.**
    - Every other socket pin: 0 V.
-3. Unplug, insert the Pico (USB towards the top edge), power up again. The
+3. Unplug, insert the S3 Pico (USB towards the top edge), power up again. The
    status LED should go blue, then yellow and green as on the bench. The 3V3 test
    point should now read about 3.3 V.
 4. Unpower, then connect one ribbon between the board and a panel and check its

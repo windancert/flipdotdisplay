@@ -12,7 +12,7 @@ from sexpr import QStr, dump, find, find_all, parse, q
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
-KICAD_SYM = "C:/Program Files/KiCad/10.0/share/kicad/symbols"
+KICAD_SYM = f"{design.KICAD_SHARE}/symbols"
 PROJECT = "flipdot_carrier"
 SCH_VERSION = "20250114"
 
@@ -223,7 +223,7 @@ class Sheet:
     def write(self, path):
         doc = ["kicad_sch", ["version", SCH_VERSION], ["generator", q("eeschema")],
                ["generator_version", q("10.0")], ["uuid", ROOT], ["paper", q("A3")],
-               ["title_block", ["title", q("Flipdot S3 driver")], ["date", q("2026-11-21")],
+               ["title_block", ["title", q("Flipdot S3 Pico driver")], ["date", q("2026-11-21")],
                 ["rev", q("A")],
                 ["comment", 1, q("Waveshare ESP32-S3-Pico to two Mobitec ribbons, 20 V coil rail")]],
                ["lib_symbols"] + list(self.lib_symbols.values())]
@@ -259,11 +259,12 @@ def main():
     sh.label("VIN_BUCK", x, y, 0)
 
     sh.text("Power: 20 V from the USB-C PD trigger module (Joy-IT ZY12PDN, set to 20 V) into J3.\n"
-            "+20V goes straight to the coils (ribbon pin 26). D2 and the R-78E make 5 V for the Pico;\n"
-            "D3 lets the Pico's own USB-C stay plugged in for flashing. NEVER 20 V on VSYS.",
+            "+20V reaches the coils (ribbon pin 26) through R11, 0.1 ohm for measuring the coil current\n"
+            "on a scope across test points I+ and I- (100 mV = 1 A). D2 and the R-78E make 5 V for the S3 Pico;\n"
+            "D3 lets the S3 Pico's own USB-C stay plugged in for flashing. NEVER 20 V on VSYS.",
             25.4, 27.94)
     sh.text("ESP32-S3-Pico pins: Raspberry Pi Pico numbering, see firmware/README.md.\n"
-            "GND pins 8, 13, 18, 23, 28 and 33 are joined on the Pico itself and left unconnected here.\n"
+            "GND pins 8, 13, 18, 23, 28 and 33 are joined on the S3 Pico itself and left unconnected here.\n"
             "Pin 18 is next to the antenna, kept clear of copper.",
             63.5, 185.42)
     sh.text("Test points: Keystone 5000-series miniature loops.", 50.8, 266.7)
