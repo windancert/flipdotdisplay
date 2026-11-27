@@ -106,7 +106,8 @@ def build():
             f.SetTextThickness(mm(0.12))
             f.SetPosition(pt(x - 5.08, y))
             f.SetTextAngleDegrees(0)
-        if ref.startswith("TP"):  # the silkscreen label says which net; no TPn clutter
+        # Test point labels say which net, and a mounting hole needs no name: no TPn or Hn clutter
+        if ref.startswith("TP") or ref.startswith("H"):
             fp.Reference().SetVisible(False)
             fp.Value().SetVisible(False)
         if ref == "J3":

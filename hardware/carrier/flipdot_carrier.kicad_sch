@@ -12267,6 +12267,104 @@
 		(uuid "c28d51fc-0541-57c9-a276-4e7b270ef4a4")
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 264.16 276.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7b1ad3bf-f9e7-5ae3-876c-4a6444e74965")
+		(property "Reference" "TP15"
+			(at 264.16 270 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VIN"
+			(at 264.16 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 269.24 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 269.24 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 264.16 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "test point tp"
+			(at 264.16 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Pin* Test*"
+			(at 264.16 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f75b7eb4-ab23-5d2c-81d2-d2ac278d5c34")
+		)
+		(instances
+			(project "flipdot_carrier"
+				(path "/2f90ea78-ed23-53a4-973a-4d4032529e21"
+					(reference "TP15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 264.16 276.86)
+			(xy 264.16 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f54109b3-ecb9-51c9-87e2-81583161702f")
+	)
+	(label "VIN_BUCK"
+		(at 264.16 279.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e11a2784-3370-5e92-b9a7-c44bb265e033")
+	)
+	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 330.2 254 0)
 		(unit 1)

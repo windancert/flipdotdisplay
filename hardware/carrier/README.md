@@ -47,7 +47,7 @@ schematic), **not yet ordered or built**.
 | C4, C5 | 2 | 100 nF ceramic, 5 mm lead spacing | 3.3 V decoupling at each ribbon header |
 | R1-R10 | 10 | 10k, 1/4 W | pull-downs: R1-R8 on COL-SEL0-7, R9 ROW-HIGH, R10 ROW-LOW |
 | R11 | 1 | 0.1 ohm, 10%, 2 W wirewound, Vitrohm BW235 (Reichelt 2W DRAHT 0,1), body 14.3 x 5.7 mm, 20.32 mm lead spacing | coil current sense; a wire link if not wanted |
-| TP1-TP14 | 14 | Keystone 5000-series miniature test point (5000 red, 5001 black, 5003 orange, 5004 yellow) | suggested: red 20V, black GND, orange 5V/VSYS/3V3, yellow signals |
+| TP1-TP15 | 15 | Keystone 5000-series miniature test point: 3x 5000 red, 2x 5001 black, 4x 5003 orange, 6x 5004 yellow | suggested: red 20V/I+/I-, black GND, orange VIN/5V/VSYS/3V3, yellow signals |
 | - | 1 | Joy-IT COM-ZY12PDN-ST (Reichelt DEBO USB-PD 1) | off the board, two wires to J3 |
 
 ## Before ordering
@@ -72,8 +72,12 @@ Labelled loops for a meter probe or a scope clip:
 |-------|-------------|
 | top edge, left of the USB plug | R-HI, R-LO (the two strobes), ROW4, COL4 (top address bits), SEL0, SEL4 (first panel on each ribbon) |
 | top edge, right of the USB plug | 3V3, GND |
-| power corner, bottom right | 20V, 5V, VSYS, GND |
+| power corner, bottom right | 20V, VIN, 5V, VSYS, GND, top to bottom in the order the power flows |
 | above R11, which sits above D1 | I+, I- (coil current) |
+
+VIN is the buck's input, behind D2. If 5V reads 0 V with 20V present, VIN tells the
+cases apart: about 0 V means D2 is in backwards or C2 is shorted; about 19.5 V means
+the R-78E itself.
 
 The strobes are the ones to watch on a scope: each pulse should be about 260 us, never
 more than the firmware's 400 us ceiling.
@@ -115,8 +119,8 @@ Solder the lowest parts first so the board lies flat on the bench:
 1. R1-R10 (either way round).
 2. D2, D3: the band is the cathode, the silkscreen marks it with a K. D1 (bidirectional)
    goes either way round.
-3. C4, C5 (either way round), R11 (either way round), and the 14 test point loops
-   TP1-TP14 (either way round; the colours suggested in the parts list).
+3. C4, C5 (either way round), R11 (either way round), and the 15 test point loops
+   TP1-TP15 (either way round; the colours suggested in the parts list).
 4. The two 1x20 female headers for the S3 Pico. Plug the S3 Pico into them first so they line
    up, then solder.
 5. J1, J2: the notch in the shroud goes on the side the silkscreen outline shows.
@@ -133,6 +137,7 @@ With the S3 Pico **out** of its socket and no ribbons connected:
    - on the right, as marked.
 2. Measure against a GND test point:
    - 20V test point, J1 pin 26 and J2 pin 26: about 20 V.
+   - VIN test point: about 19.5 V (20 V minus D2).
    - 5V test point: about 5 V.
    - VSYS test point (also socket pin 39, right-hand row, second from the top):
      about 4.7 V (5 V minus the diode). **If this reads 20 V, stop.**

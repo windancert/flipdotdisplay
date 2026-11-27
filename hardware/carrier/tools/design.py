@@ -106,15 +106,17 @@ for i, net in enumerate(PULLDOWNS):
 
 # Test points (Keystone 5000-series miniature loops): net, silkscreen label, board x, y.
 # Signals along the top edge left of the USB plug; 3.3 V and a GND right of it; 20 V,
-# 5 V, VSYS and a second GND in the power corner.
+# the buck input, 5 V, VSYS and a second GND in the power corner, in the order the
+# power flows. VIN tells a reversed D2 or a shorted C2 from a dead buck.
 TESTPOINTS = [
     ("ROW_HIGH", "R-HI", 17.78, 6.35), ("ROW_LOW", "R-LO", 22.86, 6.35),
     ("ROW4", "ROW4", 27.94, 6.35), ("COL4", "COL4", 33.02, 6.35),
     ("SEL0", "SEL0", 38.1, 6.35), ("SEL4", "SEL4", 43.18, 6.35),
     ("+3V3", "3V3", 63.5, 6.35), ("GND", "GND", 68.58, 6.35),
-    ("+20V", "20V", 102.87, 62.23), ("+5V", "5V", 102.87, 66.04),
-    ("VSYS", "VSYS", 102.87, 69.85), ("GND", "GND", 102.87, 73.66),
+    ("+20V", "20V", 102.87, 62.23), ("+5V", "5V", 102.87, 69.85),
+    ("VSYS", "VSYS", 102.87, 73.66), ("GND", "GND", 102.87, 77.47),
     ("+20V", "I+", 71.12, 43.94), ("COIL_20V", "I-", 88.9, 43.94),
+    ("VIN_BUCK", "VIN", 102.87, 66.04),
 ]
 for i, (net, label, x, y) in enumerate(TESTPOINTS):
     PARTS.append((f"TP{i + 1}", "Connector:TestPoint", label,
